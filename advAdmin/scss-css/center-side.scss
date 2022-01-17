@@ -1,0 +1,353 @@
+.center-side{
+  grid-area: center;
+  padding: 10px 10px 0 0;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: max-content 1fr max-content;
+  grid-gap: 10px;
+  &__empty{
+    font-size: 24px;
+    text-align: center;
+    font-family: "montserrat", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    color: grey;
+  }
+  &__top{
+    display: grid;
+    grid-template-columns: 300px 1fr 300px;
+    grid-gap: 10px;
+  }
+  &__header{
+    display: grid;
+    grid-template-columns: 300px 1fr 300px;
+  }
+}
+.card{
+  display: grid;
+  grid-template-rows: min-content 1fr;
+  &__title{
+    font-size: 26px;
+    font-family: "montserrat", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    letter-spacing: 0.8px;
+    text-align: center;
+    grid-column-start: 2;
+  }
+  &__info{
+    position: relative;
+  }
+  &__info-text{
+    padding: 8px 0 8px 0;
+    border-bottom: 1px solid grey;
+    color: grey;
+    font-family: "montserrat", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    letter-spacing: 0.8px;
+    font-size: 13px;
+    margin: 0;
+    & span {
+      color: black;
+      margin: 0 0 0 20px;
+      font-weight: 400;
+    }
+    &_link{
+      margin: 0 0 0 20px;
+      font-weight: 400;
+      color: #1d96ff !important;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+  }
+  &__comment{
+    margin: 20px 0 0 0;
+    position: relative;
+    display: grid;
+    grid-template-rows: min-content 1fr;
+    &-title{
+      font-weight: 700;
+      font-size: 15px;
+      color: grey;
+      font-family: "montserrat", sans-serif;
+      font-style: normal;
+      letter-spacing: 0.8px;
+      width: calc(100% - 50px);
+    }
+    &-field{
+      width: 100%;
+      resize: none;
+      margin: 10px 0 0 0;
+      box-sizing: border-box;
+    }
+  }
+  &__additionally{
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: white;
+    z-index: 4;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  &__buttons{
+    display: flex;
+    margin: 5px 0 0 0;
+  }
+  &__btn{
+    padding: 5px;
+    font-size: 10px;
+  }
+}
+.comment__status{
+  position: absolute;
+  top: 0;
+  right: 0;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  pointer-events: auto;
+}
+.carousel{
+  padding: 10px 0;
+  margin: 10px 0 0 0;
+  border-bottom: 1px solid #c2c2c2;
+  border-top: 1px solid #c2c2c2;
+}
+
+.slider__item {
+  flex: 0 0 10%;
+  max-width: 10%;
+}
+.slider__photo{
+  height: 150px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  cursor: pointer;
+  position: relative;
+  border: 3px solid white;
+}
+.slider__status{
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
+.slider__select{
+  border: 3px solid #2067B0;
+}
+.slider__reason{
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  transform: translate(-50%, 0px);
+  background-color: white;
+  font-size: 12px;
+  font-family: "montserrat", sans-serif;
+  font-weight: 400;
+  color: grey;
+  font-style: normal;
+  white-space: nowrap;
+  border-radius: 5px;
+}
+.photo{
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  &__wrap{
+    position: relative;
+  }
+  &__img{
+    height: 500px;
+    object-fit: contain;
+    cursor: pointer;
+    width: 100%;
+  }
+  &__status{
+    position: absolute;
+    bottom: 10px;
+    left: 50%;
+    transform: translate(-50%, 0);
+    width: 44px;
+    height: 44px;
+    opacity: .3;
+  }
+}
+.bottom{
+  display: grid;
+  grid-template-columns: 300px 1fr 300px;
+  &__left{
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+  }
+  &__center{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+  &__toggle{
+    display: flex;
+    text-align: center;
+    width: 50%;
+  }
+  .bottom__btn{
+    background-color: white;
+    color: #545353;
+    width: 100%;
+  }
+}
+.filter__input:checked ~.bottom__btn{
+  background: #545353;
+  color: #ffffff;
+}
+.reason{
+  position: relative;
+  width: 400px;
+  &__input{
+    padding: 10px 20px 10px 10px;
+  }
+}
+
+.contact{
+  display: flex;
+  align-items: center;
+  &__img{
+    width: 50px;
+    height: 50px;
+    border-radius: 30px;
+    margin: 0 15px 0 0;
+  }
+  &__link{
+    color: #1d96ff ;
+    text-decoration: underline;
+    cursor: pointer;
+    font-family: "montserrat", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    letter-spacing: 0.8px;
+    font-size: 16px;
+  }
+}
+
+.info{
+  display: grid;
+  grid-template-rows: calc(50% - 5px) calc(50% - 5px);
+  grid-gap: 10px;
+  &__title{
+    margin: 0 0 10px 0;
+  }
+}
+
+.request{
+  display: flex;
+  flex-direction: column;
+  &__buttons{
+    display: flex;
+    gap: 10px;
+  }
+  &__btn{
+    width: 50%;
+    margin: 0;
+  }
+  &__item{
+    white-space: normal;
+    font-size: 12px;
+  }
+}
+.messenger__field, .request__field{
+  margin: 10px 0 0 0;
+  border: 1px solid grey;
+  border-radius: 5px;
+  height: 100%;
+  overflow: auto;
+}
+.messenger{
+  display: flex;
+  flex-direction: column;
+  &__field{
+    margin: 0;
+    border-radius: 5px 5px 0 0;
+    background-color: #c4f2fd;
+    border-bottom: none;
+    display: flex;
+    flex-direction: column;
+  }
+  &__message{
+    background-color: white;
+    margin: 5px;
+    padding: 10px;
+    border-radius: 5px;
+    display: block;
+    width: fit-content;
+    font-family: "montserrat", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+    letter-spacing: 0.8px;
+    font-size: 13px;
+    position: relative;
+    min-width: 50%;
+  }
+  &__textarea{
+    resize: none;
+    width: 100%;
+    outline: none;
+    border: 1px solid grey;
+    border-radius: 0 0 0 5px;
+    font-family: "montserrat", sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    padding: 5px;
+  }
+  &__send{
+    display: flex;
+    &-btn{
+      display: block;
+      width: 45px;
+      background-size: 70%;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-image: url("../img/right-arrow-svgrepo-com.svg");
+      cursor: pointer;
+      border: 1px solid grey;
+      border-left: none;
+      border-radius: 0 0 5px 0;
+      &:hover{
+        background-color: #c0d7ff;
+      }
+      &:active{
+        background-color: #97b8ff;
+      }
+    }
+  }
+  &__btn{
+    display: block;
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    cursor: pointer;
+    &_edit{
+      right: 3px;
+      bottom: 3px;
+      background-image: url("../img/button-setting.svg");
+    }
+    &_delete{
+      right: 3px;
+      top: 3px;
+      background-image: url("../img/close.svg");
+    }
+  }
+}
+
+.inVisible{
+  display: none;
+}
