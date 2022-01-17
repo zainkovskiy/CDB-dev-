@@ -506,21 +506,12 @@ class Handler {
       } else if (event.target.classList.contains('module__close')) {
         this.closeModule(module);
         this.statusImg = false;
+      } else if (event.target.dataset.type === 'object') {
+          this.openObjectAlert(module);
+      } else if (event.target.dataset.type === 'promo') {
+          this.openPromoAlert(module);
       } else if (event.target.dataset.name === 'sendAlert'){
-        if (document.querySelector('.select__gap').innerHTML !== 'Выбрать'){
-          this.setLoader();
-          if (this.obj.privileges.card === 'ADB'){
-            this.sendADB().then(() => {
-              this.removeLoader();
-              this.closeModule(module);
-            })
-          } else{
-            this.sendAlert().then(() => {
-              this.removeLoader();
-              this.closeModule(module);
-            })
-          }
-        }
+        this.setAlertValue(event, module);
       } else if (event.target.dataset.name === 'cancelAlert'){
         this.closeModule(module);
       } else if (event.target.dataset.name === 'sendOrderPhoto'){
@@ -581,40 +572,251 @@ class Handler {
     }
   }
 
-  openAlert(){
-    const layoutAlert = `<div class="module__wrap">
-                          <div class="module__header">
-                              <span class="module-title">Выберете причину</span>
-                          </div>
-                          <form class="form-alert">
-                            <div class="form-alert__wrap">
-                              <select class="form-alert__select">
-                                ${this.obj.privileges.card === 'ADB' ? '' : `<option>Изменить ответственного Риелтора</option>`}
-                                ${this.obj.privileges.card === 'ADB' ? '' : `<option>Изменить статус</option>`}
-                                ${this.obj.privileges.card === 'ADB' ? '' : `<option>Изменить цену</option>`}
-                                ${this.obj.privileges.card === 'ADB' ? '' : `<option>Иные причины</option>`}
-                                ${this.obj.privileges.card === 'ADB' ? '' : `<option>Пожаловаться на дубль Заявки</option>`}
-                                ${this.obj.privileges.card === 'ADB' ? '' : `<option>Проблема с адресом</option>`}
-                                ${this.obj.privileges.card === 'ADB' ? '' : `<option>Проблема с выгрузкой в рекламу</option>`}
-                                ${this.obj.privileges.card === 'ADB' ? '' : `<option>Проблема с информацией в Заявке</option>`}
-                                
-                                ${this.obj.privileges.card === 'ADB' ? `<option>Активная</option>` : ''}
-                                ${this.obj.privileges.card === 'ADB' ? `<option>Отмененная</option>` : ''}
-                                ${this.obj.privileges.card === 'ADB' ? `<option>Отложенная</option>` : ''}
-                                ${this.obj.privileges.card === 'ADB' ? `<option>Предварительно отменена</option>` : ''}
-                                ${this.obj.privileges.card === 'ADB' ? `<option>Выполненная</option>` : ''}
-                                ${this.obj.privileges.card === 'ADB' ? `<option>Ожидание сделки</option>` : ''}
-                              </select>  
-                            </div>                
-                              <textarea placeholder="Введите коментарий для модератора" class="form-alert__area" 
-                              name="" id="" cols="30" rows="10"></textarea>    
-                          </form>
-                          <button data-name="sendAlert" class="ui-btn ui-btn-light-border">Отправить</button>
-                          <button data-name="cancelAlert" class="ui-btn ui-btn-light-border">Отменить</button>
-                          </div>`
-    this.openModule(layoutAlert);
-    selectStyle('.form-alert__select', `${this.obj.privileges.card === 'ADB' ? `${this.obj.reqStatus ? this.obj.reqStatus : 'Выбрать'}` : 'Выбрать'}`);
+  setAlertValue(event, module){
+    if (event.target.dataset.action === 'ADB'){
+      if (document.querySelector('.select__gap').innerHTML !== 'Выбрать'){
+        this.setLoader();
+        this.sendADB().then(() => {
+          this.removeLoader();
+          this.closeModule(module);
+        })
+      }
+    } else if (event.target.dataset.action === 'объект'){
+      const requestAlert = {
+        source: source,
+        sourceId: UID,
+        applicant: loginID,
+        type: event.target.dataset.action,
+        subtype: '',
+        extype: '',
+        reason: document.querySelector('.form-alert__area').value,
+      }
+      const subtype = document.querySelector('.select__subtype ');
+      if (subtype.innerHTML !== 'Выбрать'){
+        if (subtype.innerHTML === 'Ошибка в информации по объекту' || subtype.innerHTML === 'Что-то другое...'){
+          const extype = document.querySelector('.select__extype');
+          if (extype.innerHTML !== 'Выбрать'){
+            requestAlert.subtype = subtype.innerHTML;
+            requestAlert.extype = extype.innerHTML;
+            this.setLoader();
+            this.sendAlert(requestAlert).then(() => {
+              this.removeLoader();
+              this.closeModule(module);
+            })
+          }
+        } else {
+          requestAlert.subtype = subtype.innerHTML;
+          this.setLoader();
+          this.sendAlert(requestAlert).then(() => {
+            this.removeLoader();
+            this.closeModule(module);
+          })
+        }
+      }
+    } else if (event.target.dataset.action === 'реклама'){
+      const requestAlert = {
+        source: source,
+        sourceId: UID,
+        applicant: loginID,
+        type: event.target.dataset.action,
+        subtype: '',
+        extype: '',
+        reason: '',
+      }
+      const subtype = document.querySelector('.select__subtype ');
+      if (subtype.innerHTML !== 'Выбрать'){
+        if (subtype.innerHTML === 'Нет в рекламе'){
+          const extypePromo = document.querySelector('.select__extype-promo');
+          if (extypePromo.innerHTML !== 'Выбрать'){
+            requestAlert.subtype = subtype.innerHTML;
+            requestAlert.extype = extypePromo.innerHTML;
+            requestAlert.reason = document.querySelector('.form-alert__area').value;
+            this.setLoader();
+            this.sendAlert(requestAlert).then(() => {
+              this.removeLoader();
+              this.closeModule(module);
+            })
+          }
+        } else if (subtype.innerHTML === 'Не верная информация в рекламе'){
+          const extypeInfo = document.querySelector('.select__extype-info');
+          if (extypeInfo.innerHTML !== 'Выбрать'){
+            const reason = document.querySelector('.select__reason');
+            if (reason.innerHTML !== 'Выбрать'){
+              requestAlert.subtype = subtype.innerHTML;
+              requestAlert.extype = extypeInfo.innerHTML;
+              requestAlert.reason = reason.innerHTML + ' ' + document.querySelector('.form-alert__area').value;
+              this.setLoader();
+              this.sendAlert(requestAlert).then(() => {
+                this.removeLoader();
+                this.closeModule(module);
+              })
+            }
+          }
+        }
+      }
+    }
   }
+  openAlert(){
+    this.openModule(this.obj.privileges.card === 'ADB' ? this.alertADBLayout() : this.alertUserLayout());
+    selectStyle('.form-alert__select', 'Выбрать');
+  }
+  alertADBLayout(){
+    return `<div class="module__wrap">
+              <div class="module__header">
+                  <span class="module-title">Выберете причину</span>
+              </div>
+              <div class="form-alert">
+                <div class="form-alert__wrap">
+                  <select class="form-alert__select">
+                    <option>Активная</option>
+                    <option>Отмененная</option>
+                    <option>Отложенная</option>
+                    <option>Предварительно отменена</option>
+                    <option>Выполненная</option>
+                    <option>Ожидание сделки</option>
+                  </select>  
+                </div>                
+                  <textarea placeholder="Введите коментарий" class="form-alert__area" 
+                  name="" id="" cols="30" rows="10"></textarea>    
+              </div>
+              <button data-action="ADB" data-name="sendAlert" class="ui-btn ui-btn-light-border">Отправить</button>
+              <button data-name="cancelAlert" class="ui-btn ui-btn-light-border">Отменить</button>
+            </div>`
+  }
+  alertUserLayout(){
+    return `<div class="module__wrap">
+            <div class="module__header">
+                <span class="module-title">Укажите причину</span>
+            </div>
+            <div class="module__alert">
+              <div class="module__alert-item" data-type="object">Проблема с объектом</div>
+              <div class="module__alert-item" data-type="promo">Проблема с рекламой</div>
+            </div>
+              <button data-name="cancelAlert" class="ui-btn ui-btn-danger-dark">Отменить</button>
+            </div>`;
+  }
+  openObjectAlert(module){
+    module.innerHTML = '';
+    module.insertAdjacentHTML('beforeend',
+                        `<div class="module__wrap">
+                                <div class="module__header">
+                                    <span class="module-title">Проблема с объектом</span>
+                                </div>
+                                <div class="form-alert">
+                                  <div class="form-alert__wrap">
+                                    <select class="form-alert__subtype">
+                                      <option>Дубль</option>
+                                      <option>Смена ответственного</option>
+                                      <option>Смена статуса</option>
+                                      <option>Ошибка в информации по объекту</option>
+                                      <option>Что-то другое...</option>
+                                    </select>  
+                                    <select class="form-alert__extype">
+                                      <option>В адресе</option>
+                                      <option>В фото или описание</option>
+                                      <option>В характеристиках объекта</option>
+                                    </select>  
+                                  </div>                
+                                    <textarea placeholder="Введите коментарий" class="form-alert__area" 
+                                    name="" id="" cols="30" rows="10"></textarea>    
+                                </div>
+                                <button data-action="объект" data-name="sendAlert" class="ui-btn ui-btn-light-border">Отправить</button>
+                                <button data-name="cancelAlert" class="ui-btn ui-btn-danger-dark">Отменить</button>
+                                </div>`)
+    selectStyle('.form-alert__subtype', 'Выбрать', 'select__subtype', '');
+    selectStyle('.form-alert__extype', 'Выбрать', 'select__extype', 'isDisable-select');
+    this.handlerSelectAlertObject();
+  }
+  handlerSelectAlertObject(){
+    const allSelect = document.querySelectorAll('.select__gap');
+    for (let select of allSelect){
+      const observer = new MutationObserver(() => {
+        const extype = document.querySelector('.select__extype');
+        if (select.classList.contains('select__subtype')){
+          if (select.innerHTML === 'Ошибка в информации по объекту' || select.innerHTML === 'Что-то другое...'){
+            extype.classList.remove('isDisable-select');
+            extype.innerHTML = 'Выбрать';
+          } else {
+            extype.classList.add('isDisable-select');
+            extype.innerHTML = 'Выбрать';
+          }
+        }
+      })
+      observer.observe(select, {childList: true});
+    }
+  }
+  openPromoAlert(module){
+    module.innerHTML = '';
+    module.insertAdjacentHTML('beforeend',
+      `<div class="module__wrap">
+                                <div class="module__header">
+                                    <span class="module-title">Проблема с рекламой</span>
+                                </div>
+                                <div class="form-alert">
+                                  <div class="form-alert__wrap">
+                                    <select class="form-alert__subtype">
+                                      <option>Нет в рекламе</option>
+                                      <option>Не верная информация в рекламе</option>
+                                    </select>  
+                                    <select class="form-alert__extype-promo">
+                                      <option>На N1</option>
+                                      <option>На Циан</option>
+                                      <option>На Яндекс-Недвижимости</option>
+                                      <option>На Домклик</option>
+                                      <option>Вообще нет в рекламе</option>
+                                    </select>  
+                                    <select class="form-alert__extype-info">
+                                      <option>В адресе</option>
+                                      <option>В фото или описание</option>
+                                      <option>В цене</option>
+                                      <option>В характеристиках объекта</option>
+                                    </select>  
+                                    <select class="form-alert__reason">
+                                      <option>На N1</option>
+                                      <option>На Циан</option>
+                                      <option>На Яндекс-Недвижимости</option>
+                                      <option>На Домклик</option>
+                                      <option>Вообще везде</option>
+                                    </select>  
+                                  </div>                
+                                    <textarea placeholder="Введите коментарий" class="form-alert__area" 
+                                    name="" id="" cols="30" rows="10"></textarea>    
+                                </div>
+                                <button data-action="реклама" data-name="sendAlert" class="ui-btn ui-btn-light-border">Отправить</button>
+                                <button data-name="cancelAlert" class="ui-btn ui-btn-danger-dark">Отменить</button>
+                                </div>`)
+    selectStyle('.form-alert__subtype', 'Выбрать', 'select__subtype', '');
+    selectStyle('.form-alert__extype-promo', 'Выбрать', 'select__extype-promo', 'isDisable-select');
+    selectStyle('.form-alert__extype-info', 'Выбрать', 'select__extype-info', 'isDisable-select');
+    selectStyle('.form-alert__reason', 'Выбрать', 'select__reason', 'isDisable-select');
+    this.handlerSelectAlertPromo();
+  }
+  handlerSelectAlertPromo(){
+    const allSelect = document.querySelectorAll('.select__gap');
+    for (let select of allSelect){
+      const observer = new MutationObserver(() => {
+        const extypePromo = document.querySelector('.select__extype-promo');
+        const extypeInfo = document.querySelector('.select__extype-info');
+        const reason = document.querySelector('.select__reason');
+        if (select.classList.contains('select__subtype')){
+          if (select.innerHTML === 'Нет в рекламе'){
+            extypePromo.classList.remove('isDisable-select');
+            extypeInfo.classList.add('isDisable-select');
+            extypeInfo.innerHTML = 'Выбрать';
+            reason.classList.add('isDisable-select');
+            reason.innerHTML = 'Выбрать';
+          } else if (select.innerHTML === 'Не верная информация в рекламе'){
+            extypeInfo.classList.remove('isDisable-select');
+            reason.classList.remove('isDisable-select');
+            extypePromo.classList.add('isDisable-select');
+            extypePromo.innerHTML = 'Выбрать';
+          }
+        }
+      })
+      observer.observe(select, {childList: true});
+    }
+  }
+
   async sendADB(){
     const obj = {
       action: 'setStatus',
@@ -640,11 +842,10 @@ class Handler {
       throw new Error('Ответ сети был не ok.');
     }
   }
-  async sendAlert(){
-    const obj = this.setAlert();
+  async sendAlert(requestAlert){
     let myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json; charset=utf-8");
-    let raw = JSON.stringify(obj);
+    let raw = JSON.stringify(requestAlert);
     let requestOptions = {
       method: 'POST',
       mode: 'cors',
@@ -654,21 +855,11 @@ class Handler {
       body: raw
     };
 
-    let response = await fetch("https://crm.centralnoe.ru/dealincom/exchange/modNotify.php", requestOptions);
+    let response = await fetch("https://hs-01.centralnoe.ru/Project-Selket-Main/Servers/Support/Help.php", requestOptions);
     if (!response.ok) {
       throw new Error('Ответ сети был не ok.');
     }
     alert('Форма отправлена');
-  }
-  setAlert(){
-    const textField = document.querySelector('.form-alert__area');
-    const selectField = document.querySelector('.form-alert__select');
-    return {
-      userName: login,
-      cardId: this.obj.reqNumber,
-      selectInput: selectField.options[selectField.selectedIndex].text,
-      comment: textField.value,
-    };
   }
 
   async sendOrderPhoto(container){
@@ -853,7 +1044,7 @@ class ChartCallView{
 const app = new App();
 app.getJson();
 
-function selectStyle(select, firstWord){
+function selectStyle(select, firstWord, secondClass, isDisable){
   $(select).each(function(){
     // Variables
     var $this = $(this),
@@ -867,22 +1058,16 @@ function selectStyle(select, firstWord){
     $this.wrap('<div class="select"></div>');
     // Style box
       $('<div>', {
-        class: 'select__gap',
+        class: `select__gap ${secondClass} ${isDisable}`,
         text: firstWord
       }).insertAfter($this);
 
     var selectGap = $this.next('.select__gap'),
       caret = selectGap.find('.caret');
     // Add ul list
-    if (select === '.metro__select'){
-      $('<ul>',{
-        class: 'select__list metro__list'
-      }).insertAfter(selectGap);
-    } else {
       $('<ul>',{
         class: 'select__list'
       }).insertAfter(selectGap);
-    }
 
     var selectList = selectGap.next('.select__list');
     // Add li - option items
