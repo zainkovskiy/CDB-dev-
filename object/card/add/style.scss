@@ -39,6 +39,11 @@ i{
     display: flex;
     align-items: center;
   }
+  &__bottom{
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0 0 0;
+  }
   &__back{
     font-size: 12px;
     white-space: nowrap;
@@ -61,9 +66,18 @@ i{
 }
 
 .change-obj{
-  margin: 20px 0 0 0;
   &__input{
     appearance: auto;
+  }
+}
+
+.redemption{
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  &__checkbox{
+    appearance: auto;
+    margin: 0;
   }
 }
 .status{
@@ -113,6 +127,11 @@ i{
       justify-content: space-between;
       align-items: center;
     }
+    &-subitle{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
   }
   &__subtitle{
     display: block;
@@ -158,6 +177,10 @@ i{
     &-wrap{
       display: flex;
     }
+  }
+  &__reqOverstatePrice_checkbox{
+    appearance: auto;
+    margin: 0;
   }
 }
 .room__field{
