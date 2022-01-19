@@ -728,18 +728,14 @@ class Render {
                   </div>
                 </div>
                 <div class="docs"> 
-                  <div class="documents"> 
+                <div class="documents"> 
                       <div class="documents__wrap"> 
-                        <span class="file__text">Договор об оказании услуг</span>
+                        <span class="file__text">Скачать договор об оказании услуг</span>
                         <span data-documents="dou" class="documents__btn"></span>
                       </div>
                       <div class="documents__wrap"> 
-                        <span class="file__text">Акт показа объекта</span>
-                        <span data-documents="act" class="documents__btn"></span>
                       </div>
                       <div class="documents__wrap"> 
-                        <span class="file__text">Доп. соглашение (О продлении)</span>                       
-                        <span data-documents="ds" class="documents__btn"></span>
                       </div>
                       <div class="documents__wrap"> 
                       </div>
