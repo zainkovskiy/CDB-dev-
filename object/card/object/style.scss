@@ -1,13 +1,14 @@
 .main{
   display: grid;
-  grid-template-rows: repeat(7, auto);
+  grid-template-rows: repeat(8, auto);
   grid-template-columns: 73% 1fr;
   grid-gap: 20px;
   grid-template-areas:
     "nav nav"
     "carousel carousel"
-    "about contacts"
-    "info btn"
+    "miscellaneous miscellaneous"
+    "about btn"
+    "info story"
     "description story"
     "map story"
     "chart story";
@@ -25,9 +26,9 @@
 
 .about{
   display: grid;
-  grid-template-columns: 400px 1fr;
-  grid-template-rows: auto auto auto;
-  grid-gap: 10px 20px;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto;
+  grid-gap: 20px;
   grid-area: about;
   &__date{
     display: flex;
@@ -64,17 +65,6 @@
     align-items: flex-end;
   }
   &__logo{
-    display: flex;
-    justify-content: flex-start;
-    &-item{
-      display: block;
-      height: 40px;
-      width: 40px;
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
-      margin: 0 10px 0 0;
-    }
     &-doc{
       flex-direction: column;
       display: flex;
@@ -117,6 +107,33 @@
     display: flex;
     justify-content: space-between;
     border-bottom: 1px solid #E9ECEE;
+  }
+}
+.miscellaneous-information{
+  grid-area: miscellaneous;
+  &__text{
+    margin: 0;
+    width: 48%;
+  }
+  &__header{
+    gap: 10px;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+  }
+  &__bottom{
+    margin: 20px 0 0 0;
+    display: flex;
+    justify-content: flex-start;
+    gap: 10px;
+  }
+  &__logo{
+    display: block;
+    height: 35px;
+    width: 35px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
   }
 }
 .owner__phone__btn{
@@ -178,9 +195,12 @@
 
 .contacts{
   display: flex;
-  flex-direction: column;
   justify-content: space-between;
-  grid-area: contacts;
+  grid-column-start: 1;
+  grid-column-end: 3;
+  &__client{
+    text-align: right;
+  }
   &__link{
     color: #0a58ca;
     text-decoration: none;
@@ -188,6 +208,7 @@
   &__wrap{
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
   }
   &__border{
     display: block;
@@ -196,7 +217,7 @@
     margin: 10px 0;
   }
   &__phone{
-    margin: 0 18px 0 9px;
+    margin: 0 10px 0 0;
   }
   &__img{
     width: 30px;
@@ -208,6 +229,9 @@
     display: flex;
     margin: 5px 0;
     align-items: center;
+    &_right{
+      justify-content: flex-end;
+    }
   }
 }
 
