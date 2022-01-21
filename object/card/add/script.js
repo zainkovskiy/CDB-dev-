@@ -1641,7 +1641,7 @@ class Float{
                   ${add.obj.reqOverstate === '1' ? 'checked' : ''}>
                 </div>
                 <input name="reqOverstatePrice" id="reqOverstatePrice" class="form__input" type="text" 
-                value="${add.obj.reqOverstate === '1' ? add.obj.reqOverstatePrice : add.obj.reqPrice}" ${add.obj.reqOverstate === '1' ? '' : 'disabled'}
+                value="${add.obj.reqOverstate === '1' ? add.obj.reqOverstatePrice : `${add.obj.reqPrice ? add.obj.reqPrice : ''}`}" ${add.obj.reqOverstate === '1' ? '' : 'disabled'}
                 autocomplete="new-password">
               </div>
             </div>
@@ -1876,7 +1876,7 @@ class Room{
                   ${add.obj.reqOverstate === '1' ? 'checked' : ''}>
                 </div>
                 <input name="reqOverstatePrice" id="reqOverstatePrice" class="form__input" type="text" 
-                value="${add.obj.reqOverstate === '1' ? add.obj.reqOverstatePrice : add.obj.reqPrice}" ${add.obj.reqOverstate === '1' ? '' : 'disabled'}
+                value="${add.obj.reqOverstate === '1' ? add.obj.reqOverstatePrice : `${add.obj.reqPrice ? add.obj.reqPrice : ''}`}" ${add.obj.reqOverstate === '1' ? '' : 'disabled'}
                 autocomplete="new-password">
               </div>
             </div>
@@ -2138,7 +2138,7 @@ class House{
                   ${add.obj.reqOverstate === '1' ? 'checked' : ''}>
                 </div>
                 <input name="reqOverstatePrice" id="reqOverstatePrice" class="form__input" type="text" 
-                value="${add.obj.reqOverstate === '1' ? add.obj.reqOverstatePrice : add.obj.reqPrice}" ${add.obj.reqOverstate === '1' ? '' : 'disabled'}
+                value="${add.obj.reqOverstate === '1' ? add.obj.reqOverstatePrice : `${add.obj.reqPrice ? add.obj.reqPrice : ''}`}" ${add.obj.reqOverstate === '1' ? '' : 'disabled'}
                 autocomplete="new-password">
               </div>
             </div>                
@@ -2254,7 +2254,7 @@ class Ground{
                   ${add.obj.reqOverstate === '1' ? 'checked' : ''}>
                 </div>
                 <input name="reqOverstatePrice" id="reqOverstatePrice" class="form__input" type="text" 
-                value="${add.obj.reqOverstate === '1' ? add.obj.reqOverstatePrice : add.obj.reqPrice}" ${add.obj.reqOverstate === '1' ? '' : 'disabled'}
+                value="${add.obj.reqOverstate === '1' ? add.obj.reqOverstatePrice : `${add.obj.reqPrice ? add.obj.reqPrice : ''}`}" ${add.obj.reqOverstate === '1' ? '' : 'disabled'}
                 autocomplete="new-password">
               </div>
             </div>                        
@@ -2377,7 +2377,7 @@ class Garage{
                   ${add.obj.reqOverstate === '1' ? 'checked' : ''}>
                 </div>
                 <input name="reqOverstatePrice" id="reqOverstatePrice" class="form__input" type="text" 
-                value="${add.obj.reqOverstate === '1' ? add.obj.reqOverstatePrice : add.obj.reqPrice}" ${add.obj.reqOverstate === '1' ? '' : 'disabled'}
+                value="${add.obj.reqOverstate === '1' ? add.obj.reqOverstatePrice : `${add.obj.reqPrice ? add.obj.reqPrice : ''}`}" ${add.obj.reqOverstate === '1' ? '' : 'disabled'}
                 autocomplete="new-password">
               </div>
             </div>                        
