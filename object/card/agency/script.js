@@ -300,11 +300,11 @@ class Render {
                         <div id="doc_open_client-${id}" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#doc_client-${id}">
                             <div class="clients__wrap clients__grid"> 
                               <p class="clients__text">Тип права<span>${item.relation.typeOfOwnership ? item.relation.typeOfOwnership : ''}</span></p>
-                              <p class="clients__text">Номер доверенности${item.relation.typeOfOwnership === 'Доверенность' 
-                                ? `<span>${item.relation.attorneyValue}</span>` : ``}</p>
+                              <p class="clients__text">Номер доверенности${item.relation.typeOfOwnership === 'Доверенность'
+      ? `<span>${item.relation.attorneyValue}</span>` : ``}</p>
                               <p class="clients__text">Объем владения<span>${item.relation.scopeOfOwnership ? item.relation.scopeOfOwnership : ''}</span></p>
                               <p class="clients__text">Размер доли${item.relation.scopeOfOwnership === 'Доля'
-                                ? `<span>${item.relation.percentageOfOwnership}</span>` : ``}</p>
+      ? `<span>${item.relation.percentageOfOwnership}</span>` : ``}</p>
                             </div>
                             <span class="clients__border"></span>
                             <div data-container="doc-${item.UID}" class="file"> 
@@ -382,11 +382,11 @@ class Render {
                         <div id="doc_open_client-${id}" class="accordion-collapse collapse" aria-labelledby="flush-headingOne" data-bs-parent="#doc_client-${id}">
                             <div class="clients__wrap clients__grid"> 
                               <p class="clients__text">Тип права<span>${item.relation.typeOfOwnership ? item.relation.typeOfOwnership : ''}</span></p>
-                              <p class="clients__text">Номер доверенности${item.relation.typeOfOwnership === 'Доверенность' 
-                                ? `<span>${item.relation.attorneyValue}</span>` : ``}</p>
+                              <p class="clients__text">Номер доверенности${item.relation.typeOfOwnership === 'Доверенность'
+      ? `<span>${item.relation.attorneyValue}</span>` : ``}</p>
                               <p class="clients__text">Объем владения<span>${item.relation.scopeOfOwnership ? item.relation.scopeOfOwnership : ''}</span></p>
                               <p class="clients__text">Размер доли${item.relation.scopeOfOwnership === 'Доля'
-                                ? `<span>${item.relation.percentageOfOwnership}</span>` : ``}</p>
+      ? `<span>${item.relation.percentageOfOwnership}</span>` : ``}</p>
                             </div>
                             <span class="clients__border"></span>
                             <div data-container="doc-${item.UID}" class="file"> 
@@ -414,7 +414,7 @@ class Render {
       scopeOfOwnership.value = `value = ${this.obj.percentageOfOwnership}`;
     }
     return scopeOfOwnership;
-}
+  }
   placeLayout(){
     const params = this.obj.params;
     const street = `, ул. ${params.street}`;
@@ -614,7 +614,7 @@ class Render {
             <nav class="change-page">
                 <a class="ui-btn ui-btn-icon-eye-opened change-page__link" href="../object/?source=${source}&id=${UID}&IDDEAL=${deal}">Объект</a>
                 <a class="ui-btn ui-btn-secondary ui-btn-icon-page change-page__link" href="../agency/?source=${source}&id=${objectUID}&IDDEAL=${deal}">ДОУ</a>
-                <a class="ui-btn change-page__link" href="../photo/?source=${source}&id=${objectUID}&IDDEAL=${deal}">Фото</a>
+                <a class="ui-btn change-page__link" href="../photoEditor/?source=${source}&id=${objectUID}&IDDEAL=${deal}">Фото</a>
                 <a class="ui-btn change-page__link" href="../promotion/?source=${source}&id=${objectUID}&IDDEAL=${deal}">Реклама</a>
                 <a class="ui-btn ui-btn-icon-done change-page__link disable" href="../buySell/?source=${source}&id=${objectUID}&IDDEAL=${deal}">ПДКП/ДКП</a>
             </nav>
@@ -728,12 +728,14 @@ class Render {
                   </div>
                 </div>
                 <div class="docs"> 
-                <div class="documents"> 
+                  <div class="documents"> 
                       <div class="documents__wrap"> 
                         <span class="file__text">Скачать договор об оказании услуг</span>
                         <span data-documents="dou" class="documents__btn"></span>
                       </div>
                       <div class="documents__wrap"> 
+                        <span class="file__text">Соглашение о продление ДОУ</span>
+                        <span data-documents="extension" class="documents__btn"></span>
                       </div>
                       <div class="documents__wrap"> 
                       </div>
@@ -1328,9 +1330,9 @@ class Form {
       secondName: /^[А-ЯЁ][а-яё]*( )?-?( )?[А-ЯЁ]?[а-яё]*$/,
       nationality: /^[А-ЯЁа-яё]*\.?( )?-?( )?[А-ЯЁ]?[а-яё]*$/,
       bornLocality: /.*/,
-      passRange: /^\d{4}$/,
-      passNumber: /^\d{6}$/,
-      passCode: /^\d{3}-\d{3}$/,
+      passRange: /.*/,
+      passNumber: /.*/,
+      passCode: /.*/,
       passGranted: /.*/,
       registrationAddress: /.*/,
       residentialAddress: /.*/,
@@ -1344,7 +1346,7 @@ class Form {
       address_form: [],
     }
     for (let input of allInputs){
-      if (input.value.length === 0 && !input.hasAttribute('disabled')){
+      if (input.value.length === 0 && !input.hasAttribute('disabled') && input.name !== 'passCode'){
         validInputs[input.name] = false;
         input.classList.add('isValid');
         isValidPills[input.id].push(input);
@@ -1361,18 +1363,18 @@ class Form {
             input.classList.remove('isValid');
           }
         } else {
-            if (!libraryRegExp[input.name].test(input.value)){
-              validInputs[input.name] = false;
-              input.classList.add('isValid');
-              isValidPills[input.id].push(input);
-            } else {
-              validInputs[input.name] = true;
-              input.classList.remove('isValid');
-            }
+          if (!libraryRegExp[input.name].test(input.value)){
+            validInputs[input.name] = false;
+            input.classList.add('isValid');
+            isValidPills[input.id].push(input);
+          } else {
+            validInputs[input.name] = true;
+            input.classList.remove('isValid');
+          }
         }
       } else if (input.hasAttribute('disabled')){
-          input.classList.remove('isValid');
-          validInputs[input.name] = true;
+        input.classList.remove('isValid');
+        validInputs[input.name] = true;
       }
     }
 
@@ -1470,9 +1472,9 @@ class Form {
           }
         }
       } else if(item.name === 'attorneyValue' || item.name === 'percentageOfOwnership' || item.name === 'costForClient'){
-          newClient.relation[item.name] = item.value;
+        newClient.relation[item.name] = item.value;
       } else {
-          newClient[item.name] = item.value;
+        newClient[item.name] = item.value;
       }
     }
     newClient.b24ID = '';
@@ -1567,6 +1569,14 @@ class Handler{
       } else if (event.target.dataset.documents === "dou"){
         this.getDocuments('https://crm.centralnoe.ru/dealincom/templates/sk.php', {
           packUID: app.copyOwner.agencyagreement.UID,
+        }).then(data => {
+          location.href = `https://crm.centralnoe.ru${data.result.document.downloadUrl}`
+          console.log(data)
+        });
+      } else if (event.target.dataset.documents === "extension"){
+        this.getDocuments('https://crm.centralnoe.ru/dealincom/templates/sk.php', {
+          packUID: app.copyOwner.agencyagreement.UID,
+          Ext: 1
         }).then(data => {
           location.href = `https://crm.centralnoe.ru${data.result.document.downloadUrl}`
           console.log(data)
@@ -1765,12 +1775,12 @@ class Handler{
       }
     }
     const selectInput = document.querySelectorAll('.select__gap');
-      for (let item of selectInput){
-        const observer = new MutationObserver(() => {
-          saveChange.classList.add('save-change_active');
-        })
-        observer.observe(item, {childList: true});
-      }
+    for (let item of selectInput){
+      const observer = new MutationObserver(() => {
+        saveChange.classList.add('save-change_active');
+      })
+      observer.observe(item, {childList: true});
+    }
   }
   changeFormPromo(item){
     const carrierBtns = document.querySelectorAll('.carrier__btn');
@@ -2798,9 +2808,9 @@ class EditClient{
       secondName: /^[А-ЯЁ][а-яё]*( )?-?( )?[А-ЯЁ]?[а-яё]*$/,
       nationality: /^[А-ЯЁа-яё]*\.?( )?-?( )?[А-ЯЁ]?[а-яё]*$/,
       bornLocality: /.*/,
-      passRange: /^\d{4}$/,
-      passNumber: /^\d{6}$/,
-      passCode: /^\d{3}-\d{3}$/,
+      passRange: /.*/,
+      passNumber: /.*/,
+      passCode: /.*/,
       passGranted: /.*/,
       registrationAddress: /.*/,
       residentialAddress: /.*/,
@@ -2814,7 +2824,7 @@ class EditClient{
       address_form: [],
     }
     for (let input of allInputs){
-      if (input.value.length === 0 && !input.hasAttribute('disabled')){
+      if (input.value.length === 0 && !input.hasAttribute('disabled') && input.name !== 'passCode'){
         validInputs[input.name] = false;
         input.classList.add('isValid');
         isValidPills[input.id].push(input);
@@ -2970,9 +2980,9 @@ function selectStyle(select, firstWord){
     var selectGap = $this.next('.select__gap'),
       caret = selectGap.find('.caret');
     // Add ul list
-      $('<ul>',{
-        class: 'select__list'
-      }).insertAfter(selectGap);
+    $('<ul>',{
+      class: 'select__list'
+    }).insertAfter(selectGap);
 
     var selectList = selectGap.next('.select__list');
     // Add li - option items
