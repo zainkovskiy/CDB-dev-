@@ -488,6 +488,30 @@ class AddressHandler {
         this.openNewObject();
       } else if (event.target.dataset.filter === 'sale'){
         this.setFilterSale();
+      } else if (event.target.dataset.only === 'mine'){
+        document.querySelector(`INPUT[name="1c"]`).checked = true;
+        document.querySelector(`INPUT[name="pars"]`).checked = false;
+        this.setAllValue();
+        this.setLoader();
+        this.objectFilter.onlyMy = currentUserLogin;
+        this.sendToServer().then(data => {
+          console.log(data)
+          this.setCountCard(data);
+          new Cards(data).init();
+          this.handlerLinkToStop();
+          document.querySelector(`INPUT[name='sort']`).value = `Сортировка по умолчанию`;
+          if (data.length > 100){
+            this.startPaginat = 0;
+            this.currentPaginatActive = 0;
+            this.setPagination();
+            this.renderPagination();
+          } else {
+            this.clearPaginationContainer();
+          }
+          this.removeLoader();
+          document.querySelector('#map').innerHTML = '';
+          this.initMap(this.cards);
+        });
       }
     });
 
