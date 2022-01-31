@@ -107,6 +107,10 @@
   .mobile-margin_bottom {
     margin: 0 0 10px 0;
   }
+
+  .mobile-toggle__label {
+    display: inline-block;
+  }
 }
 
 /*# sourceMappingURL=media.css.map */

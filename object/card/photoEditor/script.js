@@ -120,7 +120,7 @@ class Render{
     if (this.photos.length > 0 && this.photos[0].reqPhotoDown === '1'){
       handlerDownload();
       return `<span>Мы заботимся о Вашем времени! Фотографии в процессе загрузки. Обычно это занимает не более 3-х минут. Можно закрыть страницу,  по факту окончания Вам придет уведомление</span>
-              <span class="info__gif"></span>`
+              <span class="info__gif"></span>`;
     } else {
       return `<span>Как работать с фотографиями?</span>
               <button data-info="photo" class="ui-btn ui-btn-primary-dark">инфо</button>`
@@ -219,7 +219,7 @@ class Render{
               <a class="ui-btn ui-btn-icon-page change-page__link" 
               href="../agency/?source=${source}&id=${objectUID}&IDDEAL=${deal}">ДОУ</a>
               
-              <a class="ui-btn ui-btn-secondary change-page__link" href="../photo/?source=${source}&id=${objectUID}&IDDEAL=${deal}">Фото</a>              
+              <a class="ui-btn ui-btn-secondary change-page__link" href="../photoEditor/?source=${source}&id=${objectUID}&IDDEAL=${deal}">Фото</a>              
               <a class="ui-btn change-page__link" href="../promotion/?source=${source}&id=${objectUID}&IDDEAL=${deal}">Реклама</a>
               <a class="ui-btn ui-btn-icon-done change-page__link disable" href="../buySell/?source=${source}&id=${objectUID}&IDDEAL=${deal}">ПДКП/ДКП</a>
             </nav>
@@ -296,21 +296,21 @@ class Handler{
       } else if (event.target.dataset.name === 'delete'){
         this.photoDelete();
       } else if (event.target.tagName === "BUTTON" && event.target.dataset.button){
-          if (event.target.dataset.button === 'save'){
-            document.querySelector('.save-change').classList.add('save-change_close');
-            setTimeout(() => {
-              this.setFiles();
-              setLoader();
-              this.sendToServer().then(() => {
-                removeLoader();
-              });
-            }, 500)
-          } else if (event.target.dataset.button === 'cancel'){
-            document.querySelector('.save-change').classList.add('save-change_close');
-            setTimeout(() => {
-              this.resetPage();
-            }, 500)
-          }
+        if (event.target.dataset.button === 'save'){
+          document.querySelector('.save-change').classList.add('save-change_close');
+          setTimeout(() => {
+            this.setFiles();
+            setLoader();
+            this.sendToServer().then(() => {
+              removeLoader();
+            });
+          }, 500)
+        } else if (event.target.dataset.button === 'cancel'){
+          document.querySelector('.save-change').classList.add('save-change_close');
+          setTimeout(() => {
+            this.resetPage();
+          }, 500)
+        }
       } else if (event.target.dataset.burger === 'burger'){
         this.checkCurrentOpenBurger();
         const block = document.querySelector(`.burger-hide`);
@@ -768,7 +768,7 @@ class EditPhoto{
     const currentY = window.pageYOffset;
     const photo = this.getPhoto(this.files);
     document.body.insertAdjacentHTML('afterbegin',
-              `<div style="top: ${currentY}px;" class="module">
+      `<div style="top: ${currentY}px;" class="module">
                           <div class="module__container"> 
                             ${photo}
                             <div class="module-photo module-upload">  
@@ -780,7 +780,7 @@ class EditPhoto{
                             </div>
                           </div>    
                           <div class="module__footer"> 
-                            <span>Не допускается к размещению фото с водяными знаками и чужих объектов.</span>
+                            <span>При размещении фотографий с видимыми водяными знаками и/или чужих объектов, ответственность о непрохождении модерации и/или отсутствию в рекламе, риелтор берет на себя.</span>
                             <div> 
                               <button data-module="save" class="ui-btn ui-btn-success">Сохранить</button>
                               <button data-module="close" class="ui-btn ui-btn-danger-dark">Закрыть</button>
@@ -822,38 +822,38 @@ class EditPhoto{
           }, 3000);
         }
       } else if (dataset.btn === 'web'){
-          event.target.classList.toggle('module-photo__btn_active');
-          if (+this.files[dataset.number].web === 0){
-            this.files[dataset.number].web = 1;
-          } else {
-              this.files[dataset.number].web = 0;
-          }
+        event.target.classList.toggle('module-photo__btn_active');
+        if (+this.files[dataset.number].web === 0){
+          this.files[dataset.number].web = 1;
+        } else {
+          this.files[dataset.number].web = 0;
+        }
       } else if (dataset.btn === 'left'){
-          this.setChanges({
-            URL: this.files[dataset.number].URL,
-            Turn: 90,
-            reqNumber: UID,
-          }, link => {
-            this.files[dataset.number].URL = link[0];
-            document.querySelector(`#id${dataset.number}`).src = link[0];
-          });
+        this.setChanges({
+          URL: this.files[dataset.number].URL,
+          Turn: 90,
+          reqNumber: UID,
+        }, link => {
+          this.files[dataset.number].URL = link[0];
+          document.querySelector(`#id${dataset.number}`).src = link[0];
+        });
       } else if (dataset.btn === 'right'){
-          this.setChanges({
-            URL: this.files[dataset.number].URL,
-            Turn: 270,
-            reqNumber: UID,
-          }, link => {
-            this.files[dataset.number].URL = link[0];
-            document.querySelector(`#id${dataset.number}`).src = link[0];
-          });
+        this.setChanges({
+          URL: this.files[dataset.number].URL,
+          Turn: 270,
+          reqNumber: UID,
+        }, link => {
+          this.files[dataset.number].URL = link[0];
+          document.querySelector(`#id${dataset.number}`).src = link[0];
+        });
       } else if (dataset.btn === 'delete'){
-          document.querySelector(`.photo${dataset.number}`).remove();
-          delete this.files[dataset.number];
+        document.querySelector(`.photo${dataset.number}`).remove();
+        delete this.files[dataset.number];
       } else if (dataset.btn === 'cut'){
-          const currentY = module.scrollTop;
-          module.setAttribute("style", "overflow-y:hidden;");
+        const currentY = module.scrollTop;
+        module.setAttribute("style", "overflow-y:hidden;");
 
-          module.insertAdjacentHTML('beforeend',
+        module.insertAdjacentHTML('beforeend',
           `<div style="top: ${currentY}px;" class="canvas__back">
                   <span class="canvas__error inVisibility">anytext</span>
                   <div id="canvas"> 
@@ -867,19 +867,19 @@ class EditPhoto{
                       </div>
                     </div>    
                 </div>`);
-          this.initDraw();
+        this.initDraw();
         this.computationCut.originalWidth = this.files[dataset.number].width;
         this.computationCut.originalHeight = this.files[dataset.number].height;
       } else if (dataset.canvas === 'close'){
+        this.closeCanvas();
+        module.removeAttribute("style");
+      } else if (dataset.canvas === 'save'){
+        if (this.computationCut.isRectangle){
+          this.calcCut(dataset.number);
+        } else {
           this.closeCanvas();
           module.removeAttribute("style");
-      } else if (dataset.canvas === 'save'){
-          if (this.computationCut.isRectangle){
-            this.calcCut(dataset.number);
-          } else {
-            this.closeCanvas();
-            module.removeAttribute("style");
-          }
+        }
       }
     });
 
@@ -893,7 +893,7 @@ class EditPhoto{
   }
   showStatusDownload(){
     document.querySelector('.info').innerHTML = `<span>Мы заботимся о Вашем времени! Фотографии в процессе загрузки. Обычно это занимает не более 3-х минут. Можно закрыть страницу,  по факту окончания Вам придет уведомление</span>
-            <span class="info__gif"></span>`;
+            <span class="info__gif"></span>`
     handlerDownload();
   }
   closeEditWindow(module){
@@ -920,7 +920,7 @@ class EditPhoto{
 
   checkRightPhoto(){
     for (let photo of this.files){
-      if (photo.height > 800 || photo.width > 800 && photo.allowFormat){
+      if (photo.height >= 800 || photo.width >= 800 && photo.allowFormat){
         this.rightFiles.push(photo);
       }
     }
@@ -979,7 +979,7 @@ class EditPhoto{
     }
 
     canvas.onclick = () => {
-        if (element !== null) {
+      if (element !== null) {
         element = null;
         canvas.style.cursor = "default";
         const rectangle = document.querySelector('.rectangle');
@@ -1033,8 +1033,8 @@ class EditPhoto{
       } else {
         this.files[number].URL = link.URL;
         document.querySelector(`#id${number}`).src = link.URL;
-          this.closeCanvas();
-          document.querySelector('.module').removeAttribute("style");
+        this.closeCanvas();
+        document.querySelector('.module').removeAttribute("style");
       }
     })
   }
