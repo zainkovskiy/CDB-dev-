@@ -644,6 +644,7 @@ class Handler {
             }
           } else {
             requestAlert.subtype = subtype.innerHTML;
+            console.log(requestAlert)
             this.setLoader();
             this.sendAlert(requestAlert).then(() => {
               this.removeLoader();
@@ -662,8 +663,8 @@ class Handler {
         extype: '',
         reason: '',
       }
-      const reason = document.querySelector('.form-alert__area');
-      if (reason.value.length > 0){
+      const reasonComment = document.querySelector('.form-alert__area');
+      if (reasonComment.value.length > 0){
         const subtype = document.querySelector('.select__subtype ');
         if (subtype.innerHTML !== 'Выбрать'){
           if (subtype.innerHTML === 'Нет в рекламе'){
@@ -671,7 +672,7 @@ class Handler {
             if (extypePromo.innerHTML !== 'Выбрать'){
               requestAlert.subtype = subtype.innerHTML;
               requestAlert.extype = extypePromo.innerHTML;
-              requestAlert.reason = reason.value;
+              requestAlert.reason = reasonComment.value;
               this.setLoader();
               this.sendAlert(requestAlert).then(() => {
                 this.removeLoader();
@@ -685,7 +686,8 @@ class Handler {
               if (reason.innerHTML !== 'Выбрать'){
                 requestAlert.subtype = subtype.innerHTML;
                 requestAlert.extype = extypeInfo.innerHTML;
-                requestAlert.reason = reason.innerHTML + ' ' + reason.value;
+                requestAlert.reason = reason.innerHTML;
+                requestAlert.reason = reason.innerHTML + ' ' + reasonComment.value;
                 this.setLoader();
                 this.sendAlert(requestAlert).then(() => {
                   this.removeLoader();
