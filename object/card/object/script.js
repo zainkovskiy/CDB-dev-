@@ -2,34 +2,30 @@ class App{
   constructor() {
     this.container = document.querySelector('.main');
     this.obj = {};
+    this.objAPI = 'https://crm.centralnoe.ru/dealincom/factory/objectViewer.php'
+    this.additional = '';
+    this.additionalAPI = 'https://hs-01.centralnoe.ru/Project-Selket-Main/Servers/Object/getState.php';
   }
 
-  async getJson() {
-    var request1Cnamed = {
-      user: login,
-      source: source,
-      id: UID,
+  async getJson(API, request1Cnamed) {
+    const myHeaders = {
+      "Content-Type": "application/json; charset=utf-8",
     };
-
-    var myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json; charset=utf-8");
-    var raw = JSON.stringify(request1Cnamed);
-    var requestOptions = {
+    const requestOptions = {
       method: 'POST',
       mode: 'cors',
       cache: 'no-cache',
       credentials: "include",
       headers: myHeaders,
-      body: raw
+      body: JSON.stringify(request1Cnamed)
     };
 
-    let response = await fetch("https://crm.centralnoe.ru/dealincom/factory/objectViewer.php", requestOptions);
+    let response = await fetch(API, requestOptions);
     if (!response.ok) {
       throw new Error('Ответ сети был не ok.');
     }
 
-    this.obj = await response.json();
-    this.init();
+    return await response.json();
   }
 
   async setChart(){
@@ -60,7 +56,7 @@ class App{
 
   init(){
     document.querySelector('.main').scrollIntoView();
-    this.container.insertAdjacentHTML('beforeend', new Render(this.obj).render());
+    this.container.insertAdjacentHTML('beforeend', new Render(this.obj, this.additional).render());
     this.checkSlider();
     if (this.obj.privileges.card === 'full'){
       this.setChart().then(data => {
@@ -75,8 +71,15 @@ class App{
     }
     console.log(btoa(UID))
     new Handler(this.obj).init();
+    this.initTooltip();
   }
 
+  initTooltip(){
+    let tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    let tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+      return new bootstrap.Tooltip(tooltipTriggerEl)
+    })
+  }
   isChart(){
     const currentX = document.documentElement.clientWidth;
     if (currentX < 500){
@@ -118,8 +121,9 @@ class App{
 }
 
 class Render {
-  constructor(obj) {
+  constructor(obj, additional) {
     this.obj = obj;
+    this.additional = additional;
   }
 
   initMap(){
@@ -240,13 +244,12 @@ class Render {
   }
   getDocType(){
     if (source === '1c'){
-      return this.obj.docType ? this.obj.docType : '';
+      return this.additional.docType ? this.additional.docType : '';
     } else {
       return ''
     }
   }
   getClient(){
-    console.log(this.obj)
     if (source === 'pars' || this.obj.privileges.card === 'full' || this.obj.docType === null || this.obj.docType === 'Без договора'){
       return `<div class="contacts">
                   <span class="text">Владелец</span>
@@ -298,6 +301,32 @@ class Render {
     }
   }
 
+  getTodo(){
+    let todoList = '';
+    for (let text of this.additional.photoStatus){
+      todoList += `<li>${text}</li>`;
+    }
+    return todoList
+  }
+  getStamp(){
+    const stamp = {
+      client: '',
+      moderator: ''
+    }
+      if (this.additional.clientAccepted === "Accepted" && this.additional.docType === "Рекламный договор"){
+        stamp.client = `<span class="stamp">Подтверждено клиентом</span>`;
+      }
+
+      if (this.additional.docModeration === "inProgress" && this.additional.docType !== "Рекламный договор"){
+        stamp.moderator = `<span class="stamp">Документы на проверке</span>`;
+      } else if (this.additional.contentModeration === "Accepted"){
+        stamp.moderator = `<span class="stamp">Подтверждено модератором</span>`;
+      } else if (this.additional.contentModeration === "inProgress"){
+        stamp.moderator = `<span class="stamp">На основной модерации</span>`;
+      }
+    return stamp;
+  }
+
   render(){
     const photo = this.isPhoto();
     const createdDate = this.getDate(this.obj.created);
@@ -309,6 +338,7 @@ class Render {
     const client = this.getClient();
     const regExp = new RegExp('зарезервировано', 'i');
     const phoneOwner = this.getPhoneOwner();
+    const stamps = this.getStamp();
     this.initMap();
     // const chartView = this.isChart();
     return `<input class="mobile-toggle__input" id="menu__toggle" type="checkbox">
@@ -347,9 +377,12 @@ class Render {
             <div class="miscellaneous-information wrapper"> 
                 <div class="miscellaneous-information__header"> 
                   <p class="title info__text miscellaneous-information__text">Заявка №<span class="text">${this.obj.reqNumber ? this.obj.reqNumber : ''}</span></p>
-                  <p class="title info__text miscellaneous-information__text">Статус<span class="text">${this.obj.reqStatus ? this.obj.reqStatus : ''}</span></p>
+                  <p class="title info__text miscellaneous-information__text">Статус
+                  <span class="text">
+                  ${this.additional ? `${this.additional.reqStatus ? this.additional.reqStatus : ''}` : ''}
+                  </span></p>
                   <p class="title info__text miscellaneous-information__text">Создано<span class="text">${createdDate ? createdDate : ''}</span></p>
-                  <p class="title info__text miscellaneous-information__text">Актуализированно<span class="text">${updatedDate ? updatedDate : ''}</span></p>
+                  <p class="title info__text miscellaneous-information__text">Актуализировано<span class="text">${updatedDate ? updatedDate : ''}</span></p>
                   <p class="title info__text miscellaneous-information__text">Тип договора<span class="text">${docType}</span></p>
                   <p class="title info__text miscellaneous-information__text">Риелтор<span class="text">
                   <a class="contacts__link text" onclick="event.preventDefault()" class="blog-p-user-name" id="bp_R1gY0o5G" href="/company/personal/user/${this.obj.ownerId}" bx-tooltip-user-id="${this.obj.ownerId}">
@@ -361,6 +394,7 @@ class Render {
                 </div>
             </div>
             <div class="about wrapper">
+              <div class="about__top"> 
                 <div class="about__address">  
                   <span class="text">
                     ${this.obj.typeRealty === 'Гараж' || this.obj.typeRealty === 'Земельный участок' ? '' : `${this.obj.roomCount ? `${this.obj.roomCount} к.` : ''}`}
@@ -370,23 +404,45 @@ class Render {
                     <p class="text p_margin">${this.obj.city ? `${this.obj.city}` : ''} ${this.obj.area ? `${this.obj.area} р-н` : ''}</p>
                     ${this.obj.community ? `<p class="text p_margin">${this.obj.community}</p>` : ''}  
                 </div>
+                <div class="attention__wrap ${this.additional.photoStatus.length === 0 ? 'visible' : ''}"> 
+                  <span class="attention miscellaneous-information__logo"></span>
+                  <ol class="attention__list"> 
+                    ${source === '1c' &&  this.getTodo()}
+                  </ol>
+                </div>
+              </div>
+              <div class="about__bottom"> 
                 ${client}
+                <div class="about__stamp"> 
+                    ${source === '1c' && stamps.client}
+                    ${source === '1c' && stamps.moderator}
+                </div>
+              </div>
             </div>
             <div class="about__price wrapper"> 
-                <div class="about__price_wrap reqOverstate ${this.obj.reqOverstate === '0' ? 'visible' : ''} "> 
-                  <span class="about__title">${this.obj.reqOverstate === '1' ? `${this.obj.reqOverstatePrice ? this.obj.reqOverstatePrice : this.obj.price}` : this.obj.price} тыс. ₽</span>
-                  <input class="visibility" name="reqOverstatePrice" type="text" value="${this.obj.reqOverstate === '1' ? `${this.obj.reqOverstatePrice ? this.obj.reqOverstatePrice : this.obj.price}` : this.obj.price}">     
-                </div>
                 <div> 
                   <div class="about__price_wrap"> 
-                    <span class="const-price ${this.obj.reqOverstate === '1'? 'info__area-text strikethrough' : 'about__title'}">${this.obj.price ? this.obj.price : ''} тыс. ₽</span>  
+                    <span class="const-price about__title">${this.obj.price ? this.obj.price : ''} тыс. ₽</span>  
                     <input class="visibility" name="price" type="text" value="${this.obj.price ? this.obj.price : ''}">     
                   </div>
-                  <span class="text text_grey">${priceMeter} ₽/кв.м</span>   
+                </div>
+                <div class="about__price_wrap reqOverstate ${this.obj.reqOverstate === '0' ? 'visible' : ''} "> 
+                  <span class="text text_grey reqOverstateText">В рекламе ${this.obj.reqOverstate === '1' ? `${this.obj.reqOverstatePrice ? this.obj.reqOverstatePrice : this.obj.price}` : this.obj.price}</span>
+                  <i class="description__status question"                   
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="bottom"
+                  title="Применено завышение. Указанная цена для выгрузки" ></i>
+                  <input class="visibility" name="reqOverstatePrice" type="text" value="${this.obj.reqOverstate === '1' ? `${this.obj.reqOverstatePrice ? this.obj.reqOverstatePrice : this.obj.price}` : this.obj.price}">     
                 </div>
                 <div ${this.obj.privileges.card === 'full' || this.obj.privileges.card === 'ADB' ? '' : 'visible'}> 
-                  <div class="about__toggle"> 
-                    <span class="text text_grey">с завышением?</span>
+                  <div class="about__toggle visibility"> 
+                    <div class="about__price_wrap">
+                      <span class="text text_grey">Завышение</span>
+                      <i class="description__status question"                
+                      data-bs-toggle="tooltip"
+                      data-bs-placement="bottom"
+                      title="Стирает историю изменения цены для рекламных площадок. Объект выходит в рекламу под новым номером с новой ценой" ></i>
+                    </div>
                     <label class="switch">
                       <input data-overstate="toggle" class="switch__open" type="checkbox" ${this.obj.reqOverstate === '1' ? 'checked' : ''}>
                       <span class="slider__toggle slider__main"></span>
@@ -413,9 +469,9 @@ class Render {
                     <p class="title info__text margin_top">Балкон<span class="text text_right">${this.obj.gallery ? this.obj.gallery : ''}</span></p>
                   </div>
                   <div class="info__info"> 
-                    <p class="title info__text margin_top">Год сдачи<span class="text text_right">${this.obj.buildDate ? this.obj.buildDate : ''}</span></p>
-                    <p class="title info__text margin_top">Материал<span class="text text_right">${this.obj.material ? this.obj.material : ''}</span></p>          
                     <p class="title info__text margin_top">Этажей<span class="text text_right">${this.obj.totalFloors ? this.obj.totalFloors : ''}</span></p> 
+                    <p class="title info__text margin_top">Материал<span class="text text_right">${this.obj.material ? this.obj.material : ''}</span></p>      
+                    <p class="title info__text margin_top"l>Год сдачи<span class="text text_right">${this.obj.buildDate ? this.obj.buildDate : ''}</span></p>    
                     ${this.obj.metroDistance ? this.obj.metroDistance >= 60 ? '' :
                     `<p class="title info__text margin_top">
                     <span>
@@ -428,6 +484,7 @@ class Render {
                     </span>
                     <span class="text text_right">${this.obj.metroDistance ? this.obj.metroDistance : ''} мин. пешком</span>
                   </p>` : ''}
+                    <p class="title info__text margin_top">Стоимость кв.м.<span class="text text_right">${priceMeter}</span></p> 
                   </div>
             </div>
             <div class="btn-group wrapper mobile_visible"> 
@@ -452,7 +509,16 @@ class Render {
       : 'isVisible'}">${historyLayout}</div>
             <div class="description wrapper">
               <div class="description__header"> 
-                <span class="description__title">Описание</span>    
+                <div class="description__header_wrap"> 
+                  <span class="description__title">Описание</span>  
+                  ${source === '1c' && 
+                `<span
+                  data-bs-toggle="tooltip"
+                  data-bs-placement="right"
+                  title="${+this.additional.commentAccepted === 1 ? 'одобрено модератором' : 'не одобрено модератором'}" 
+                  class="description__status ${+this.additional.commentAccepted === 1 ? 'description__status_accept' : 'description__status_reject'}">
+                </span>`} 
+                </div>
                 <span data-description="edit" class="edit-btn">редактировать</span>    
               </div>
               <textarea rows="10" class="description__text text" disabled>${this.obj.comment ? this.obj.comment : ' '}</textarea>
@@ -942,25 +1008,80 @@ class Handler {
         event.target.innerHTML = 'сохранить';
         document.querySelector('.description__text').removeAttribute('disabled');
       } else if (event.target.dataset.description === 'save'){
-        event.target.dataset.description = 'edit';
-        event.target.innerHTML = 'редактировать';
-        document.querySelector('.description__text').setAttribute('disabled', 'disabled');
+        const comment = document.querySelector('.description__text');
+        comment.setAttribute('disabled', 'disabled');
+        event.target.innerHTML = 'Идет сохранение ...';
+        event.target.classList.add('btn-loading');
+        app.getJson(app.objAPI, {
+          action: 'setComment',
+          reqComment: comment.value,
+          id: UID,
+        }).then(data => {
+          console.log(data)
+          event.target.dataset.description = 'edit';
+          event.target.innerHTML = 'редактировать';
+          event.target.classList.remove('btn-loading');
+        })
       } else if (event.target.dataset.price === 'edit'){
         event.target.dataset.price = 'save';
         event.target.innerHTML = 'сохранить';
         document.querySelector(`INPUT[name='price']`).classList.toggle('visibility');
         document.querySelector(`INPUT[name='reqOverstatePrice']`).classList.toggle('visibility');
+        document.querySelector(`.about__toggle `).classList.toggle('visibility');
       } else if (event.target.dataset.price === 'save'){
-        event.target.dataset.price = 'edit';
-        event.target.innerHTML = 'редактировать цену';
         document.querySelector(`INPUT[name='price']`).classList.toggle('visibility');
         document.querySelector(`INPUT[name='reqOverstatePrice']`).classList.toggle('visibility');
+        document.querySelector(`.about__toggle `).classList.toggle('visibility');
+        this.handleChange(event.target);
       } else if (event.target.dataset.overstate === 'toggle'){
         document.querySelector('.reqOverstate').classList.toggle('visible');
-        document.querySelector('.const-price').classList.toggle('about__title');
-        document.querySelector('.const-price').classList.toggle('strikethrough');
-        document.querySelector('.const-price').classList.toggle('info__area-text');
       }
+    })
+  }
+  handleChange(elem){
+    const priseInput = document.querySelector(`INPUT[name='price']`);
+    const overstatePriseInput = document.querySelector(`INPUT[name='reqOverstatePrice']`);
+    const toggleOverstate = document.querySelector(`.switch__open`);
+
+    document.querySelector('.const-price').innerHTML = `${priseInput.value} тыс. ₽`;
+    document.querySelector('.reqOverstateText').innerHTML = `В рекламе ${overstatePriseInput.value}`;
+
+    if (toggleOverstate.checked && +this.obj.reqOverstate === 0 || !toggleOverstate.checked && +this.obj.reqOverstate === 1){
+      this.sendOverstateChange(overstatePriseInput, toggleOverstate, elem);
+    } else if (+this.obj.reqOverstatePrice !== +overstatePriseInput.value){
+      this.sendOverstateChange(overstatePriseInput, toggleOverstate, elem);
+    }
+
+    if (+this.obj.price !== +priseInput.value){
+      elem.innerHTML = 'Идет сохранение ...';
+      elem.classList.add('btn-loading');
+      app.getJson(app.objAPI, {
+        action: 'setPrice',
+        reqPrice: priseInput.value,
+        id: UID,
+      }).then(data =>{
+        console.log(data)
+        elem.dataset.price = 'edit';
+        elem.innerHTML = 'редактировать цену';
+        elem.classList.remove('btn-loading');
+      })
+    }
+  }
+
+
+  sendOverstateChange(price, toggle, elem){
+    elem.innerHTML = 'Идет сохранение ...';
+    elem.classList.add('btn-loading');
+    app.getJson(app.objAPI, {
+      action: 'setOverstate',
+      reqOverstate: toggle.checked ? '1' : '0',
+      reqOverstatePrice: price.value,
+      id: UID,
+    }).then(data =>{
+      console.log(data)
+      elem.dataset.price = 'edit';
+      elem.innerHTML = 'редактировать цену';
+      elem.classList.remove('btn-loading');
     })
   }
 }
@@ -1112,7 +1233,27 @@ class ChartCallView{
 }
 
 const app = new App();
-app.getJson();
+app.getJson(app.objAPI, {
+    user: login,
+    source: source,
+    id: UID,
+}).then(data => {
+    console.log(data)
+    app.obj = data;
+    if (source === '1c'){
+      app.getJson(app.additionalAPI, {
+        reqNumber: UID
+      }).then(data => {
+        if (data.result === 'ok'){
+          console.log(data.state)
+          app.additional = data.state;
+          app.init();
+        }
+      })
+    } else {
+      app.init();
+    }
+});
 
 function selectStyle(select, firstWord, secondClass, isDisable){
   $(select).each(function(){
