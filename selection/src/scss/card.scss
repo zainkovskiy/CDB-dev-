@@ -1,0 +1,66 @@
+.cards-select, .cards-remove, .cards-sort{
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  gap: 10px;
+}
+.cards-sort{
+  overflow: hidden;
+  height: 100%;
+}
+.cards-select_wrap{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+.card{
+  width: 100%;
+  display: grid;
+  grid-template-columns: 65% 1fr min-content;
+  grid-gap: 10px;
+  &__about{
+    display: flex;
+    gap: 10px;
+  }
+  &__img{
+    min-width: 192px;
+    max-width: 192px;
+    height: 152px;
+    object-fit: cover;
+  }
+  &__address{
+    @extend %font-regular;
+    font-size: 18px;
+    display: block;
+  }
+  &__price{
+    @extend %font-bold;
+    font-size: 24px;
+    display: block;
+    margin: 10px 0 0 0;
+  }
+  &__comment{
+    width: calc(100% - 12px);
+    resize: none;
+    padding: 5px;
+    border: 1px solid grey;
+    @extend %font-regular;
+    font-size: 12px;
+    outline: none;
+    border-radius: 5px;
+    &:disabled{
+      background-color: #fff;
+      border: 1px solid transparent;
+    }
+  }
+  &__buttons{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+}
+
+.inVisible{
+  display: none;
+}

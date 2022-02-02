@@ -1,0 +1,177 @@
+@font-face {
+  font-family: 'montserrat';
+  src: url("../fonts/Montserrat-Regular.ttf");
+  font-weight: 400;
+  font-style: normal
+}
+@font-face {
+  font-family: 'montserrat';
+  src: url("../fonts/Montserrat-Bold.ttf");
+  font-weight: 700;
+  font-style: normal
+}
+
+%font-regular{
+  font-family: "montserrat", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+}
+
+%font-bold{
+  font-family: "montserrat", sans-serif;
+  font-style: normal;
+  font-weight: 700;
+}
+
+body{
+  margin: 0 auto;
+  background-color: #eef2f4;
+}
+
+.selection{
+  max-width: 1170px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 0 10px;
+  box-sizing: border-box;
+}
+
+.wrapper{
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 5px;
+  &_comment{
+    padding: 5px;
+  }
+}
+
+.title{
+  @extend %font-bold;
+  display: block;
+  width: 100%;
+  font-size: 18px;
+}
+
+.accordion{
+  box-sizing: border-box;
+  @extend %font-regular;
+  display: block;
+  font-size: 14px;
+  width: 100%;
+  cursor: pointer;
+  border: 1px solid transparent;
+  position: relative;
+  &:hover{
+    border: 1px solid grey;
+  }
+  &:active{
+    border: 1px solid grey;
+    background-color: #e2e2e2;
+  }
+  &:after{
+    content: '';
+    display: block;
+    width: 20px;
+    height: 20px;
+    background-image: url("../img/arrow.svg");
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    transform: rotate(180deg);
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    transition: transform .3s;
+  }
+  &_active{
+    &:after{
+      transform: rotate(0deg);
+    }
+  }
+}
+.accordion-body_open{
+  animation: openBlock .3s linear;
+  animation-fill-mode: forwards;
+}
+.accordion-body_close{
+  animation: closeBlock .3s linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes openBlock {
+  from {
+    height: 0;
+  }
+  to {
+    height: 100%;
+  }
+}
+@keyframes closeBlock {
+  from {
+    height: 100%;
+  }
+  to {
+    height: 0;
+  }
+}
+
+.btn{
+  display: block;
+  width: 30px;
+  height: 30px;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 80%;
+  border: 1px solid transparent;
+  cursor: pointer;
+  border-radius: 5px;
+  &:hover{
+    border: 1px solid grey;
+  }
+  &:active{
+    border: 1px solid grey;
+    background-color: #e2e2e2;
+  }
+  &_like{
+    background-image: url("../img/like.png");
+    pointer-events: none;
+  }
+  &_dislike{
+    background-image: url("../img/dislike.png");
+    pointer-events: none;
+  }
+  &_edit{
+    background-image: url("../img/edit.png");
+  }
+  &_remove{
+    background-image: url("../img/trash.png");
+  }
+  &_link{
+    background-image: url("../img/link.png");
+  }
+  &_contract{
+    background-image: url("../img/document.png");
+  }
+  &_history{
+    background-image: url("../img/show.png");
+  }
+  &_save{
+    background-image: url("../img/save.svg");
+    background-size: contain;
+    background-color: #e2e2e2;
+    border: 1px solid grey;
+    &:hover{
+      background-color: #bfbfbf;
+    }
+    &:active{
+      background-color: #e2e2e2;
+    }
+  }
+  &_return{
+    background-image: url("../img/arrow_undo.svg");
+    background-size: 60%;
+    background-color: #17bd27;
+  }
+}
