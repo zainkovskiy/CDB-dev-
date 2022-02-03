@@ -152,6 +152,7 @@ class Render {
         }
       });
       myMap.geoObjects.add(myGeoObject);
+      myMap.controls.add('zoomControl');
       myMap.behaviors.disable('scrollZoom');
       if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)){
         //... отключаем перетаскивание карты
@@ -397,7 +398,7 @@ class Render {
             </div> 
             <div class="miscellaneous-information wrapper"> 
                 <div class="miscellaneous-information__header"> 
-                  <p class="title info__text miscellaneous-information__text">Заявка №<span class="text">${this.obj.reqNumber ? this.obj.reqNumber : ''}</span></p>
+                  <p class="title info__text miscellaneous-information__text">Заявка №<span class="text">${UID ? UID : ''}</span></p>
                   <p class="title info__text miscellaneous-information__text">Статус
                   <span class="text">
                   ${this.additional ? `${this.additional.reqStatus ? this.additional.reqStatus : ''}` : ''}
@@ -445,7 +446,11 @@ class Render {
                 <div> 
                   <div class="about__price_wrap"> 
                     <span class="const-price about__title">${this.obj.price ? `${this.obj.price} тыс. ₽` : ''}</span>  
-                    <input class="visibility" name="price" type="text" value="${this.obj.price ? this.obj.price : ''}">     
+                    <input class="visibility" 
+                      autocomplete="off"
+                      name="price" 
+                      type="text" 
+                      value="${this.obj.price ? this.obj.price : ''}">     
                   </div>
                 </div>
                 <div class="about__price_wrap reqOverstate ${this.obj.privileges.user === 'owner' && this.obj.reqOverstate === '1' ? '' : 'visible'}"> 
@@ -454,7 +459,11 @@ class Render {
                   data-bs-toggle="tooltip"
                   data-bs-placement="bottom"
                   title="Применено завышение. Указанная цена для выгрузки" ></i>
-                  <input class="visibility" name="reqOverstatePrice" type="text" value="${this.obj.reqOverstate === '1' ? `${this.obj.reqOverstatePrice ? this.obj.reqOverstatePrice : this.obj.price}` : this.obj.price}">     
+                  <input class="visibility" 
+                      autocomplete="off"
+                      name="reqOverstatePrice" 
+                      type="text" 
+                      value="${this.obj.reqOverstate === '1' ? `${this.obj.reqOverstatePrice ? this.obj.reqOverstatePrice : this.obj.price}` : this.obj.price}">     
                 </div>
                 <div class="${this.obj.privileges.card === 'full' || this.obj.privileges.card === 'ADB' || this.obj.privileges.user === 'owner' ? '' : 'visible'}"> 
                   <div class="about__toggle visibility"> 
