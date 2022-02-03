@@ -14,6 +14,7 @@
     "chart story";
 }
 .main_without-chart{
+  grid-template-rows: repeat(7, auto);
   grid-template-areas:
     "nav nav"
     "carousel carousel"
@@ -22,6 +23,17 @@
     "info btn"
     "description story"
     "map story";
+}
+.main_pars{
+  grid-template-rows: repeat(7, auto);
+  grid-template-areas:
+    "nav nav"
+    "carousel carousel"
+    "miscellaneous miscellaneous"
+    "about price"
+    "info btn"
+    "description description"
+    "map map";
 }
 INPUT[type=text]{
   position: absolute;
@@ -74,9 +86,10 @@ INPUT[type=text]{
 }
 .about{
   grid-area: about;
-  gap: 10px;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr min-content;
+  grid-template-rows:  auto auto;
+  grid-gap: 10px;
   &__top{
     display: flex;
     justify-content: space-between;
@@ -86,6 +99,7 @@ INPUT[type=text]{
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+    grid-row-start: 2;
   }
   &__date{
     display: flex;
@@ -121,10 +135,12 @@ INPUT[type=text]{
     display: flex;
     flex-direction: column;
     grid-area: price;
-    justify-content: space-between;
+    justify-content: center;
+    gap: 5px;
     &_wrap{
       position: relative;
-      align-items: flex-end;
+      align-items: center;
+      justify-content: center;
       display: flex;
       gap: 5px;
     }
@@ -147,6 +163,7 @@ INPUT[type=text]{
     gap: 10px;
     align-items: center;
     justify-content: space-between;
+    margin: 5px 0 0 0;
   }
   &__stamp{
     display: flex;
@@ -186,6 +203,10 @@ INPUT[type=text]{
 }
 .miscellaneous-information{
   grid-area: miscellaneous;
+  &_wrap{
+    display: flex;
+    gap: 10px;
+  }
   &__text{
     margin: 0;
     width: 48%;
@@ -199,7 +220,7 @@ INPUT[type=text]{
   &__bottom{
     margin: 20px 0 0 0;
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     gap: 10px;
   }
   &__logo{
@@ -419,15 +440,11 @@ INPUT[type=text]{
   display: block;
   margin: 0 0 10px 0;
 }
-#map{
-  grid-area: map;
-}
+
 .chart{
   grid-area: chart;
   width: 100%;
-  background-color: white;
-  height: 400px;
-  margin: 0 0 20px 0;
+  background-color: #fff;
 }
 .module{
   position: absolute;
@@ -646,6 +663,7 @@ INPUT[type=text]{
   display: flex;
   align-items: center;
   background-color: #e8e3dd;
+  grid-area: map;
 }
 .mobile-toggle__label{
   display: none;
@@ -702,43 +720,40 @@ input:checked + .slider__toggle:before {
 }
 
 .attention{
-  background-image: url("../img/attention.svg");
   &__wrap{
-    position: relative;
+    grid-row-start: 1;
+    grid-row-end: 3;
+    grid-column-start: 2;
   }
   &__list{
-    position: absolute;
-    top: -50%;
-    left: 40px;
     padding: 0.25rem 0.25rem 0.25rem 26px;
-    background-color: #000;
-    color: white;
+    color: #484848;
     margin: 0;
-    z-index: 99;
     border-radius: 0.25rem;
-    display: none;
     width: 220px;
-    opacity: .9;
-    font-size: 13px;
-    &:after{
-      right: 100%;
-      top: 7%;
-      border: solid transparent;
-      content: "";
-      height: 0;
-      width: 0;
+    max-height: 120px;
+    opacity: 0.9;
+    overflow: auto;
+    font-size: 12px;
+    border: 1px dashed #d12f4a;
+    list-style-type: none;
+    & li{
+      position: relative;
+    }
+    & li:before{
+      content: '';
+      display: block;
+      width: 20px;
+      height: 20px;
+      border-radius: 30px;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 70%;
+      background-image: url("../img/exclamation-button.svg");
+      background-color: #fcff00;
       position: absolute;
-      pointer-events: none;
+      left: -23px;
     }
-    &:after{
-      border-color: rgba(255, 255, 255, 0);
-      border-right-color: #000;
-      border-width: 10px;
-      margin-top: 0;
-    }
-  }
-  &:hover ~.attention__list{
-    display: block;
   }
 }
 .stamp{
@@ -750,6 +765,10 @@ input:checked + .slider__toggle:before {
   display: block;
   text-align: center;
   font-size: 12px;
+  &_accepted{
+    border: 6px double #05cc00;
+    color: #05cc00;
+  }
 }
 
 .question{

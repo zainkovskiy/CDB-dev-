@@ -69,6 +69,9 @@ class App{
         this.setTopForStory();
       });
     }
+    if (source === 'pars'){
+      document.querySelector('.main').classList.add('main_pars');
+    }
     console.log(btoa(UID))
     new Handler(this.obj).init();
     this.initTooltip();
@@ -225,7 +228,25 @@ class Render {
     }
   }
   haveIsLogo(){
-    if (source === '1c'){
+    const libraryIconLogos = {
+      'Avito': 'https://crm.centralnoe.ru/dealincom/assets/img/avito_logo.png',
+      'Cian': 'https://crm.centralnoe.ru/dealincom/assets/img/cian_logo.png',
+      'Domclick': 'https://crm.centralnoe.ru/dealincom/assets/img/dom_logo.jpg',
+      'Site': '../img/centr_logo.png',
+      'Yandex': 'https://crm.centralnoe.ru/dealincom/assets/img/y_logo.png',
+      'N1': 'https://crm.centralnoe.ru/dealincom/assets/img/n1_logo.png',
+    }
+    if (source === '1c' && this.obj.platform.length > 0){
+      let logos = '';
+      for (let logo of this.obj.platform){
+        if (logo.name === 'Site'){
+          logos = `<a class="miscellaneous-information__logo" href='${logo.url}' target="_blank" style="background-image: url(${libraryIconLogos[logo.name]})" title="нажмите чтобы перейти на площадку"></a>` + logos;
+        } else {
+          logos += `<a class="miscellaneous-information__logo" href='${logo.url}' target="_blank" style="background-image: url(${libraryIconLogos[logo.name]})" title="нажмите чтобы перейти на площадку"></a>`
+        }
+      }
+      return logos
+    } else if (source === '1c'){
       return `<span class="miscellaneous-information__logo" style="background-image: url(${this.obj.logo})"></span>`
     } else {
       let logos = '';
@@ -236,10 +257,10 @@ class Render {
     }
   }
   getPrice(){
-    if (this.obj.price === '0' || this.obj.totalArea === '0'){
-      return `0`
+    if (this.obj.price && this.obj.totalArea){
+      return ((+this.obj.price / +this.obj.totalArea) * 1000).toFixed(0);
     } else {
-      return ((this.obj.price / this.obj.totalArea) * 1000).toFixed(0);
+      return ``
     }
   }
   getDocType(){
@@ -320,7 +341,7 @@ class Render {
       if (this.additional.docModeration === "inProgress" && this.additional.docType !== "Рекламный договор"){
         stamp.moderator = `<span class="stamp">Документы на проверке</span>`;
       } else if (this.additional.contentModeration === "Accepted"){
-        stamp.moderator = `<span class="stamp">Подтверждено модератором</span>`;
+        stamp.moderator = `<span class="stamp stamp_accepted">Подтверждено модератором</span>`;
       } else if (this.additional.contentModeration === "inProgress"){
         stamp.moderator = `<span class="stamp">На основной модерации</span>`;
       }
@@ -329,8 +350,8 @@ class Render {
 
   render(){
     const photo = this.isPhoto();
-    const createdDate = this.getDate(this.obj.created);
-    const updatedDate = this.getDate(this.obj.updated);
+    const createdDate = this.obj.created && this.getDate(this.obj.created);
+    const updatedDate = this.obj.updated && this.getDate(this.obj.updated);
     let priceMeter = this.getPrice();
     const logo = this.haveIsLogo();
     const historyLayout = this.historyLayout();
@@ -390,7 +411,13 @@ class Render {
                   </a> </span></p>
                 </div>
                 <div class="miscellaneous-information__bottom"> 
-                  ${logo}
+                  <div class="miscellaneous-information_wrap"> 
+                    ${logo}
+                  </div>
+                  <div class="about__stamp"> 
+                    ${source === '1c' ? stamps.client : ''}
+                    ${source === '1c' ? stamps.moderator : ''}
+                  </div>
                 </div>
             </div>
             <div class="about wrapper">
@@ -404,29 +431,24 @@ class Render {
                     <p class="text p_margin">${this.obj.city ? `${this.obj.city}` : ''} ${this.obj.area ? `${this.obj.area} р-н` : ''}</p>
                     ${this.obj.community ? `<p class="text p_margin">${this.obj.community}</p>` : ''}  
                 </div>
-                <div class="attention__wrap ${this.additional.photoStatus.length === 0 ? 'visible' : ''}"> 
-                  <span class="attention miscellaneous-information__logo"></span>
-                  <ol class="attention__list"> 
-                    ${source === '1c' &&  this.getTodo()}
-                  </ol>
-                </div>
+              </div>
+              <div class="attention__wrap ${this.obj.privileges.user !== 'owner' || this.additional.photoStatus.length === 0 ? 'visible' : ''}"> 
+                <ol class="attention__list"> 
+                  ${source === '1c' &&  this.getTodo()}
+                </ol>
               </div>
               <div class="about__bottom"> 
                 ${client}
-                <div class="about__stamp"> 
-                    ${source === '1c' && stamps.client}
-                    ${source === '1c' && stamps.moderator}
-                </div>
               </div>
             </div>
             <div class="about__price wrapper"> 
                 <div> 
                   <div class="about__price_wrap"> 
-                    <span class="const-price about__title">${this.obj.price ? this.obj.price : ''} тыс. ₽</span>  
+                    <span class="const-price about__title">${this.obj.price ? `${this.obj.price} тыс. ₽` : ''}</span>  
                     <input class="visibility" name="price" type="text" value="${this.obj.price ? this.obj.price : ''}">     
                   </div>
                 </div>
-                <div class="about__price_wrap reqOverstate ${this.obj.reqOverstate === '0' ? 'visible' : ''} "> 
+                <div class="about__price_wrap reqOverstate ${this.obj.privileges.user === 'owner' && this.obj.reqOverstate === '1' ? '' : 'visible'}"> 
                   <span class="text text_grey reqOverstateText">В рекламе ${this.obj.reqOverstate === '1' ? `${this.obj.reqOverstatePrice ? this.obj.reqOverstatePrice : this.obj.price}` : this.obj.price}</span>
                   <i class="description__status question"                   
                   data-bs-toggle="tooltip"
@@ -434,7 +456,7 @@ class Render {
                   title="Применено завышение. Указанная цена для выгрузки" ></i>
                   <input class="visibility" name="reqOverstatePrice" type="text" value="${this.obj.reqOverstate === '1' ? `${this.obj.reqOverstatePrice ? this.obj.reqOverstatePrice : this.obj.price}` : this.obj.price}">     
                 </div>
-                <div ${this.obj.privileges.card === 'full' || this.obj.privileges.card === 'ADB' ? '' : 'visible'}> 
+                <div class="${this.obj.privileges.card === 'full' || this.obj.privileges.card === 'ADB' || this.obj.privileges.user === 'owner' ? '' : 'visible'}"> 
                   <div class="about__toggle visibility"> 
                     <div class="about__price_wrap">
                       <span class="text text_grey">Завышение</span>
@@ -448,7 +470,7 @@ class Render {
                       <span class="slider__toggle slider__main"></span>
                     </label>
                   </div>
-                <span class="edit-btn" data-price="edit">редактировать цену</span>      
+                <span class="edit-btn" data-price="edit">редактировать цену</span>
                 </div> 
             </div>   
             <div class="info wrapper">
@@ -511,15 +533,17 @@ class Render {
               <div class="description__header"> 
                 <div class="description__header_wrap"> 
                   <span class="description__title">Описание</span>  
-                  ${source === '1c' && 
+                  ${source === '1c' ? 
                 `<span
                   data-bs-toggle="tooltip"
                   data-bs-placement="right"
                   title="${+this.additional.commentAccepted === 1 ? 'одобрено модератором' : 'не одобрено модератором'}" 
-                  class="description__status ${+this.additional.commentAccepted === 1 ? 'description__status_accept' : 'description__status_reject'}">
-                </span>`} 
+                  class="description__status 
+                ${+this.additional.commentAccepted === 1 ? 'description__status_accept' : 'description__status_reject'}
+                ">
+                </span>` : ''} 
                 </div>
-                <span data-description="edit" class="edit-btn">редактировать</span>    
+                ${this.obj.privileges.user === 'owner' ? `<span data-description="edit" class="edit-btn">редактировать</span>` : ''}                   
               </div>
               <textarea rows="10" class="description__text text" disabled>${this.obj.comment ? this.obj.comment : ' '}</textarea>
             </div>
