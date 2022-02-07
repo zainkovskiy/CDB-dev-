@@ -67,6 +67,7 @@ class App {
     this.currentPhoto = '';
     this.currentPhotoType = true;
     this.deniedReason = [];
+    this.openFile = false;
     this.docsFiles = [];
     this.photoFiles = [];
     this.timerUpdateItems = '';
@@ -136,7 +137,7 @@ class App {
 
     let listLayout = '';
     for (let item of itemsArr){
-      listLayout += `<div class="list__item id${item.reqNumber}" data-item="${item.reqNumber}"> 
+      listLayout += `<div class="list__item id${item.reqNumber} ${this.getTypeEng(item)}" data-item="${item.reqNumber}"> 
                       <div class="list__status"> 
                         <span class="btn__status btn__status_question"></span>
                       </div>
@@ -158,6 +159,17 @@ class App {
       return 'РД'
     }
   }
+  getTypeEng(item){
+    if (item.reqType === 'sk'){
+      if (item.modType === 'first'){
+        return 'first'
+      } else if (item.modType === 'last'){
+        return 'last'
+      }
+    } else if (item.reqType === 'adv'){
+      return 'adv'
+    }
+  }
   layout(){
     const list = this.getList(this.items);
     return `<div class="left-side">
@@ -169,9 +181,18 @@ class App {
               ${list}
             </div>
             <div class="count"> 
-              <p class="count__item">Перв.<span class="count_first">${this.quantityType.first}</span></p>
-              <p class="count__item">Осн.<span class="count_last">${this.quantityType.last}</span></p>
-              <p class="count__item">РД<span class="count_adv">${this.quantityType.adv}</span></p>
+              <label class="count__btn">
+                <input class="count__checkbox" type="checkbox" checked data-type="first">
+                <p class="count__item">Перв.<span class="count_first">${this.quantityType.first}</span></p>
+              </label>
+              <label class="count__btn">
+                <input class="count__checkbox" type="checkbox" checked data-type="last">
+                <p class="count__item">Осн.<span class="count_last">${this.quantityType.last}</span></p>
+              </label>
+              <label class="count__btn">
+                <input class="count__checkbox" type="checkbox" checked data-type="adv">
+                <p class="count__item">РД<span class="count_adv">${this.quantityType.adv}</span></p>
+              </label>
             </div>
             </div>
             <div class="center-side"> 
@@ -341,6 +362,15 @@ class App {
         document.querySelector('.messenger__send-btn').removeAttribute('data-id');
     }
   }
+  getDocFiles(){
+    let files = '';
+    if (this.docsFiles.length > 0 && this.currentItem.type.reqType === 'adv'){
+      for (let file of this.docsFiles){
+        files += `<img data-open="file" data-fileid="${file.id}" class="photo__img-file" src="${file.type === 'pdf' ? 'img/pdf.png' : file.url}">`
+      }
+    }
+    return files;
+  }
   centerLayout(){
     const photo = this.getPhotoItem(this.currentItem.type.modType === 'first' ? this.docsFiles : this.photoFiles);
     const message = this.getMessages();
@@ -485,6 +515,9 @@ class App {
                     <button data-action="denied" data-control="all" class="button button_denied">вернуть все</button>
                   </div>
                 </div>
+                <div class="bottom__right"> 
+                    ${this.getDocFiles()}
+                </div>
               </div>
               <div class="carousel"> 
                 <div class="slider">
@@ -536,7 +569,14 @@ class App {
           transformImage.rotate = 0;
           transformImage.height = 100;
           transformImage.width = 100;
-          this.openPhotoFullScreen();
+          this.openPhotoFullScreen(this.currentPhoto);
+      } else if (event.target.dataset.open === 'file'){
+        const find = this.currentItem.files.find(file => file.id === event.target.dataset.fileid);
+        this.openFile = !this.openFile;
+        transformImage.rotate = 0;
+        transformImage.height = 100;
+        transformImage.width = 100;
+        this.openPhotoFullScreen(find);
       } else if(event.target.dataset.control){
           this.switchActionSetStatus(event.target.dataset.action, event.target.dataset.control);
       } else if (event.target.dataset.list === 'update'){
@@ -581,8 +621,11 @@ class App {
         document.querySelector('.card__additionally').classList.remove('inVisible');
       } else if (event.target.dataset.info === 'less'){
         document.querySelector('.card__additionally').classList.add('inVisible');
+      } else if(event.target.dataset.type){
+        this.isShowTypeElem(event.target.checked, event.target.dataset.type);
       }
     })
+
 
     const inputSearch = document.querySelector('.input__search');
     inputSearch.addEventListener('keyup', () => {
@@ -604,6 +647,11 @@ class App {
         }
       }
     })
+  }
+  isShowTypeElem(checked, type){
+      for (let item of document.querySelectorAll(`.${type}`)){
+        item.classList[checked ? 'remove' : 'add']('inVisible');
+      }
   }
 
   showAllSliderItems(){
@@ -874,34 +922,34 @@ class App {
     this.handlerModule();
   }
 
-  openPhotoFullScreen(){
-    if (this.currentPhoto){
-      if (this.currentPhoto.type === 'jpg'){
-        this.openJPG();
-      } else if (this.currentPhoto.type === 'pdf'){
-        this.openPDF();
+  openPhotoFullScreen(photo){
+    if (photo){
+      if (photo.type === 'jpg'){
+        this.openJPG(photo);
+      } else if (photo.type === 'pdf'){
+        this.openPDF(photo);
       }
     }
   }
-  openJPG(){
+  openJPG(photo){
     document.querySelector('HTML').setAttribute("style", "overflow-y:hidden;");
 
     const currentY = window.pageYOffset;
     const layout = `<div style="top: ${currentY}"  class="module">
                       <span data-name="close" class="module__close"></span>
-                      <img class="module__img" src="${this.currentPhoto.url}" alt="нет фото"> 
+                      <img class="module__img" src="${photo.url}" alt="нет фото"> 
                       <div class="module__controller"> 
                         <span data-rotate="left" class="module__btn module__left"></span>
                         <span data-rotate="right" class="module__btn module__right"></span>
                         <span data-scale="plus" class="module__btn module__zoom-plus"></span>
                         <span data-scale="minus" class="module__btn module__zoom-minus"></span>
-                        <a href="${this.currentPhoto.url}" target="_blank" download class="module__btn module__download""></a>
+                        <a href="${photo.url}" target="_blank" download class="module__btn module__download""></a>
                       </div>
                   </div>`
     document.body.insertAdjacentHTML('beforebegin', layout);
     this.handlerModule();
   }
-  openPDF(){
+  openPDF(photo){
     document.querySelector('HTML').setAttribute("style", "overflow-y:hidden;");
 
     const currentY = window.pageYOffset;
@@ -925,10 +973,10 @@ class App {
                       </div>
                   </div>`
     document.body.insertAdjacentHTML('beforebegin', layout);
-    this.callPDFjs();
+    this.callPDFjs(photo);
     this.handlerModule();
   }
-  callPDFjs(){
+  callPDFjs(photo){
     const myState = {
       pdf: null,
       currentPage: 1,
@@ -936,8 +984,8 @@ class App {
     }
     // img/New_Horizons.pdf
     // ${this.currentPhoto.url}
-    console.log(this.currentPhoto.url);
-    pdfjsLib.getDocument(`${this.currentPhoto.url}`).then((pdf) => {
+    console.log(photo.url);
+    pdfjsLib.getDocument(`${photo.url}`).then((pdf) => {
       console.log(pdf)
       myState.pdf = pdf;
       render();
@@ -1094,6 +1142,9 @@ class App {
     })
   }
   closeModule(module){
+    if (this.openFile){
+      this.openFile = !this.openFile;
+    }
     document.querySelector('HTML').removeAttribute("style");
     module.remove();
   }
@@ -1101,32 +1152,39 @@ class App {
   handlerKeyboard(){
     document.body.addEventListener('keyup', event => {
       if (event.code === 'ArrowRight'){
-        const nextElem = this.slideActive.nextElementSibling;
-        if (nextElem && !nextElem.classList.contains('inVisible')){
-          const nextArrow = document.querySelector(`.slider__control[data-slide='next']`);
-          nextArrow.click();
-          this.currentPhoto = this.currentItem.files.find(item => item.id === nextElem.dataset.photo_id);
-          this.setMainPhoto();
-          this.setNewSlideSelect(nextElem);
-          const openPhoto = document.querySelector('.module__img');
-          if (openPhoto){
-            openPhoto.src = this.currentPhoto.url;
+        if (!this.openFile){
+          const nextElem = this.slideActive.nextElementSibling;
+          if (nextElem && !nextElem.classList.contains('inVisible')){
+            const nextArrow = document.querySelector(`.slider__control[data-slide='next']`);
+            nextArrow.click();
+            this.currentPhoto = this.currentItem.files.find(item => item.id === nextElem.dataset.photo_id);
+            this.setMainPhoto();
+            this.setNewSlideSelect(nextElem);
+            const openPhoto = document.querySelector('.module__img');
+            if (openPhoto){
+              openPhoto.src = this.currentPhoto.url;
+            }
           }
         }
       } else if (event.code === 'ArrowLeft'){
-        const prevElem = this.slideActive.previousElementSibling;
-        if (prevElem && !prevElem.classList.contains('inVisible')){
-          const prevArrow = document.querySelector(`.slider__control[data-slide='prev']`);
-          prevArrow.click();
-          this.currentPhoto = this.currentItem.files.find(item => item.id === prevElem.dataset.photo_id);
-          this.setMainPhoto();
-          this.setNewSlideSelect(prevElem);
-          const openPhoto = document.querySelector('.module__img');
-          if (openPhoto){
-            openPhoto.src = this.currentPhoto.url;
+        if (!this.openFile){
+          const prevElem = this.slideActive.previousElementSibling;
+          if (prevElem && !prevElem.classList.contains('inVisible')){
+            const prevArrow = document.querySelector(`.slider__control[data-slide='prev']`);
+            prevArrow.click();
+            this.currentPhoto = this.currentItem.files.find(item => item.id === prevElem.dataset.photo_id);
+            this.setMainPhoto();
+            this.setNewSlideSelect(prevElem);
+            const openPhoto = document.querySelector('.module__img');
+            if (openPhoto){
+              openPhoto.src = this.currentPhoto.url;
+            }
           }
         }
       } else if (event.code === 'Escape'){
+        if (this.openFile){
+          this.openFile = !this.openFile;
+        }
         const module = document.querySelector('.module');
         if (module){
           this.closeModule(module);
@@ -1192,8 +1250,9 @@ class App {
       data: this.currentItem,
       reason: `${this.deniedReason.length > 0 ? this.deniedReason : ''}`,
     }).then(() => {
+      console.log('here')
       this.subtractionQuantityType();
-      const nextItem = this.currentItemActive.nextElementSibling;
+      let nextItem = this.getNext(this.currentItemActive);
       if (nextItem){
         nextItem.scrollIntoView({block: "start", behavior: "smooth"})
         this.toggleActive(nextItem);
@@ -1204,6 +1263,13 @@ class App {
         centerField.insertAdjacentHTML('beforeend',`<p class="center-side__empty">Обновите объекты</p>`);
       }
     })
+  }
+  getNext(elem){
+    let next = elem;
+    do {
+      next = next.nextElementSibling;
+    } while (next && next.classList.contains('inVisible'));
+    return next;
   }
   getNewItems(){
     document.querySelector('.button_update').classList.add('button_load');

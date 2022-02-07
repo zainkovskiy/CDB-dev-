@@ -15,6 +15,8 @@
   font-family: "montserrat", sans-serif;
   font-style: normal;
   font-weight: 400;
+  display: block;
+  width: 100%;
 }
 
 %font-bold{
@@ -174,4 +176,56 @@ body{
     background-size: 60%;
     background-color: #17bd27;
   }
+}
+
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 37px;
+  height: 20px;
+}
+
+
+.switch input {display:none;}
+
+
+.slider__toggle {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 34px;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+  &:before{
+    position: absolute;
+    content: "";
+    height: 13px;
+    width: 13px;
+    left: 4px;
+    bottom: 4px;
+    border-radius: 50%;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+}
+input:checked + .slider__toggle {
+  background-color: #21f344;
+}
+input[type=date]{
+  padding: 5px;
+  @extend %font-regular;
+  border: 1px solid grey;
+  border-radius: 5px;
+  outline: none;
+}
+
+input:checked + .slider__toggle:before {
+  -webkit-transform: translateX(16px);
+  -ms-transform: translateX(16px);
+  transform: translateX(16px);
 }

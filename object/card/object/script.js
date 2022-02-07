@@ -58,7 +58,7 @@ class App{
     document.querySelector('.main').scrollIntoView();
     this.container.insertAdjacentHTML('beforeend', new Render(this.obj, this.additional).render());
     this.checkSlider();
-    if (this.obj.privileges.card === 'full'){
+    if (this.obj.privileges.card === 'full' || this.obj.privileges.card === 'ADB'){
       this.setChart().then(data => {
         if (data.promotionStats){
           this.container.insertAdjacentHTML('beforeend', this.isChart());
@@ -237,6 +237,10 @@ class Render {
       'Yandex': 'https://crm.centralnoe.ru/dealincom/assets/img/y_logo.png',
       'N1': 'https://crm.centralnoe.ru/dealincom/assets/img/n1_logo.png',
     }
+    if (this.additional && this.additional.docType === 'Без договора' || this.additional && this.additional.docType === 'Отмененная'){
+      return ''
+    }
+
     if (source === '1c' && this.obj.platform.length > 0){
       let logos = '';
       for (let logo of this.obj.platform){
@@ -453,7 +457,7 @@ class Render {
                       value="${this.obj.price ? this.obj.price : ''}">     
                   </div>
                 </div>
-                <div class="about__price_wrap reqOverstate ${this.obj.privileges.user === 'owner' && this.obj.reqOverstate === '1' ? '' : 'visible'}"> 
+                <div class="about__price_wrap reqOverstate ${this.obj.privileges.user === 'owner' && this.obj.reqOverstate === '1' ? '' : 'visibility'}"> 
                   <span class="text text_grey reqOverstateText">В рекламе ${this.obj.reqOverstate === '1' ? `${this.obj.reqOverstatePrice ? this.obj.reqOverstatePrice : this.obj.price}` : this.obj.price}</span>
                   <i class="description__status question"                   
                   data-bs-toggle="tooltip"
@@ -1067,7 +1071,7 @@ class Handler {
         document.querySelector(`.about__toggle `).classList.toggle('visibility');
         this.handleChange(event.target);
       } else if (event.target.dataset.overstate === 'toggle'){
-        document.querySelector('.reqOverstate').classList.toggle('visible');
+        document.querySelector('.reqOverstate').classList.toggle('visibility');
       }
     })
   }
@@ -1090,7 +1094,7 @@ class Handler {
       elem.classList.add('btn-loading');
       app.getJson(app.objAPI, {
         action: 'setPrice',
-        reqPrice: priseInput.value,
+        reqPrice: priseInput.value.split(' ').join(''),
         id: UID,
       }).then(data =>{
         console.log(data)

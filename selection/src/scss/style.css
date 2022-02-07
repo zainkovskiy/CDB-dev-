@@ -10,10 +10,12 @@
   font-weight: 700;
   font-style: normal;
 }
-.card__comment, .card__address, .accordion {
+.toggle__item, .card__comment, .card__address, input[type=date], .accordion {
   font-family: "montserrat", sans-serif;
   font-style: normal;
   font-weight: 400;
+  display: block;
+  width: 100%;
 }
 
 .card__price, .title {
@@ -172,6 +174,59 @@ body {
   background-color: #17bd27;
 }
 
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 37px;
+  height: 20px;
+}
+
+.switch input {
+  display: none;
+}
+
+.slider__toggle {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 34px;
+  background-color: #ccc;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+.slider__toggle:before {
+  position: absolute;
+  content: "";
+  height: 13px;
+  width: 13px;
+  left: 4px;
+  bottom: 4px;
+  border-radius: 50%;
+  background-color: white;
+  -webkit-transition: 0.4s;
+  transition: 0.4s;
+}
+
+input:checked + .slider__toggle {
+  background-color: #21f344;
+}
+
+input[type=date] {
+  padding: 5px;
+  border: 1px solid grey;
+  border-radius: 5px;
+  outline: none;
+}
+
+input:checked + .slider__toggle:before {
+  -webkit-transform: translateX(16px);
+  -ms-transform: translateX(16px);
+  transform: translateX(16px);
+}
+
 .header {
   display: grid;
   grid-template-columns: 65% 1fr;
@@ -213,6 +268,10 @@ body {
   display: flex;
   gap: 10px;
 }
+.card__center {
+  display: flex;
+  flex-wrap: wrap;
+}
 .card__img {
   min-width: 192px;
   max-width: 192px;
@@ -245,6 +304,19 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+
+.toggle {
+  display: flex;
+  width: 100%;
+  align-items: flex-end;
+  gap: 20px;
+}
+.toggle__item {
+  display: flex;
+  align-items: flex-end;
+  gap: 10px;
+  font-size: 14px;
 }
 
 .inVisible {

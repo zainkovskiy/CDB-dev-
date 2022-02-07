@@ -1,3 +1,7 @@
+"use strict"
+
+const deal = 31471;
+
 class Selection {
   constructor(objects) {
     this.objectsList = objects;
@@ -6,6 +10,8 @@ class Selection {
     this.selection = document.querySelector('.selection');
     this.cardsSelected = document.querySelector('.cards-select');
     this.cardsRemoved = document.querySelector('.cards-remove');
+    this.actList = [];
+
   }
   init(){
     if (this.objectsList.length > 0){
@@ -41,7 +47,7 @@ class Selection {
       `<div class="wrapper"></div>
             <div class="wrapper header__buttons"> 
               <span data-link="copy" class="btn btn_link"></span>
-              <span class="btn btn_contract"></span>
+              <span class="btn btn_contract" data-contract="get"></span>
               <span class="btn btn_history"></span>
             </div>`)
   }
@@ -80,6 +86,10 @@ class Selection {
         this.toggleShowBlockCards(event);
       } else if (event.target.dataset.card === 'move'){
         this.movingCard(event.target.dataset.key, event.target.dataset.id);
+      } else if (event.target.dataset.act === 'add'){
+        this.setActList(event.target.checked, event.target.dataset.req, event.target.dataset.source);
+      } else if (event.target.dataset.contract === 'get'){
+
       }
     })
   }
@@ -169,6 +179,21 @@ class Selection {
       offer_id: find.member
     });
   }
+  setActList(checked, reqNumber, source){
+    if (checked){
+      this.actList.push(
+        {
+          id: reqNumber,
+          source: source,
+          date: document.querySelector(`.input__${reqNumber}`).value,
+        });
+      console.log(this.actList)
+    } else {
+      const find = this.actList.find(item => item.id === reqNumber);
+      const index = this.actList.indexOf(find);
+      this.actList.splice(index, 1);
+    }
+  }
 }
 
 class ObjectCard{
@@ -180,9 +205,22 @@ class ObjectCard{
     return `<div class="card" data-card="${this.card.member}"> 
               <div class="wrapper card__about"> 
                 <img class="card__img" src="${this.card.photo}" alt="photo">
-                <div> 
+                <div class="card__center"> 
                   <span class="card__address">${this.card.address}</span>
-                  <spam class="card__price">${this.card.price} тыс. руб.</spam>
+                  <span class="card__price">${this.card.price} тыс. руб.</span>
+                  <div class="toggle"> 
+                    <label class="toggle__item"> 
+                      <input class="input__${this.card.reqNumber}" type="date">
+                      Дата просмотра
+                    </label>
+                    <label class="toggle__item"> 
+                      <label class="switch">
+                        <input data-act="add" data-req="${this.card.reqNumber}" data-source="${this.card.source}" class="switch__open" type="checkbox">
+                        <span class="slider__toggle slider__main"></span>
+                      </label>
+                      Добавить в акт
+                    </label>
+                  </div>
                 </div>
               </div>
               <div class="wrapper wrapper_comment"> 
@@ -226,7 +264,7 @@ class Server {
 const server = new Server();
 server.request({
   action: 'getForDeal',
-  deal: 31471,
+  deal: deal,
 }).then(data => {
   console.log(data)
   new Selection(data).init();
