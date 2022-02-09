@@ -53,7 +53,7 @@ class Render {
   isPhoto(){
     let photoElem = '';
     for (let item of this.obj.photo){
-    photoElem += `<div class="slider__item slider__photo" data-img=${item} style="background-image: url(${item})"></div>`
+      photoElem += `<div class="slider__item slider__photo" data-img=${item} style="background-image: url(${item})"></div>`
     }
     return photoElem;
   }
@@ -109,6 +109,9 @@ class Render {
 
     return `<div class="header"> 
                 <div class="header__logo"></div>
+            </div>
+            <div class="plea wrapper"> 
+              Подтвердите размещение объекта 
             </div>
             <div class="carousel"> 
                 <div class="slider">
@@ -203,7 +206,7 @@ class Handler {
 
     const currentY = window.pageYOffset;
     document.body.insertAdjacentHTML('afterbegin',
-                  `<div style="top: ${currentY}px;" class="module">
+      `<div style="top: ${currentY}px;" class="module">
                           <span class="module__close"></span>
                             ${layout}
                           </div>`);
@@ -306,7 +309,8 @@ class Handler {
 const app = new App();
 app.getJson({
   action : "get",
-  valid : offer
+  valid : offer,
+  server: JSON.parse(srvParams)
 }).then(data => {
   if (data.result === 'ok'){
     app.ON = data;
