@@ -237,7 +237,7 @@ class Render {
       'Yandex': 'https://crm.centralnoe.ru/dealincom/assets/img/y_logo.png',
       'N1': 'https://crm.centralnoe.ru/dealincom/assets/img/n1_logo.png',
     }
-    if (this.additional && this.additional.docType === 'Без договора' || this.additional && this.additional.docType === 'Отмененная'){
+    if (this.additional && this.additional.docType === 'Без договора' || this.additional && this.additional.reqStatus === 'Отмененная'){
       return ''
     }
 
@@ -339,17 +339,17 @@ class Render {
       client: '',
       moderator: ''
     }
-      if (this.additional.clientAccepted === "Accepted" && this.additional.docType === "Рекламный договор"){
-        stamp.client = `<span class="stamp">Подтверждено клиентом</span>`;
-      }
+    if (this.additional.clientAccepted === "Accepted" && this.additional.docType === "Рекламный договор"){
+      stamp.client = `<span class="stamp">Подтверждено клиентом</span>`;
+    }
 
-      if (this.additional.docModeration === "inProgress" && this.additional.docType !== "Рекламный договор"){
-        stamp.moderator = `<span class="stamp">Документы на проверке</span>`;
-      } else if (this.additional.contentModeration === "Accepted"){
-        stamp.moderator = `<span class="stamp stamp_accepted">Подтверждено модератором</span>`;
-      } else if (this.additional.contentModeration === "inProgress"){
-        stamp.moderator = `<span class="stamp">На основной модерации</span>`;
-      }
+    if (this.additional.docModeration === "inProgress" && this.additional.docType !== "Рекламный договор"){
+      stamp.moderator = `<span class="stamp">Документы на проверке</span>`;
+    } else if (this.additional.contentModeration === "Accepted"){
+      stamp.moderator = `<span class="stamp stamp_accepted">Подтверждено модератором</span>`;
+    } else if (this.additional.contentModeration === "inProgress"){
+      stamp.moderator = `<span class="stamp">На основной модерации</span>`;
+    }
     return stamp;
   }
 
@@ -403,12 +403,11 @@ class Render {
             <div class="miscellaneous-information wrapper"> 
                 <div class="miscellaneous-information__header"> 
                   <p class="title info__text miscellaneous-information__text">Заявка №<span class="text">${UID ? UID : ''}</span></p>
-                  <p class="title info__text miscellaneous-information__text">Статус
-                  <span class="text">
-                  ${this.additional ? `${this.additional.reqStatus ? this.additional.reqStatus : ''}` : ''}
-                  </span></p>
+                  <p class="title info__text miscellaneous-information__text">Сделка
+                    <span class="text text_link" data-open="deal" data-deal="${this.obj.deal}">${this.obj.deal ? this.obj.deal : ''}</span>
+                  </p>
                   <p class="title info__text miscellaneous-information__text">Создано<span class="text">${createdDate ? createdDate : ''}</span></p>
-                  <p class="title info__text miscellaneous-information__text">Актуализировано<span class="text">${updatedDate ? updatedDate : ''}</span></p>
+                  <p class="title info__text miscellaneous-information__text">Статус<span class="text">${this.additional ? `${this.additional.reqStatus ? this.additional.reqStatus : ''}` : ''}</span></p>
                   <p class="title info__text miscellaneous-information__text">Тип договора<span class="text">${docType}</span></p>
                   <p class="title info__text miscellaneous-information__text">Риелтор<span class="text">
                   <a class="contacts__link text" onclick="event.preventDefault()" class="blog-p-user-name" id="bp_R1gY0o5G" href="/company/personal/user/${this.obj.ownerId}" bx-tooltip-user-id="${this.obj.ownerId}">
@@ -508,7 +507,7 @@ class Render {
                     <p class="title info__text margin_top">Материал<span class="text text_right">${this.obj.material ? this.obj.material : ''}</span></p>      
                     <p class="title info__text margin_top"l>Год сдачи<span class="text text_right">${this.obj.buildDate ? this.obj.buildDate : ''}</span></p>    
                     ${this.obj.metroDistance ? this.obj.metroDistance >= 60 ? '' :
-                    `<p class="title info__text margin_top">
+      `<p class="title info__text margin_top">
                     <span>
                     ${this.obj.metro ? this.obj.metro : ''}
                     <svg width="11" height="6" viewBox="0 0 11 6" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -523,7 +522,7 @@ class Render {
                   </div>
             </div>
             <div class="btn-group wrapper mobile_visible"> 
-              <button data-name="openCard" class="btn_edit ui-btn ui-btn-primary-dark 
+              <button data-name="openCard" data-open="reservation" class="btn_edit ui-btn ui-btn-primary-dark 
                     ${this.obj.docType === 'Эксклюзивный договор' || this.obj.docType === 'Рекламный договор'
     || regExp.test(this.obj.docType) ? 'isVisible' : ''}">
                     Зарезервировать
@@ -540,14 +539,14 @@ class Render {
                 data-name="photoOrder">Фотосъемка</button>
               <button data-name="alert" class="btn_edit ui-btn ui-btn-danger-light">${this.obj.privileges.card === 'ADB' ? 'статус' : 'Вниманию модератора'}</button>
             </div>
-            <div class="story wrapper mobile_visible ${this.obj.privileges.card === 'full' || this.obj.privileges.card === 'ADB'? this.obj.privileges.card
+            <div class="story wrapper mobile_visible ${this.obj.privileges.card === 'full' || this.obj.privileges.card === 'ADB' ? this.obj.privileges.card
       : 'isVisible'}">${historyLayout}</div>
             <div class="description wrapper">
               <div class="description__header"> 
                 <div class="description__header_wrap"> 
                   <span class="description__title">Описание</span>  
-                  ${source === '1c' ? 
-                `<span
+                  ${source === '1c' ?
+      `<span
                   data-bs-toggle="tooltip"
                   data-bs-placement="right"
                   title="${+this.additional.commentAccepted === 1 ? 'одобрено модератором' : 'не одобрено модератором'}" 
@@ -590,7 +589,7 @@ class Handler {
       if (event.target.dataset.name === 'alert'){
         this.openAlert();
       } else if (event.target.dataset.name === 'openCard'){
-        this.openCard(UID);
+        this.openCard(UID, 'reservation');
       } else if (event.target.dataset.name === 'photoOrder'){
         let field = `<div class="module__wrap">
                     <textarea placeholder="Введите коментарий для фотографа" class="form-alert__area" 
@@ -602,12 +601,17 @@ class Handler {
       }
     });
   }
-  openCard(idReq) {
-    if (source === '1c'){
-      location = `https://crm.centralnoe.ru/CDB/object/card/applicationForOneself/?id=${UID}&deal=${deal}`;
-    } else {
-      let readyString = `https://crm.centralnoe.ru/CDB/object/card/infoAboutClients/?id=${idReq}&deal=${deal}`;
+  openCard(idReq, path) {
+    if (path === 'deal'){
+      let readyString = `https://crm.centralnoe.ru/crm/deal/details/${idReq}/`;
       BX.SidePanel.Instance.open(readyString, {animationDuration: 300,  width: 925, });
+    } else {
+      if (source === '1c'){
+        location = `https://crm.centralnoe.ru/CDB/object/card/applicationForOneself/?id=${UID}&deal=${deal}`;
+      } else {
+        let readyString = `https://crm.centralnoe.ru/CDB/object/card/infoAboutClients/?id=${idReq}&deal=${deal}`;
+        BX.SidePanel.Instance.open(readyString, {animationDuration: 300,  width: 925, });
+      }
     }
   }
 
@@ -1051,7 +1055,7 @@ class Handler {
         event.target.classList.add('btn-loading');
         app.getJson(app.objAPI, {
           action: 'setComment',
-          reqComment: comment.value,
+          reqComment: comment.value.replace(/\n/g, ``),
           id: UID,
         }).then(data => {
           console.log(data)
@@ -1072,6 +1076,8 @@ class Handler {
         this.handleChange(event.target);
       } else if (event.target.dataset.overstate === 'toggle'){
         document.querySelector('.reqOverstate').classList.toggle('visibility');
+      } else if (event.target.dataset.open === 'deal'){
+        event.target.dataset.deal !== 'null' && this.openCard(event.target.dataset.deal, event.target.dataset.open);
       }
     })
   }
@@ -1104,7 +1110,6 @@ class Handler {
       })
     }
   }
-
 
   sendOverstateChange(price, toggle, elem){
     elem.innerHTML = 'Идет сохранение ...';
@@ -1271,25 +1276,25 @@ class ChartCallView{
 
 const app = new App();
 app.getJson(app.objAPI, {
-    user: login,
-    source: source,
-    id: UID,
+  user: login,
+  source: source,
+  id: UID,
 }).then(data => {
-    console.log(data)
-    app.obj = data;
-    if (source === '1c'){
-      app.getJson(app.additionalAPI, {
-        reqNumber: UID
-      }).then(data => {
-        if (data.result === 'ok'){
-          console.log(data.state)
-          app.additional = data.state;
-          app.init();
-        }
-      })
-    } else {
-      app.init();
-    }
+  console.log(data)
+  app.obj = data;
+  if (source === '1c'){
+    app.getJson(app.additionalAPI, {
+      reqNumber: UID
+    }).then(data => {
+      if (data.result === 'ok'){
+        console.log(data.state)
+        app.additional = data.state;
+        app.init();
+      }
+    })
+  } else {
+    app.init();
+  }
 });
 
 function selectStyle(select, firstWord, secondClass, isDisable){

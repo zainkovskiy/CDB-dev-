@@ -58,8 +58,8 @@ INPUT[type=text]{
   margin: 5px 0 0 0;
   user-select: none;
   transition: border .3s,
-              background-color .3s,
-              color .3s;
+  background-color .3s,
+  color .3s;
   border: 1px solid aliceblue;
   &:hover{
     border: 1px solid #32a5d1;
@@ -313,6 +313,10 @@ INPUT[type=text]{
     display: flex;
     align-items: center;
     gap: 5px;
+  }
+  &_link{
+    color: #0a58ca;
+    cursor: pointer;
   }
 }
 
@@ -795,8 +799,12 @@ input:checked + .slider__toggle:before {
   }
   75% {
     background-color: #65A7C1FF;
-   }
+  }
   100% {
     background-color: aliceblue;
   }
+}
+
+.disabled{
+  pointer-events: none;
 }
