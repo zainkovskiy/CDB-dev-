@@ -36,6 +36,7 @@ class App{
     this.sessionNumber = '';
     this.isNotItem = true;
     this.currentItemUID = '';
+    this.info = '';
     this.object = '';
     this.deal = '';
     this.client = '';
@@ -75,6 +76,7 @@ class App{
       operatorId: loginID,
       action: 'stopWorking',
       UID: this.sessionNumber,
+      comment: document.querySelector('.client__area').value,
     }).then(() => {
       this.clearDom();
       this.clearThis();
@@ -85,6 +87,7 @@ class App{
       operatorId: loginID,
       action: 'getItem',
     }).then(info => {
+      this.info = info;
       this.isNotItem = false;
       console.log(info)
       if (info.result){
@@ -176,6 +179,7 @@ class App{
           result: 1,
           data: this.object,
           direction: dataset.direction,
+          comment: document.querySelector('.client__area').value,
         }).then(() => {
           this.removeLoader();
           if (this.checkWork.disabled){
@@ -274,7 +278,31 @@ class App{
       case 'denial':
         this.openModule(answer);
         break;
+      case 'confirms':
+        this.sendConfirms('confirms');
+        break;
     }
+  }
+  sendConfirms(action){
+    this.setLoader();
+    api.requestToServer('getInfo', {
+      action: 'finishItem',
+      item: this.currentItemUID,
+      result: 1,
+      data: this.object,
+      direction: action,
+      comment: document.querySelector('.client__area').value,
+    }).then(() => {
+      this.removeLoader();
+      if (this.checkWork.disabled){
+        this.finishSession();
+        this.checkWork.disabled = false;
+      } else {
+        this.clearDom();
+        this.clearThis();
+        this.counterTime();
+      }
+    });
   }
   showDirectionButton(){
     const direction = document.querySelector('.object__direction');
@@ -500,7 +528,7 @@ class App{
           const clientContainer = document.querySelector('.client');
           console.log(this.client)
           clientContainer.innerHTML = '';
-          clientContainer.insertAdjacentHTML('beforeend', new ClientLayout(this.client, realtor).render())
+          clientContainer.insertAdjacentHTML('beforeend', new ClientLayout(this.client, realtor, this.info).render())
         })
       }
     })
@@ -1644,9 +1672,10 @@ data-open="card"
 }
 
 class ClientLayout{
-  constructor(client, realtor) {
+  constructor(client, realtor, info) {
     this.client = client;
     this.realtor = realtor;
+    this.info = info;
   }
   getPhone(){
     if (this.client.HAS_PHONE === "Y"){
@@ -1718,7 +1747,7 @@ class ClientLayout{
                 </div>
                 <div class="client__buttons"> 
                     <button data-answer="denial" class="can-btn can-btn_width33 client__btn-fail">отказ</button>
-                    <button data-answer="agree" class="can-btn can-btn_width33 client__btn-agree">согласен</button>
+                    <button data-answer="${this.info.request.type === 'frompars' ? 'agree' : 'confirms'}" class="can-btn can-btn_width33 client__btn-agree">${this.info.request.type === 'frompars' ? 'согласен' : 'подтверждает'}</button>
                     <button data-answer="fail" class="can-btn can-btn_width33 client__btn-fail">не ответил</button>
                 </div>
               </div>`
