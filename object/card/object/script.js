@@ -1099,9 +1099,10 @@ class Handler {
         comment.setAttribute('disabled', 'disabled');
         event.target.innerHTML = 'Идет сохранение ...';
         event.target.classList.add('btn-loading');
+        //тестирование переносов строки
         app.getJson(app.objAPI, {
           action: 'setComment',
-          reqComment: comment.value.replace(/\n/g, ``),
+          reqComment: comment.value.replace(/\n/g, ` *EOL `),
           id: UID,
         }).then(data => {
           console.log(data)
@@ -1346,6 +1347,7 @@ class ChartCallView{
 const app = new App();
 app.getJson(app.objAPI, {
   user: login,
+  userId: loginID,
   source: source,
   id: UID,
 }).then(data => {
