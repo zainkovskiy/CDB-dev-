@@ -65,7 +65,21 @@ export class App extends Component{
       obj: {...prevState.obj, docExpired: moment().add('days', 90).format('YYYY-MM-DD')}
     }))
   }
-
+  sendFiles = (files, source) => {
+    let data = new FormData();
+    data.append('photo[]', source);
+    for (let item of files) {
+      data.append('photo[]', item)
+    }
+    data.append('reqNumber', this.state.obj.UID)
+    let xhr = new XMLHttpRequest();
+    xhr.open("POST", "https://hs-01.centralnoe.ru/Project-Selket-Main/Servers/MediaExchange/UploaderDoc.php", true);
+    xhr.responseType = 'json';
+    xhr.send(data);
+    xhr.onload = () => {
+      this.addFiles(xhr.response)
+    };
+  }
   addFiles = (files) => {
     this.setState(prevState => ({
       obj: {...prevState.obj, documents: [...prevState.obj.documents, ...files]}
@@ -98,7 +112,7 @@ export class App extends Component{
         docType={this.state.obj.docType}
         docForm={this.state.obj.docForm}
         handleInputs={this.handleInputs}
-        addFiles={this.addFiles}
+        sendFiles={this.sendFiles}
       />,
       4: <FourthStep
           documents={this.state.obj.documents}
@@ -115,7 +129,12 @@ export class App extends Component{
             <Title/>
             <div className='container-grid'>
               {step[obj.step]}
-              <Info docType={this.state.obj.docType} docForm={this.state.obj.docForm} docExpired={this.state.obj.docExpired}/>
+              <Info
+                docType={this.state.obj.docType}
+                docForm={this.state.obj.docForm}
+                docExpired={this.state.obj.docExpired}
+                progress={this.state.obj.step}
+              />
             </div>
           </>
           : <Linear/>}

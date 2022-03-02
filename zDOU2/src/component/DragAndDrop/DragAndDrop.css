@@ -1,0 +1,32 @@
+.file {
+  display: flex;
+  align-items: center;
+  padding: 20px 5px;
+  border: 1px dashed #bcbcbc;
+  background-color: white;
+  flex-direction: column;
+  justify-content: flex-start;
+  font-size: 12px;
+  gap: 0.5rem;
+}
+.file__text {
+  text-align: center;
+}
+.file__input {
+  display: none;
+}
+.file__label {
+  background-image: url("../../img/download.svg");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  cursor: pointer;
+  width: 30px;
+  height: 30px;
+}
+
+.event-none {
+  pointer-events: none;
+}
+
+/*# sourceMappingURL=DragAndDrop.css.map */

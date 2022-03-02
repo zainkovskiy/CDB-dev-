@@ -4,14 +4,21 @@ import moment from "moment";
 import './Info.css';
 
 export function Info (props){
-  const { docType, docForm, docExpired } = props;
+  const { docType, docForm, docExpired, progress } = props;
+
+  const progressPercent = {
+    1: 0,
+    2: 33,
+    3: 66,
+    4: 100
+  }
   return (<div className='info'>
     <div className='progress'>
       <div className='progress__back'>
-        <div style={ {width: `20%`} } className='progress__line'>
+        <div style={ {width: `${progressPercent[progress]}%`} } className='progress__line'>
         </div>
       </div>
-      <span>20%</span>
+      <span>{progressPercent[progress]}%</span>
     </div>
     <p className='info__text'>Тип: <span>{docType}</span></p>
     {

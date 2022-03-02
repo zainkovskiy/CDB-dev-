@@ -1,63 +1,15 @@
 import React, { Component } from "react";
 import Button from "@mui/material/Button";
-
-import './ThirdStep.css';
-
 import {File} from "../File";
 import {Notice} from "../Notice";
+import {DragAndDrop} from "../DragAndDrop";
 
-const UID = 57772000043;
+
+import './ThirdStep.css';
 
 export class ThirdStep  extends Component{
   state = {
     haveContract: false,
-  }
-  dragenter = (e) =>{
-    e.stopPropagation();
-    e.preventDefault();
-    if (e.target.classList.contains('file')) {
-      e.target.style.background = "#f1f8ff";
-    }
-  }
-  dragover = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-    if (e.target.classList.contains('file')) {
-      e.target.style.background = "#f1f8ff";
-    }
-  }
-  dragleave = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-    if (e.target.classList.contains('file')) {
-      e.target.style.background = "";
-    }
-  }
-  drop = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
-    this.sendFiles(e.dataTransfer.files, e.target.dataset.container);
-  }
-
-  handlerInputFiles = (event) => {
-    event.target.parentElement.style.background = "#f1f8ff";
-    this.sendFiles(event.target.files, event.target.name);
-  }
-
-  sendFiles = (files, source) => {
-    let data = new FormData();
-    data.append('photo[]', source);
-    for (let item of files) {
-      data.append('photo[]', item)
-    }
-    data.append('reqNumber', UID)
-    let xhr = new XMLHttpRequest();
-    xhr.open("POST", "https://hs-01.centralnoe.ru/Project-Selket-Main/Servers/MediaExchange/UploaderDoc.php", true);
-    xhr.responseType = 'json';
-    xhr.send(data);
-    xhr.onload = () => {
-      this.props.addFiles(xhr.response)
-    };
   }
 
   isHaveContract = () => {
@@ -122,45 +74,24 @@ export class ThirdStep  extends Component{
           <span className='subtitle'>Загрузить {namePromo}</span>
           <div>
             <div className="upload">
-              <div data-container="contract" className="file">
-                <input
-                  name="contract"
-                  className="file__input"
-                  id="file_contract"
-                  type="file"
-                  multiple
-                  onChange={this.handlerInputFiles}
-                />
-                <label className="file__label" htmlFor="file_contract"></label>
-                <span className="file__text">Загрузить {docType === 'Рекламный' ? namePromo : 'ДОУ (+ соглашение если СК)'}</span>
-              </div>
+              <DragAndDrop
+                container={'contract'}
+                title={`Загрузить ${docType === 'Рекламный' ? namePromo : 'ДОУ (+ соглашение если СК)'}`}
+                sendFiles={this.props.sendFiles}
+              />
               {
                 docType !== 'Рекламный' &&
                 <>
-                  <div data-container="other" className="file">
-                    <input
-                      name="other"
-                      className="file__input"
-                      id="file_other"
-                      type="file"
-                      multiple
-                      onChange={this.handlerInputFiles}
-                    />
-                    <label className="file__label" htmlFor="file_other"></label>
-                    <span className="file__text">Прочее</span>
-                  </div>
-                  <div data-container="egrn" className="file">
-                  <input
-                  name="egrn"
-                  className="file__input"
-                  id="file_egrn"
-                  type="file"
-                  multiple
-                  onChange={this.handlerInputFiles}
+                  <DragAndDrop
+                    container={'other'}
+                    title={`Прочее`}
+                    sendFiles={this.props.sendFiles}
                   />
-                  <label className="file__label" htmlFor="file_egrn"></label>
-                  <span className="file__text">Загрузите ЕГРН</span>
-                  </div>
+                  <DragAndDrop
+                    container={'egrn'}
+                    title={`Загрузите ЕГРН`}
+                    sendFiles={this.props.sendFiles}
+                  />
                 </>
               }
             </div>
@@ -188,19 +119,6 @@ export class ThirdStep  extends Component{
   }
 
   componentDidMount() {
-    const inputsFile = document.querySelectorAll('.file');
-    inputsFile.forEach(el => {
-      el.addEventListener("dragenter", this.dragenter, false);
-    })
-    inputsFile.forEach(el => {
-      el.addEventListener("dragover", this.dragover, false);
-    })
-    inputsFile.forEach(el => {
-      el.addEventListener("dragleave", this.dragleave, false);
-    })
-    inputsFile.forEach(el => {
-      el.addEventListener("drop", this.drop, false);
-    })
     this.isHaveContract();
   }
   componentDidUpdate(prevProps, prevState, snapshot) {
@@ -208,63 +126,4 @@ export class ThirdStep  extends Component{
       this.isHaveContract();
     }
   }
-  componentWillUnmount() {
-    const inputsFile = document.querySelectorAll('.file');
-    inputsFile.forEach(el => {
-      el.removeEventListener("dragenter", this.dragenter, false);
-    })
-    inputsFile.forEach(el => {
-      el.removeEventListener("dragover", this.dragover, false);
-    })
-    inputsFile.forEach(el => {
-      el.removeEventListener("dragleave", this.dragleave, false);
-    })
-    inputsFile.forEach(el => {
-      el.removeEventListener("drop", this.drop, false);
-    })
-  }
 }
-
-const template = `<div className="upload">
-              <div data-container="contract" className="file">
-                <input
-                  name="contract"
-                  className="file__input"
-                  id="file_contract"
-                  type="file"
-                  multiple
-                  onChange={this.handlerInputFiles}
-                />
-                <label className="file__label" htmlFor="file_contract"></label>
-                <span className="file__text">Загрузить {docType === 'Рекламный' ? namePromo : 'ДОУ (+ соглашение если СК)'}</span>
-              </div>
-              {
-                docType !== 'Рекламный' &&
-                <>
-                  <div data-container="other" className="file">
-                    <input
-                      name="other"
-                      className="file__input"
-                      id="file_other"
-                      type="file"
-                      multiple
-                      onChange={this.handlerInputFiles}
-                    />
-                    <label className="file__label" htmlFor="file_other"></label>
-                    <span className="file__text">Прочее</span>
-                  </div>
-                  <div data-container="egrn" className="file">
-                  <input
-                  name="egrn"
-                  className="file__input"
-                  id="file_egrn"
-                  type="file"
-                  multiple
-                  onChange={this.handlerInputFiles}
-                  />
-                  <label className="file__label" htmlFor="file_egrn"></label>
-                  <span className="file__text">Загрузите ЕГРН</span>
-                  </div>
-                </>
-              }
-            </div>`
