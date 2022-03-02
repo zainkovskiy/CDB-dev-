@@ -2,9 +2,10 @@ import React from "react";
 import moment from "moment";
 
 import './Info.css';
+import Button from "@mui/material/Button";
 
 export function Info (props){
-  const { docType, docForm, docExpired, progress } = props;
+  const { docType, docForm, docExpired, progress, prevStep, handleInputs, accepted } = props;
 
   const progressPercent = {
     1: 0,
@@ -24,11 +25,26 @@ export function Info (props){
     {
       docType === 'Рекламный' && <p className={`info__text`}>Вид: <span>{docForm}</span></p>
     }
-    <p className='info__text'>Срок: <span>{ docExpired && moment(docExpired).format('DD.MM.YYYY') }</span></p>
-    { docType === 'Рекламный' &&
-      <span className='info__text_promo'>
-        Дата установлена автоматически
-      </span>
+    { docType === 'Рекламный' && accepted === 'Подтвержденно' ||  docType === 'Эксклюзив' ?
+      <>
+        <p className='info__text'>Срок: <span>{ docExpired && moment(docExpired).format('DD.MM.YYYY') }</span></p>
+        {docType === 'Рекламный' &&
+          <span className='info__text_promo'>
+            Дата установлена автоматически
+          </span>
+        }
+      </> : ''
+    }
+    { (prevStep > 0 && prevStep < 3) &&
+      <Button
+        name='step'
+        value={prevStep}
+        variant="contained"
+        data-action='backStep'
+        onClick={() => handleInputs(event)}
+      >
+      назад
+      </Button>
     }
   </div>)
 }

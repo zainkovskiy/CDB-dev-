@@ -8,7 +8,7 @@ export function SecondStep(props) {
   const [error, setError] = useState('');
   const [isSend, setIsSend] = useState(false);
 
-  const { clients, docType, docForm, handleInputs, setClientsChanges, phoneForSms } = props;
+  const { clients, docType, docForm, handleInputs, setClientsChanges, phoneForSms, currentPhone } = props;
 
   const nextStep = (event) => {
     if (validPage()) {
@@ -44,6 +44,7 @@ export function SecondStep(props) {
             phoneForSms={phoneForSms}
             setIsSend={setIsSend}
             isSend={isSend}
+            currentPhone={currentPhone}
           />)
         : <div>нет клиента</div>
       }
@@ -53,7 +54,9 @@ export function SecondStep(props) {
         name='step'
         value={ docType === 'Рекламный' && (docForm === 'Звонок' || docForm === 'СМС') ? '4' : '3' }
         onClick={nextStep}
-        variant="contained">
+        variant="contained"
+        data-action='nextStep'
+      >
         { docType === 'Рекламный' && (docForm === 'Звонок' || docForm === 'СМС') ? 'Отправить на проверку' : 'Далее' }
       </Button>
     </div>

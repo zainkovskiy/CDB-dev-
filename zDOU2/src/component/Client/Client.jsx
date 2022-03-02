@@ -9,7 +9,7 @@ export class Client extends Component {
     firstName: this.props.client.firstName  ? this.props.client.firstName : '',
     secondName: this.props.client.secondName  ? this.props.client.secondName : '',
     dateBorn: this.props.client.dateBorn  ? this.props.client.dateBorn : '',
-    phone: '',
+    phone: this.props.currentPhone ? this.props.currentPhone : '',
     disabled: true
   }
 
@@ -59,7 +59,7 @@ export class Client extends Component {
           label="Имя"
           type="text"
           name='firstName'
-          value={this.state.lastName}
+          value={this.state.firstName}
           size="small"
           onChange={(event) => this.handleInput(event)}
           helperText={`${this.state.firstName.length === 0 ? 'Укажите имя клиента' : ''}`}
@@ -82,14 +82,14 @@ export class Client extends Component {
             error={this.state.dateBorn.length === 0}
             type='date'
             name='dateBorn'
-            value={this.state.dateBorn}
+            value={this.state.dateBorn && this.state.dateBorn.split(' ')[0]}
             size="small"
             onChange={(event) => this.handleInput(event)}
             helperText={`${this.state.dateBorn.length === 0 ? 'Не корректно указана дата рождения' : 'Дата рождения'}`}
             fullWidth
           />
           {
-            docType !== 'Эксклюзив' && client.phone && client.phone > 0 ?
+            docType !== 'Эксклюзив' && client.phone && client.phone.length > 0 ?
             <TextField
               disabled={this.state.disabled}
               error={this.state.phone.length === 0}
@@ -107,7 +107,7 @@ export class Client extends Component {
                 client.phone.map((phone, idx) => <MenuItem key={idx} value={phone}>{phone}</MenuItem>)
               }
             </TextField>
-            : "У клиента нет номеров"
+            : `${docType === 'Эксклюзив' ? '' : "У клиента нет номеров"}`
           }
         </div>
         </>

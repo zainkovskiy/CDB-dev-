@@ -7,7 +7,7 @@ import './FirstStep.css';
 
 export function FirstStep(props){
   const { docType, docExpired, docForm, rights } = props;
-  const { handleInputs, setExpiredWithPromo } = props;
+  const { handleInputs, setExpired } = props;
 
   const [isErrorDate, setIsErrorDate] = useState(false);
   const [textErrorDate, setTextErrorDate] = useState('');
@@ -62,7 +62,7 @@ export function FirstStep(props){
                       type="radio"
                       checked={docType === 'Эксклюзив'}
                       value='Эксклюзив'
-                      onChange={(event) => handleInputs(event)}
+                      onChange={(event) => {handleInputs(event); setExpired(event)}}
                     />
                     <label htmlFor='ex'>
                       Эксклюзив
@@ -75,7 +75,7 @@ export function FirstStep(props){
                       type="radio"
                       checked={docType === 'Рекламный'}
                       value='Рекламный'
-                      onChange={(event) => {handleInputs(event); setExpiredWithPromo();}}
+                      onChange={(event) => {handleInputs(event); setExpired(event);}}
                     />
                     <label htmlFor='promo'>
                       Рекламный
@@ -172,7 +172,9 @@ export function FirstStep(props){
                 name='step'
                 value="2"
                 onClick={(event) => isValid(event)}
-                variant="contained">
+                variant="contained"
+                data-action='nextStep'
+              >
                 Далее
               </Button>
             </div>)

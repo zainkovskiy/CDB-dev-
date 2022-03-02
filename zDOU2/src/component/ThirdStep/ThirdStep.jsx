@@ -111,7 +111,9 @@ export class ThirdStep  extends Component{
             name='step'
             value='4'
             onClick={(event) => handleInputs(event)}
-            variant="contained">
+            variant="contained"
+            data-action='nextStep'
+          >
             Отправить на проверку
           </Button>
       </div>

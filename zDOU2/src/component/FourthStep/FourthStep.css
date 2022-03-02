@@ -3,5 +3,10 @@
   flex-direction: column;
   gap: 0.5rem;
 }
+.about__wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
 
 /*# sourceMappingURL=FourthStep.css.map */
