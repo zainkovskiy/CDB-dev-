@@ -35,12 +35,14 @@ export function FirstStep(props){
       validLibrary.docType = false;
     } else {
       validLibrary.docType = true;
+      setErrorTypeText('');
     }
     if (docType === 'Рекламный' && !docForm){
       setErrorViewText('укажите вид договора');
       validLibrary.docForm = false;
     } else {
       validLibrary.docForm = true;
+      setErrorViewText('');
     }
 
     if (validLibrary.docType && validLibrary.docForm && validLibrary.docExpired) {
@@ -149,21 +151,23 @@ export function FirstStep(props){
                   <span className='error-text'>{ errorViewText }</span>
                 </div>
               </div>
-              <div className='container-page__wrap'>
-                <span className='subtitle'>Срок действия договора</span>
-                <TextField
-                  error={isErrorDate}
-                  id="date"
-                  label="Срок действия договора"
-                  type="date"
-                  name='docExpired'
-                  disabled={docType === 'Рекламный'}
-                  value={ `${docExpired ? docExpired.split(' ')[0] : moment().format('YYYY-MM-DD')}` }
-                  onChange={(event) => handleInputs(event)}
-                  helperText={docType === 'Рекламный' ? 'В соответствии с регламентом срок размещения РД 90 календарных дней' : textErrorDate}
-                  size="small"
-                />
-              </div>
+              {docType === 'Эксклюзив' &&
+                <div className='container-page__wrap'>
+                  <span className='subtitle'>Срок действия договора</span>
+                  <TextField
+                    error={isErrorDate}
+                    id="date"
+                    label="Срок действия договора"
+                    type="date"
+                    name='docExpired'
+                    disabled={docType === 'Рекламный'}
+                    value={ `${docExpired ? docExpired.split(' ')[0] : moment().format('YYYY-MM-DD')}` }
+                    onChange={(event) => handleInputs(event)}
+                    helperText={docType === 'Рекламный' ? 'В соответствии с регламентом срок размещения РД 90 календарных дней' : textErrorDate}
+                    size="small"
+                  />
+                </div>
+              }
               <Button
                 name='step'
                 value="2"

@@ -26,7 +26,7 @@ export function FileWindow(props) {
           href={document.URI}
           target="_blank"
           download
-          variant="outlined"
+          variant="text"
         >
           Скачать
         </Button>

@@ -5,10 +5,10 @@ import Button from "@mui/material/Button";
 
 export class Client extends Component {
   state = {
-    lastName: this.props.client.lastName,
-    firstName: this.props.client.firstName,
-    secondName: this.props.client.secondName,
-    dateBorn: this.props.client.dateBorn,
+    lastName: this.props.client.lastName ? this.props.client.lastName : '',
+    firstName: this.props.client.firstName  ? this.props.client.firstName : '',
+    secondName: this.props.client.secondName  ? this.props.client.secondName : '',
+    dateBorn: this.props.client.dateBorn  ? this.props.client.dateBorn : '',
     phone: '',
     disabled: true
   }
@@ -59,7 +59,7 @@ export class Client extends Component {
           label="Имя"
           type="text"
           name='firstName'
-          value={this.state.firstName}
+          value={this.state.lastName}
           size="small"
           onChange={(event) => this.handleInput(event)}
           helperText={`${this.state.firstName.length === 0 ? 'Укажите имя клиента' : ''}`}
@@ -89,7 +89,7 @@ export class Client extends Component {
             fullWidth
           />
           {
-            docType !== 'Эксклюзив' &&
+            docType !== 'Эксклюзив' && client.phone && client.phone > 0 ?
             <TextField
               disabled={this.state.disabled}
               error={this.state.phone.length === 0}
@@ -104,10 +104,10 @@ export class Client extends Component {
               helperText={`${this.state.phone.length === 0 ? 'Укажите номер телефона клиента' : ''}`}
             >
               {
-                client.phone.length > 0 &&
-                  client.phone.map((phone, idx) => <MenuItem key={idx} value={phone}>{phone}</MenuItem>)
+                client.phone.map((phone, idx) => <MenuItem key={idx} value={phone}>{phone}</MenuItem>)
               }
             </TextField>
+            : "У клиента нет номеров"
           }
         </div>
         </>

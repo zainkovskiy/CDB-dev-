@@ -18,12 +18,11 @@ export class App extends Component{
     preloader: true,
   }
   sendAlterObject = () => {
-    fetch('https://hs-01.centralnoe.ru/Project-Selket-Main/Servers/Contract/Server.php',
-      {
-          action: 'set',
-          obj: this.state.obj
-          }
-        ).then(res => {
+    const raw = {
+      method: 'POST',
+      body: JSON.stringify({action: 'nextStep', data: this.state.obj})
+    }
+    fetch('https://hs-01.centralnoe.ru/Project-Selket-Main/Servers/Contract/Server.php', raw).then(res => {
               res.json().then(data => {
                 console.log(data)
               })
@@ -143,9 +142,15 @@ export class App extends Component{
   }
 
   componentDidMount() {
-    fetch('https://hs-01.centralnoe.ru/Project-Selket-Main/Servers/Contract/Server.php', {action: 'get'}).then(res => {
+    const raw = {
+      method: 'POST',
+      body: JSON.stringify({action: 'get', dealId: 99019})
+    }
+    fetch('https://hs-01.centralnoe.ru/Project-Selket-Main/Servers/Contract/Server.php', raw).then(res => {
       res.json().then(data => {
         this.setState({obj: data, preloader: false});
+      }).catch(err => {
+        console.log(err)
       })
     })
   }
