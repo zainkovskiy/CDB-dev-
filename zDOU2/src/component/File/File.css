@@ -1,0 +1,18 @@
+.document {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+.document span {
+  text-align: center;
+  font-size: 12px;
+}
+.document__img {
+  height: 100px;
+  width: 100%;
+  object-fit: contain;
+  cursor: pointer;
+}
+
+/*# sourceMappingURL=File.css.map */

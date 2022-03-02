@@ -1,0 +1,38 @@
+.info {
+  border: 1px solid #484848;
+  padding: 1rem;
+  border-radius: 5px;
+}
+.info p {
+  margin-bottom: 0;
+}
+.info__text {
+  font-size: 12px;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px dashed #c7c7c7;
+}
+.info__text_promo {
+  font-size: 10px;
+  color: darkgrey;
+}
+
+.progress {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.progress__back {
+  width: 100%;
+  border: 1px solid #c7c7c7;
+  height: 14px;
+  border-radius: 20px;
+  box-sizing: border-box;
+}
+.progress__line {
+  background-color: #4cc81d;
+  height: 100%;
+  border-radius: 20px;
+}
+
+/*# sourceMappingURL=Info.css.map */

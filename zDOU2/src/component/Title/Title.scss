@@ -1,0 +1,15 @@
+%font-regular{
+  font-family: "montserrat", sans-serif;
+  font-style: normal;
+  font-weight: 400;
+  letter-spacing: 0.8px
+}
+.title{
+  color: #fff;
+  padding: 1rem;
+  background-color: #0c54a0;
+  border-radius: 5px;
+  margin: 1rem 0;
+  text-transform: uppercase;
+  @extend %font-regular;
+}

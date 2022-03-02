@@ -1,0 +1,16 @@
+.document{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  & span {
+    text-align: center;
+    font-size: 12px;
+  }
+  &__img{
+    height: 100px;
+    width: 100%;
+    object-fit: contain;
+    cursor: pointer;
+  }
+}

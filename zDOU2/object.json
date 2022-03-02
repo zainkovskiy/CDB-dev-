@@ -1,0 +1,28 @@
+{
+  "step": "1",
+  "docType": "Эксклюзив, Рекламный",
+  "docExpired": "20022-08-18",
+  "docForm": "Бумажный, СМС, Скрин, Голос",
+  "clients": [
+    {
+      "UID": "007",
+      "firstName": "Smith",
+      "name": "John",
+      "secondName" : "",
+      "dateBorn": "1978-11-25",
+      "phone" : [
+        "89009997799",
+        "89991234567"
+      ]
+    }
+  ],
+  "documents": [
+    {
+      "UID": "007",
+      "URI": "link",
+      "documentType": "contract"
+    }
+  ],
+  "rights": "full"
+}
+

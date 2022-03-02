@@ -1,0 +1,18 @@
+%font-bold{
+  font-family: "montserrat", sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0.8px
+}
+
+.notice{
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid #484848;
+  background-color: #fbffed;
+  & span {
+    display: block;
+    @extend %font-bold;
+    margin: 0 0 0.5rem 0;
+  }
+}

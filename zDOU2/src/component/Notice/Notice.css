@@ -1,0 +1,19 @@
+.notice span {
+  font-family: "montserrat", sans-serif;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+}
+
+.notice {
+  padding: 0.5rem;
+  border-radius: 5px;
+  border: 1px solid #484848;
+  background-color: #fbffed;
+}
+.notice span {
+  display: block;
+  margin: 0 0 0.5rem 0;
+}
+
+/*# sourceMappingURL=Notice.css.map */
