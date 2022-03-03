@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import TextField from '@mui/material/TextField';
-import MenuItem from '@mui/material/MenuItem';
 import Button from "@mui/material/Button";
 
 export class Client extends Component {
@@ -9,15 +8,11 @@ export class Client extends Component {
     firstName: this.props.client.firstName  ? this.props.client.firstName : '',
     secondName: this.props.client.secondName  ? this.props.client.secondName : '',
     dateBorn: this.props.client.dateBorn  ? this.props.client.dateBorn : '',
-    phone: this.props.currentPhone ? this.props.currentPhone : '',
     disabled: true
   }
 
   handleInput = (event) => {
     const elem = event.target;
-    if (elem.name === 'phone') {
-      this.props.phoneForSms(elem.value);
-    }
     this.setState({ [elem.name]: elem.value })
   }
 
@@ -30,15 +25,16 @@ export class Client extends Component {
   }
 
   render() {
-    const { client, docType, setIsSend, isSend } = this.props;
+    const { setIsSend, isSend } = this.props;
     return (
       <>
         <Button
-          variant="outlined"
+          variant="contained"
           size="small"
           onClick={() => {this.saveClient(); setIsSend(!isSend)}}
+          color="success"
         >
-          { this.state.disabled ? 'Редактировать клиента' : 'Сохранить' }
+          { this.state.disabled ? 'Редактировать клиента' : 'Сохранить клиента' }
         </Button>
         <TextField
           disabled={this.state.disabled}
@@ -76,41 +72,18 @@ export class Client extends Component {
           onChange={(event) => this.handleInput(event)}
           helperText={`${this.state.secondName.length === 0 ? 'Укажите отчество клиента' : ''}`}
         />
-        <div className='field-wrap'>
-          <TextField
-            disabled={this.state.disabled}
-            error={this.state.dateBorn.length === 0}
-            type='date'
-            name='dateBorn'
-            value={this.state.dateBorn && this.state.dateBorn.split(' ')[0]}
-            size="small"
-            onChange={(event) => this.handleInput(event)}
-            helperText={`${this.state.dateBorn.length === 0 ? 'Не корректно указана дата рождения' : 'Дата рождения'}`}
-            fullWidth
-          />
-          {
-            docType !== 'Эксклюзив' && client.phone && client.phone.length > 0 ?
-            <TextField
-              disabled={this.state.disabled}
-              error={this.state.phone.length === 0}
-              id="outlined-select-currency"
-              select
-              label="Номер клиента"
-              value={this.state.phone}
-              name='phone'
-              size="small"
-              fullWidth
-              onChange={(event) => this.handleInput(event)}
-              helperText={`${this.state.phone.length === 0 ? 'Укажите номер телефона клиента' : ''}`}
-            >
-              {
-                client.phone.map((phone, idx) => <MenuItem key={idx} value={phone}>{phone}</MenuItem>)
-              }
-            </TextField>
-            : `${docType === 'Эксклюзив' ? '' : "У клиента нет номеров"}`
-          }
-        </div>
-        </>
-        )
+        <TextField
+          disabled={this.state.disabled}
+          error={this.state.dateBorn.length === 0}
+          type='date'
+          name='dateBorn'
+          value={this.state.dateBorn && this.state.dateBorn.split(' ')[0]}
+          size="small"
+          onChange={(event) => this.handleInput(event)}
+          helperText={`${this.state.dateBorn.length === 0 ? 'Не корректно указана дата рождения' : 'Дата рождения'}`}
+          fullWidth
+        />
+      </>
+      )
   }
 }

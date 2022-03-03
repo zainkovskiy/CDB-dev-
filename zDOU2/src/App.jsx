@@ -25,7 +25,9 @@ export class App extends Component{
     }
     fetch('https://hs-01.centralnoe.ru/Project-Selket-Main/Servers/Contract/Server.php', raw).then(res => {
               res.json().then(data => {
-                console.log(data)
+                if (+data.step === 4) {
+                  this.setState({obj: data})
+                }
               })
     })
   }
@@ -43,6 +45,7 @@ export class App extends Component{
     }))
   }
   phoneForSms = (phone) => {
+    console.log(phone)
     const newSmsvalidation = Object.assign({}, this.state.obj.smsvalidation);
     newSmsvalidation.phone = phone;
 
@@ -102,7 +105,7 @@ export class App extends Component{
 
 
   render() {
-    const { preloader, obj } = this.state;
+    const {preloader, obj} = this.state;
     const step = {
       1: <FirstStep
         docType={this.state.obj.docType}
@@ -120,7 +123,8 @@ export class App extends Component{
         setClientsChanges={this.setClientsChanges}
         phoneForSms={this.phoneForSms}
         currentPhone={this.state.obj.smsvalidation && this.state.obj.smsvalidation.phone ? this.state.obj.smsvalidation.phone : ''}
-        />,
+        clientsPhones={this.state.obj.phones}
+      />,
       3: <ThirdStep
         documents={this.state.obj.documents}
         docType={this.state.obj.docType}
@@ -129,34 +133,45 @@ export class App extends Component{
         sendFiles={this.sendFiles}
       />,
       4: <FourthStep
-          documents={this.state.obj.documents}
-          docType={this.state.obj.docType}
-          docForm={this.state.obj.docForm}
-          docExpired={this.state.obj.docExpired}
-          smsvalidation={this.state.obj.smsvalidation}
-        />,
+        documents={this.state.obj.documents}
+        docType={this.state.obj.docType}
+        docForm={this.state.obj.docForm}
+        docExpired={this.state.obj.docExpired}
+        smsvalidation={this.state.obj.smsvalidation}
+      />,
     }
+    const isGrid = +obj.step !== 4 ? 'container-grid' : '';
+
     return (
       <>
-        { !preloader ?
+        {!preloader ?
           <>
             {
-              this.state.obj === 'error' ?
+              obj === 'error' ?
                 <Error/> :
                 <>
                   <Header/>
                   <Title/>
-                  <div className='container-grid'>
-                    {step[obj.step]}
-                    <Info
-                      docType={this.state.obj.docType}
-                      docForm={this.state.obj.docForm}
-                      docExpired={this.state.obj.docExpired}
-                      progress={this.state.obj.step}
-                      prevStep={+this.state.obj.step - 1}
-                      handleInputs={this.handleInputs}
-                      accepted={this.state.obj.smsvalidation.status}
-                    />
+                  <div className={isGrid}>
+                    {
+                      obj.rights ?
+                        <>
+                          {step[obj.step]}
+                          {
+                            +obj.step !== 4 &&
+                            <Info
+                              docType={this.state.obj.docType}
+                              docForm={this.state.obj.docForm}
+                              docExpired={this.state.obj.docExpired}
+                              progress={this.state.obj.step}
+                              prevStep={+this.state.obj.step - 1}
+                              handleInputs={this.handleInputs}
+                              accepted={this.state.obj.smsvalidation.status}
+                            />
+                          }
+                        </>
+                        : <span>Нет прав на просмотр</span>
+                    }
                   </div>
                 </>
             }

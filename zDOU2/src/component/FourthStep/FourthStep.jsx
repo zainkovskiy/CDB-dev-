@@ -16,17 +16,17 @@ export function FourthStep (props) {
                 { docType === 'Рекламный' && <Button variant="text">Сменить тип</Button> }
               </div>
               {
-                docType === 'Рекламный' && <span>Вид: {docForm}</span>
+                docType === 'Рекламный' && <div className='about__wrap'>Вид: {docForm}</div>
               }
               <div className='about__wrap'>
                 <span>Срок: {moment(docExpired).format('DD.MM.YYYY')}</span>
                 { docType === 'Эксклюзив' && <Button variant="text">Продлить</Button> }
               </div>
-              <span>Подтверденно модератором: Нет</span>
+              <div className='about__wrap'>Подтвержденно модератором: Нет</div>
               {
                 (docType === 'Рекламный' && docForm === 'СМС') &&
                   <div className='about__wrap'>
-                    <span>Статус смс: {smsvalidation.status} ({smsvalidation.phone})</span>
+                    <span>Статус смс: {smsvalidation.status} ({smsvalidation.phone}) {moment(smsvalidation.date).format('DD.MM.YYYY')}</span>
                     <Button variant="text">Повторить отправку</Button>
                   </div>
               }

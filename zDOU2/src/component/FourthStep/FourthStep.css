@@ -1,7 +1,7 @@
 .about {
-  display: flex;
+  display: grid;
   flex-direction: column;
-  gap: 0.5rem;
+  grid-auto-rows: 1fr;
 }
 .about__wrap {
   display: flex;
