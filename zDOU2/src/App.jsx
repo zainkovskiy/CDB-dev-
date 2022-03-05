@@ -14,22 +14,33 @@ import {Title} from "./component/Title";
 import {Info} from "./component/Info";
 
 export class App extends Component{
-  state = {
-    obj: '',
-    preloader: true,
+  constructor(props) {
+    super(props);
+    this.state = {
+      obj: '',
+      preloader: true,
+    }
+    this.phoneForSms = this.phoneForSms.bind(this)
   }
-  sendAlterObject = (action) => {
+  sendAlterObject = (action, comment) => {
     const raw = {
       method: 'POST',
-      body: JSON.stringify({action: action, data: this.state.obj})
+      body: JSON.stringify({action: action, data: this.state.obj, comment: comment})
     }
     fetch('https://hs-01.centralnoe.ru/Project-Selket-Main/Servers/Contract/Server.php', raw).then(res => {
               res.json().then(data => {
-                if (+data.step === 4) {
+                console.log(data)
+                if (+data.step === 4 || action === 'changeType') {
                   this.setState({obj: data})
                 }
               })
     })
+  }
+
+  repeatSendSMS = (action, newNumberPhone, comment) => {
+    this.phoneForSms(newNumberPhone).then(() => {
+      this.sendAlterObject(action, comment);
+    });
   }
 
   setClientsChanges = (uid, changes) => {
@@ -44,8 +55,7 @@ export class App extends Component{
       obj: { ...prevState.obj, clients:newClients }
     }))
   }
-  phoneForSms = (phone) => {
-    console.log(phone)
+  async phoneForSms (phone) {
     const newSmsvalidation = Object.assign({}, this.state.obj.smsvalidation);
     newSmsvalidation.phone = phone;
 
@@ -87,7 +97,7 @@ export class App extends Component{
       data.append('photo[]', item)
     }
     data.append('deal', this.state.obj.UID)
-    data.append('loginId', 2921)
+    data.append('loginId', loginID)
     let xhr = new XMLHttpRequest();
     xhr.open("POST", "https://hs-01.centralnoe.ru/Project-Selket-Main/Servers/MediaExchange/UploaderDoc.php", true);
     xhr.responseType = 'json';
@@ -102,7 +112,13 @@ export class App extends Component{
     }))
   }
 
-
+  setNewType = (event, newExpired) => {
+    this.setState(prevState => ({
+      obj: {...prevState.obj, docType : 'Эксклюзив', docExpired : newExpired},
+    }), () => {
+      this.handleInputs(event);
+    })
+  }
 
   render() {
     const {preloader, obj} = this.state;
@@ -137,7 +153,14 @@ export class App extends Component{
         docType={this.state.obj.docType}
         docForm={this.state.obj.docForm}
         docExpired={this.state.obj.docExpired}
+        docProlongation={this.state.obj.docProlongation}
         smsvalidation={this.state.obj.smsvalidation}
+        moderation={this.state.obj.moderation}
+        handleInputs={this.handleInputs}
+        setNewType={this.setNewType}
+        clientsPhones={this.state.obj.phones}
+        repeatSendSMS={this.repeatSendSMS}
+        isRepeat={this.state.obj.isRepeat}
       />,
     }
     const isGrid = +obj.step !== 4 ? 'container-grid' : '';
@@ -167,6 +190,7 @@ export class App extends Component{
                               prevStep={+this.state.obj.step - 1}
                               handleInputs={this.handleInputs}
                               accepted={this.state.obj.smsvalidation.status}
+                              showBack={this.state.obj.showBack}
                             />
                           }
                         </>
@@ -184,7 +208,7 @@ export class App extends Component{
   componentDidMount() {
     const raw = {
       method: 'POST',
-      body: JSON.stringify({action: 'get', dealId: 99019})
+      body: JSON.stringify({action: 'get', dealId: deal})
     }
     fetch('https://hs-01.centralnoe.ru/Project-Selket-Main/Servers/Contract/Server.php', raw).then(res => {
       res.json().then(data => {

@@ -1,25 +1,20 @@
 import React from 'react';
-import DialogTitle from "@mui/material/DialogTitle";
-import DialogContent from "@mui/material/DialogContent";
 import DialogActions from "@mui/material/DialogActions";
 import Button from "@mui/material/Button";
 import GetAppIcon from "@mui/icons-material/GetApp";
 
+import './FileWindow.css';
 
 export function FileWindow(props) {
-  const { document, url, docTypeRus } = props;
+  const { document, url } = props;
 
   return(
     <>
-      <DialogTitle>
-        { docTypeRus[document.documentType] }
-      </DialogTitle>
-      <DialogContent>
+      <div className="paper">
         <img
           src={url}
-          style={ {width: '100%'} }
+          className='paper__img'
         />
-      </DialogContent>
       <DialogActions>
         <Button
           endIcon={<GetAppIcon/>}
@@ -31,6 +26,7 @@ export function FileWindow(props) {
           Скачать
         </Button>
       </DialogActions>
+      </div>
     </>
   )
 }

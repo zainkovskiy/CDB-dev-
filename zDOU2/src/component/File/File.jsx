@@ -40,6 +40,8 @@ export function File (props) {
             <Dialog
               open={open}
               onClose={ () => setOpen(!open) }
+              fullWidth={false}
+              maxWidth={''}
             >
               <FileWindow document={document} url={getURL()} docTypeRus={docTypeRus}/>
             </Dialog>

@@ -5,7 +5,7 @@ import './Info.css';
 import Button from "@mui/material/Button";
 
 export function Info (props){
-  const { docType, docForm, docExpired, progress, prevStep, handleInputs, accepted } = props;
+  const { docType, docForm, docExpired, progress, prevStep, handleInputs, accepted, showBack } = props;
 
   const progressPercent = {
     1: 0,
@@ -35,7 +35,7 @@ export function Info (props){
         }
       </> : ''
     }
-    { (prevStep > 0 && prevStep < 3) &&
+    { (prevStep > 0 && prevStep < 3 && showBack) &&
       <Button
         name='step'
         value={prevStep}
