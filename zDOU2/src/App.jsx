@@ -147,6 +147,7 @@ export class App extends Component{
         docForm={this.state.obj.docForm}
         handleInputs={this.handleInputs}
         sendFiles={this.sendFiles}
+        UID={this.state.obj.UID}
       />,
       4: <FourthStep
         documents={this.state.obj.documents}
@@ -213,6 +214,7 @@ export class App extends Component{
     fetch('https://hs-01.centralnoe.ru/Project-Selket-Main/Servers/Contract/Server.php', raw).then(res => {
       res.json().then(data => {
         this.setState({obj: data, preloader: false});
+        console.log(data)
       }).catch(err => {
         this.setState({obj: 'error', preloader: false});
       })

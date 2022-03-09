@@ -19,7 +19,7 @@ export class ThirdStep  extends Component{
       }
     }
   }
-  getNamePromo(){
+  getNamePromo = () => {
     if (this.props.docType === 'Рекламный') {
       if (this.props.isSms === 'Скрин') {
         return 'скрин'
@@ -30,9 +30,18 @@ export class ThirdStep  extends Component{
       return 'сканы'
     }
   }
-
+  getDocument = (req) => {
+    const requestOptions = {
+      method: 'POST',
+      body: JSON.stringify(req)
+    }
+    fetch('https://crm.centralnoe.ru/dealincom/templates/sk.php', requestOptions)
+      .then(data => {
+        location.href = `https://crm.centralnoe.ru${data.result.document.downloadUrl}`
+    })
+  }
   render() {
-    const { documents, docForm, docType, handleInputs } = this.props;
+    const { documents, docForm, docType, handleInputs, UID } = this.props;
     const namePromo = this.getNamePromo();
 
     return (
@@ -57,13 +66,19 @@ export class ThirdStep  extends Component{
               <>
                 <div className='downloads__item'>
                   <span>ДОУ (+ соглашение если СК)</span>
-                  <Button variant="contained" >
+                  <Button
+                    variant="contained"
+                    onClick={() => this.getDocument({packUID: UID})}
+                  >
                     Скачать
                   </Button>
                 </div>
                 <div className='downloads__item'>
                 <span>Соглашение о продление ДОУ</span>
-                <Button variant="contained">
+                <Button
+                  variant="contained"
+                  onClick={() => this.getDocument({packUID: UID, Ext: 1})}
+                >
                 Скачать
                 </Button>
                 </div>

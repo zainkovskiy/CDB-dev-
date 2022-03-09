@@ -1,26 +1,28 @@
-let loginId = 2921;
 class Leads {
   constructor() {
     this.leads = [];
     this.container = document.querySelector('.page');
   }
   init(){
-    this.container.insertAdjacentHTML('beforeend', new Layout().init());
+    this.container.insertAdjacentHTML('beforeend', new Layout().init(this.leads.length));
     new Lead(this.leads).layout();
-    selectStyle('.change__lead','Новый ЛИД')
     new Handler(this.container).init();
   }
 }
 
 class Layout {
-  init(){
+  init(countLeads){
     return `<header class="header">
-                <span class="header__logo"></span>   
+              <span class="header__logo"></span>  
+              <span class="header__count">Количество лидов ${countLeads}</span>
+              <div class="select"> 
+                <input class="select__input" type="text" readonly value="Не квалифицирован" name="filter">
+                <div class="select__field isVisible filter"> 
+                  <span class="select__option" data-option="Не квалифицирован" data-filter="noQualify">Не квалифицирован</span>
+                  <span class="select__option" data-option="Квалифицирован" data-filter="qualify">Квалифицирован</span>
+                </div>
+              </div> 
             </header> 
-            <select class="change__lead"> 
-                <option>Новый ЛИД</option>
-                <option>Квалифицирован</option>
-            </select>
             <div class="leads"></div>`
   }
 }
@@ -31,13 +33,13 @@ class Lead {
     this.container = document.querySelector('.leads');
   }
   layout(){
+    this.container.innerHTML = '';
     for (let lead of this.leads){
       this.container.insertAdjacentHTML('beforeend',
         `<div class="lead"> 
                 <div class="info"> 
                   <span data-name="lead" data-id="${lead.ID}" class="info__name">${lead.name}</span>
-                  <span class="info__cost">${lead.cost}</span>
-                  <span class="info__time">${lead.time && lead.time.split('T')[0].split('-').reverse().join('.')}</span>
+                  <span class="info__time">Создан ${lead.time && lead.time.split('T')[0].split('-').reverse().join('.')}</span>
                 </div>
                 <div class="buttons"> 
                   ${(lead.telNumber &&lead.telNumber.length > 0) ?
@@ -55,11 +57,13 @@ class Lead {
 class Handler {
   constructor(container) {
     this.container = container
+    this.currentSelect = '';
+    this.currentOptions = '';
   }
   init(){
     this.container.addEventListener('click', event => {
       if (event.target.classList.contains('header__logo')){
-        this.openMainPage();
+        // this.openMainPage();
       } else if (event.target.dataset.name === 'lead'){
         this.setLoader();
         getData({
@@ -72,26 +76,59 @@ class Handler {
         })
       } else if (event.target.dataset.name === 'contract'){
         this.openContract(event.target.dataset.id, event.target.dataset.phone);
+      } else if (event.target.tagName === 'INPUT' && event.target.type === 'text') {
+          if (this.currentSelect && this.currentSelect === event.target) {
+            this.closeSelectField();
+          } else {
+            this.openSelectField(event.target)
+          }
+      } else if (event.target.dataset.filter){
+        this.currentSelect.value = event.target.dataset.option;
+        this.setLoader();
+        getData({
+          action: 'getList',
+          type: event.target.dataset.filter,
+          userId: loginID,
+        }).then(data => {
+          this.removeLoader();
+          new Lead(data).layout();
+          document.querySelector('.header__count').innerHTML = `Количество лидов ${data.length}`
+          this.closeSelectField();
+        })
+      } else if (event.target.dataset.type === 'category') {
+        this.currentSelect.value = event.target.dataset.option;
+        this.closeSelectField();
       }
     })
-    const observer = new MutationObserver(event => {
-      console.log(event)
-    })
-    observer.observe(document.querySelector('.select__gap'), {childList: true});
   }
-  sendSelectQualify(inputs, select, id, phone){
+  closeSelectField() {
+    if (this.currentOptions){
+      this.currentOptions.classList.add('isVisible');
+      this.currentOptions = '';
+      this.currentSelect = '';
+    }
+  }
+  openSelectField(input) {
+    const findBlock = document.querySelector(`.${input.name}`);
+    if (findBlock){
+      this.closeSelectField();
+      this.currentOptions = findBlock;
+      this.currentOptions.classList.remove('isVisible');
+      this.currentSelect = input;
+    }
+  }
+  sendSelectQualify(inputs, id, phone){
     const qualify = {
       phone: phone,
       action: 'setWin',
-      category: select.innerHTML,
       UID: id,
-      userId: loginId
+      userId: loginID
     }
     inputs.forEach(input => {
       qualify[input.name] = input.value;
     })
     getData(qualify).then(() => {
-      location.href = 'https://crm.centralnoe.ru/CDB(dev)/catalog/filter/mobile/leads/index.html';
+      location.href = 'index.php';
     })
   }
   setLoader(){
@@ -108,13 +145,34 @@ class Handler {
     let timeLineStory = '';
     for(let item of timeline){
       if (item.PROVIDER_TYPE_ID === "CALL") {
-        timeLineStory += `<p class="card__subtitle">${item.SUBJECT}
-                            <span class="card__subtitle-child">${item.DESCRIPTION}</span>
-                            <audio class="card__audio" src="${item.FILES[0].url}" controls></audio>
-                           </p>`
+        timeLineStory += `<div class="call"> 
+                            <p class="call__title">${+item.DIRECTION === 1 ? `Входящий` : 'Исходящий' } звонок ${this.getTypeCall(item)}</p>
+                            ${item.SUBJECT ? `<span class="call__title">${item.SUBJECT}</span>` : ''}
+                            ${item.DESCRIPTION ? `<span class="call__subtitle">${item.DESCRIPTION}</span>` : ''}
+                            ${item.FILES && item.FILES.length > 0 ?
+                              `<audio class="card__audio" src="${item.FILES[0].url}" controls></audio>` 
+                              : ''
+                            }
+                          </div>`
+      } else if (item.PROVIDER_TYPE_ID === "EMAIL") {
+        timeLineStory += `<div class="call">
+                            <span class="call__title">Входящее письмо</span>
+                            ${item.DESCRIPTION ? `<span class="call__subtitle">${item.DESCRIPTION}</span>` : ''}
+                          </div>`
+      } else if (item.isComment){
+        timeLineStory += `<div class="call"><span class="call__title">${item.message}</span></div>`
       }
     }
     return timeLineStory;
+  }
+  getTypeCall(call){
+    if (!call.SETTINGS.hasOwnProperty('length')) {
+      return `<span class="call__status call__denied">пропущенный звонок</span>`
+    } else if (!call.DESCRIPTION) {
+      return `<span class="call__status call__denied">занято</span>`
+    } else {
+      return `<span class="call__status call__approved">успешный звонок</span>`
+    }
   }
   openLead(lead){
     const htmlDom = document.querySelector('HTML');
@@ -127,7 +185,7 @@ class Handler {
                       </div>
                       <div class="card__info"> 
                         <span data-id="${lead.ID}" ${lead.HAS_PHONE === 'Y' && `data-phone="${lead.PHONE[0].VALUE}"`} data-name="contract" class="btn">квалифицировать</span>
-                        <span class="card__title">Лид</span>
+                        <span class="card__title">Лид №${lead.ID} ${lead.DATE_CREATE ? `от ${lead.DATE_CREATE.split('T')[0].split('-').reverse().join('.')}` : ''}</span>
                         <p class="card__subtitle">Телефон
                           ${lead.HAS_PHONE === 'Y' ?
                             `<a class="card__subtitle-child" href="tel:${lead.PHONE[0].VALUE}">${lead.PHONE[0].VALUE}</a>`  
@@ -140,7 +198,7 @@ class Handler {
                       </div>                                         
                       <div class="card__info"> 
                         <span class="card__title">История</span>  
-                        ${lead.timeline.length > 0 && this.getCall(lead.timeline)}  
+                        ${(lead.timeline && lead.timeline.length > 0) ? this.getCall(lead.timeline) : ''}  
                       </div>
                     </div>`
     this.container.insertAdjacentHTML('beforeend', layout);
@@ -186,8 +244,7 @@ class Handler {
         this.openQualifyForm(event.target.dataset.id, event.target.dataset.phone);
       } else if (event.target.dataset.qualify === 'save'){
         const allInputs = document.querySelector(`.${select}`).querySelectorAll('INPUT');
-        const selectType = document.querySelector(`.${select}`).querySelector('.select__gap ');
-        this.sendSelectQualify(allInputs, selectType, event.target.dataset.id, event.target.dataset.phone);
+        this.sendSelectQualify(allInputs, event.target.dataset.id, event.target.dataset.phone);
         this.setLoader();
       } else if (event.target.dataset.qualify === 'no') {
         this.setLoader();
@@ -208,7 +265,7 @@ class Handler {
       UID: id,
       type: type,
     }).then(() => {
-      location.href = 'https://crm.centralnoe.ru/CDB(dev)/catalog/filter/mobile/leads/index.html';
+      location.href = 'index.php';
     })
   }
   openQualifyForm(id, phone){
@@ -218,52 +275,57 @@ class Handler {
     const layout = `<div style="top: ${currentY}px;" class="qualify">
                         <div class="qualify__wrap"> 
                           <span class="qualify__subtitle">Фамилия</span>
-                          <input class="qualify__input" type="text" name="LAST_NAME" autocomplete="off">
+                          <input class="select__input" type="text" name="LAST_NAME" autocomplete="off">
                         </div>
                         <div class="qualify__wrap"> 
                           <span class="qualify__subtitle">Имя</span>
-                          <input class="qualify__input" type="text" name="NAME" autocomplete="off">
+                          <input class="select__input" type="text" name="NAME" autocomplete="off">
                         </div>
                         <div class="qualify__wrap"> 
                           <span class="qualify__subtitle">Отчество</span>
-                          <input class="qualify__input" type="text" name="SECOND_NAME" autocomplete="off">
+                          <input class="select__input" type="text" name="SECOND_NAME" autocomplete="off">
                         </div>
-                        <select class="qualify__select"> 
-                          <option>Вторичка - Спрос</option>
-                          <option>Вторичка - Заявка</option>
-                          <option>Новостройка - Спрос</option>
-                          <option>Реализация выкупленных объектов</option>
-                          <option>Аренда - РКЦ</option>
-                          <option>Партнеры для выкупов</option>
-                          <option>Выкупы от банков</option>
-                          <option>Аренда - Снять</option>
-                          <option>Аренда - Сдать</option>
-                          <option>ОКН - Продам</option>
-                          <option>ОКН - Сдам</option>
-                          <option>ОКН - Куплю</option>
-                          <option>ОКН - Сниму</option>
-                          <option>ОКН - Оценка</option>
-                          <option>ОКН - Ипотека</option>
-                          <option>ДЭД - Оценка</option>
-                          <option>ДЭД - Ипотека</option>
-                          <option>СКС - Жалобы</option>
-                          <option>Акредитация (ИБ)</option>
-                          <option>Воронки и туннели продаж</option>
-                      </select>
+                        <div class="qualify__wrap">
+                          <span class="qualify__subtitle">Направление</span>
+                          <div class="select"> 
+                              <input class="select__input" type="text" readonly value="Вторичка - Спрос" name="category">
+                              <div class="select__field isVisible category"> 
+                            <span class="select__option" data-type="category" data-option="Вторичка - Спрос">Вторичка - Спрос</span>
+                            <span class="select__option" data-type="category" data-option="Вторичка - Заявка">Вторичка - Заявка</span>
+                            <span class="select__option" data-type="category" data-option="Новостройка - Спрос">Новостройка - Спрос</span>
+                            <span class="select__option" data-type="category" data-option="Реализация выкупленных объектов">Реализация выкупленных объектов</span>
+                            <span class="select__option" data-type="category" data-option="Аренда - РКЦ">Аренда - РКЦ</span>
+                            <span class="select__option" data-type="category" data-option="Партнеры для выкупов">Партнеры для выкупов</span>
+                            <span class="select__option" data-type="category" data-option="Выкупы от банков">Выкупы от банков</span>
+                            <span class="select__option" data-type="category" data-option="Аренда - Снять">Аренда - Снять</span>
+                            <span class="select__option" data-type="category" data-option="Аренда - Сдать">Аренда - Сдать</span>
+                            <span class="select__option" data-type="category" data-option="ОКН - Продам">ОКН - Продам</span>
+                            <span class="select__option" data-type="category" data-option="ОКН - Сдам">ОКН - Сдам</span>
+                            <span class="select__option" data-type="category" data-option="ОКН - Куплю">ОКН - Куплю</span>
+                            <span class="select__option" data-type="category" data-option="ОКН - Сниму">ОКН - Сниму</span>
+                            <span class="select__option" data-type="category" data-option="ОКН - Оценка">ОКН - Оценка</span>
+                            <span class="select__option" data-type="category" data-option="ОКН - Ипотека">ОКН - Ипотека</span>
+                            <span class="select__option" data-type="category" data-option="ДЭД - Оценка">ДЭД - Оценка</span>
+                            <span class="select__option" data-type="category" data-option="ДЭД - Ипотека">ДЭД - Ипотека</span>
+                            <span class="select__option" data-type="category" data-option="СКС - Жалобы">СКС - Жалобы</span>
+                            <span class="select__option" data-type="category" data-option="Акредитация (ИБ)">Акредитация (ИБ)</span>
+                            <span class="select__option" data-type="category" data-option="Воронки и туннели продаж">Воронки и туннели продаж</span>
+                              </div>                      
+                          </div> 
+                        </div>
                       <button data-id=${id} data-qualify="save" data-phone=${phone} class="btn">сохранить</button>
                       <button data-name="close" class="btn btn_red">закрыть</button>
                     </div>`
     this.container.insertAdjacentHTML('beforeend', layout);
     this.handlerModule('qualify');
-    selectStyle('.qualify__select', 'Вторичка - Спрос')
   }
 }
 
 const leads = new Leads();
 getData({
   action: 'getList',
-  type: 'qualify',
-  userId: loginId,
+  type: 'noQualify',
+  userId: loginID,
 }).then(data=>{
   console.log(data)
   leads.leads = data;
@@ -290,80 +352,3 @@ async function getData(raw){
   return await response.json();
 }
 
-function selectStyle(select, firstWord){
-  $(select).each(function(){
-    // Variables
-    var $this = $(this),
-      selectOption = $this.find('option'),
-      selectOptionLength = selectOption.length,
-      selectedOption = selectOption.filter(':selected'),
-      dur = 500;
-
-    $this.hide();
-    // Wrap all in select box
-    $this.wrap('<div class="select"></div>');
-    // Style box
-    if (select === '.metro__select'){
-      $('<div>',{
-        class: 'select__gap metro__gap',
-        text: firstWord
-      }).insertAfter($this);
-    } else {
-      $('<div>', {
-        class: 'select__gap',
-        text: firstWord
-      }).insertAfter($this);
-    }
-
-    var selectGap = $this.next('.select__gap'),
-      caret = selectGap.find('.caret');
-    // Add ul list
-    if (select === '.metro__select'){
-      $('<ul>',{
-        class: 'select__list metro__list'
-      }).insertAfter(selectGap);
-    } else {
-      $('<ul>',{
-        class: 'select__list'
-      }).insertAfter(selectGap);
-    }
-
-    var selectList = selectGap.next('.select__list');
-    // Add li - option items
-    for(var i = 0; i < selectOptionLength; i++){
-      $('<li>',{
-        class: 'select__item',
-        html: $('<span>',{
-          text: selectOption.eq(i).text()
-        })
-      })
-        .attr('data-value', selectOption.eq(i).val())
-        .appendTo(selectList);
-    }
-    // Find all items
-    var selectItem = selectList.find('li');
-
-    selectList.slideUp(0);
-    selectGap.on('click', function(){
-      if(!$(this).hasClass('on')){
-        $(this).addClass('on');
-        selectList.slideDown(dur);
-
-        selectItem.on('click', function(){
-          var chooseItem = $(this).data('value');
-
-          $('select').val(chooseItem).attr('selected', 'selected');
-          selectGap.text($(this).find('span').text());
-
-          selectList.slideUp(dur);
-          selectGap.removeClass('on');
-        });
-
-      } else {
-        $(this).removeClass('on');
-        selectList.slideUp(dur);
-      }
-    });
-
-  });
-}
