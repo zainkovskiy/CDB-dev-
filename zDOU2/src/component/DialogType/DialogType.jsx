@@ -20,7 +20,7 @@ export function DialogType (props) {
       setIsErrorDate(false);
       setTextErrorDate('');
       onClose();
-      setNewType(event, newDate)
+      setNewType(event, newDate, true)
     }
   }
 

@@ -112,11 +112,11 @@ export class App extends Component{
     }))
   }
 
-  setNewType = (event, newExpired) => {
+  setNewType = (event, newExpired, isCb) => {
     this.setState(prevState => ({
       obj: {...prevState.obj, docType : 'Эксклюзив', docExpired : newExpired},
     }), () => {
-      this.handleInputs(event);
+      isCb ? this.handleInputs(event) : this.sendAlterObject(event.target.dataset.action)
     })
   }
 
@@ -162,6 +162,8 @@ export class App extends Component{
         clientsPhones={this.state.obj.phones}
         repeatSendSMS={this.repeatSendSMS}
         isRepeat={this.state.obj.isRepeat}
+        sendFiles={this.sendFiles}
+        sendAlterObject={this.sendAlterObject}
       />,
     }
     const isGrid = +obj.step !== 4 ? 'container-grid' : '';
@@ -192,6 +194,7 @@ export class App extends Component{
                               handleInputs={this.handleInputs}
                               accepted={this.state.obj.smsvalidation.status}
                               showBack={this.state.obj.showBack}
+                              docProlongation={this.state.obj.docProlongation}
                             />
                           }
                         </>

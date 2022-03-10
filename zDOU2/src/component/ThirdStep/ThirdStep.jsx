@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import Button from "@mui/material/Button";
 import {File} from "../File";
-import {Notice} from "../Notice";
 import {DragAndDrop} from "../DragAndDrop";
 
 
@@ -46,7 +45,6 @@ export class ThirdStep  extends Component{
 
     return (
         <div className='container-page'>
-          <Notice/>
           {
             docType === 'Рекламный' && docForm === 'Скрин' ? '' :
             <span className='subtitle'>Скачать форму</span>

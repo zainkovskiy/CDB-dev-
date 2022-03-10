@@ -5,7 +5,7 @@ import './Info.css';
 import Button from "@mui/material/Button";
 
 export function Info (props){
-  const { docType, docForm, docExpired, progress, prevStep, handleInputs, accepted, showBack } = props;
+  const { docType, docForm, docExpired, progress, prevStep, handleInputs, accepted, showBack, docProlongation } = props;
 
   const progressPercent = {
     1: 0,
@@ -27,7 +27,7 @@ export function Info (props){
     }
     { docType === 'Рекламный' && accepted === 'Подтвержденно' ||  docType === 'Эксклюзив' ?
       <>
-        <p className='info__text'>Срок: <span>{ docExpired && moment(docExpired).format('DD.MM.YYYY') }</span></p>
+        <p className='info__text'>Срок: <span>{ moment(docProlongation ? docProlongation : docExpired).format('DD.MM.YYYY') }</span></p>
         {docType === 'Рекламный' &&
           <span className='info__text_promo'>
             Дата установлена автоматически

@@ -10,9 +10,15 @@
   border-radius: 5px;
   border: 1px solid #484848;
   background-color: #fbffed;
-  & span {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  &__title{
     display: block;
     @extend %font-bold;
-    margin: 0 0 0.5rem 0;
+  }
+  &__list{
+    margin: 0;
+    padding: 0 0 0 1.25rem;
   }
 }

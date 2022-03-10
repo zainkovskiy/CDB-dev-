@@ -29,8 +29,8 @@ export class FourthStep extends Component{
   }
 
   render() {
-    const { docType, docForm, docExpired, documents, smsvalidation, repeatSendSMS,
-      moderation, handleInputs, setNewType, docProlongation, clientsPhones, isRepeat } = this.props;
+    const { docType, docForm, docExpired, documents, smsvalidation, repeatSendSMS, sendAlterObject,
+      moderation, handleInputs, setNewType, docProlongation, clientsPhones, isRepeat, sendFiles } = this.props;
     return (<div className='container-page'>
       <div className='about'>
         <div className='about__wrap'>
@@ -63,7 +63,7 @@ export class FourthStep extends Component{
         }
         <div className='about__wrap'>
           <span>Срок: {moment(docType === 'Эксклюзив' && moderation.status !== 'Подтвержден' ? docProlongation : docExpired).format('DD.MM.YYYY')}</span>
-          { docType === 'Эксклюзив' &&
+          { (docType === 'Эксклюзив' && moderation.status === 'Подтвержден') &&
           <Button
             variant="text"
             onClick={() => {this.setOpenChangeType(); this.setTitleDialog('Продлить договор')}}
@@ -90,7 +90,16 @@ export class FourthStep extends Component{
           </div>
         }
       </div>
-      <Notice/>
+      { moderation.status === 'Отклонено' &&
+      <Notice
+        moderation={moderation}
+        docType={docType}
+        sendFiles={sendFiles}
+        docExpired={docExpired}
+        docProlongation={docProlongation}
+        sendAlterObject={sendAlterObject}
+        setNewType={setNewType}
+      /> }
       {documents.length > 0 &&
       <>
         <span className='subtitle'>Файлы</span>
