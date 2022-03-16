@@ -127,7 +127,7 @@ class App {
   }
   getType(item){
     if (item.reqType === "sk" && item.modType === "first"){
-      return 'Перв.'
+      return 'СК'
     } else if (item.reqType === "sk" && item.modType === "last"){
       return 'Осн.'
     } else if (item.reqType === "adv"){
@@ -158,7 +158,7 @@ class App {
             <div class="count"> 
               <label class="count__btn">
                 <input class="count__checkbox" type="checkbox" checked data-type="first">
-                <p class="count__item">Перв.<span class="count_first">${this.quantityType.first}</span></p>
+                <p class="count__item">СК<span class="count_first">${this.quantityType.first}</span></p>
               </label>
               <label class="count__btn">
                 <input class="count__checkbox" type="checkbox" checked data-type="last">
@@ -358,9 +358,9 @@ class App {
         document.querySelector('.messenger__send-btn').removeAttribute('data-id');
       })
     } else {
-        messengerTextarea.value = '';
-        document.querySelector('.messenger__send-btn').dataset.message = 'send';
-        document.querySelector('.messenger__send-btn').removeAttribute('data-id');
+      messengerTextarea.value = '';
+      document.querySelector('.messenger__send-btn').dataset.message = 'send';
+      document.querySelector('.messenger__send-btn').removeAttribute('data-id');
     }
   }
   // getDocFiles(){
@@ -402,19 +402,19 @@ class App {
                       ${this.currentItem.created.split(" ")[1].split('.')[0]}
                     </span>
                   </p>
-                  <p class="card__info-text">Клиент:<span>${this.currentItem.clients[0] ? 
-                    `${this.currentItem.clients[0].lastName ? this.currentItem.clients[0].lastName : ''}
+                  <p class="card__info-text">Клиент:<span>${this.currentItem.clients[0] ?
+      `${this.currentItem.clients[0].lastName ? this.currentItem.clients[0].lastName : ''}
                     ${this.currentItem.clients[0].name ? this.currentItem.clients[0].name : ''}
                     ${this.currentItem.clients[0].secondName ? this.currentItem.clients[0].secondName : ''}`
-                    : ''} </span>
+      : ''} </span>
                   </p>
                   <p class="card__info-text">Тип договора:<span>${this.currentItem.type.type ? this.currentItem.type.type : ''} </span></p>
-                  <p class="card__info-text">Срок действия:<span>${this.currentItem.publishedAt.stop ? 
-                    this.currentItem.publishedAt.stop.split(" ")[0].split('-').reverse().join('.') : ''} </span></p>
-                  <p class="card__info-text">Тип объекста:<span>${this.currentItem.objectType ? 
-                    `${this.currentItem.objectType.type ? this.currentItem.objectType.type : ''}
+                  <p class="card__info-text">Срок действия:<span>${this.currentItem.publishedAt.stop ?
+      this.currentItem.publishedAt.stop.split(" ")[0].split('-').reverse().join('.') : ''} </span></p>
+                  <p class="card__info-text">Тип объекста:<span>${this.currentItem.objectType ?
+      `${this.currentItem.objectType.type ? this.currentItem.objectType.type : ''}
                     ${this.currentItem.objectType.rooms ? `(${this.currentItem.objectType.rooms}к.)` : ''}`
-                    : ''} </span></p>
+      : ''} </span></p>
                   <p class="card__info-text">Квартира:<span>${this.currentItem.objectRoom ? this.currentItem.objectRoom : ''} </span></p>
                   <p class="card__info-text">Доля объекта:<span>${this.currentItem.objectShare ? this.currentItem.objectShare : ''} </span></p>
                   <div class='card__additionally inVisible'> 
@@ -511,15 +511,15 @@ class App {
                     <button data-action="approved" data-control="application" class="button button_approved">подтвердить</button>
                     <button data-action="denied" data-control="application" class="button button_denied">вернуть</button>
                     ${this.getStatusForReason(this.currentItem.type) === 'Первичная' ?
-                    `<button data-action="egrn" data-control="application" class="button button_approved">заказать ЕГРН</button>` : ''}
+      `<button data-action="egrn" data-control="application" class="button button_approved">заказать ЕГРН</button>` : ''}
                   </div>
                   <div class="${this.currentPhotoType ? 'inVisible' : ''}"> 
                     <button data-action="approved" data-control="all" class="button button_approved">подтвердить все</button>
                     <button data-action="approved" data-control="one" class="button button_approved docs_hide">подтвердить</button>
                     <button data-action="denied" data-control="one" class="button button_denied docs_hide">вернуть</button>
                     <button data-action="denied" data-control="all" class="button button_denied">вернуть все</button>
-                    ${this.getStatusForReason(this.currentItem.type) === 'Первичная' ? 
-                    `<button  class="button button_approved">заказать ЕГРН</button>` : ''}
+                    ${this.getStatusForReason(this.currentItem.type) === 'Первичная' ?
+      `<button  class="button button_approved">заказать ЕГРН</button>` : ''}
                   </div>
                 </div>
                 <!-- <div class="bottom__right"> 
@@ -551,34 +551,34 @@ class App {
         this.toggleActive(event.target);
         this.getItem(event.target.dataset.item);
       } else if (event.target.dataset.get === 'photos'){
-          if (this.photoFiles.length > 0){
-            for (let elem of document.querySelectorAll('.docs_hide')){
-              elem.classList.remove('inVisible');
-            }
-            document.querySelector('.reason').classList.remove('inVisibility');
-            this.setSliderPhoto(this.photoFiles);
-            this.setMainPhoto();
-            this.setStartSlideSelect();
+        if (this.photoFiles.length > 0){
+          for (let elem of document.querySelectorAll('.docs_hide')){
+            elem.classList.remove('inVisible');
           }
-      } else if (event.target.dataset.get === 'docs'){
-          if (this.docsFiles.length > 0){
-            for (let elem of document.querySelectorAll('.docs_hide')){
-              elem.classList.add('inVisible');
-            }
-            document.querySelector('.reason').classList.add('inVisibility');
-            this.setSliderPhoto(this.docsFiles);
-            this.setMainPhoto();
-            this.setStartSlideSelect();
-          }
-      } else if (event.target.dataset.photo_id){
-          this.currentPhoto = this.currentItem.files.find(item => item.id === event.target.dataset.photo_id);
+          document.querySelector('.reason').classList.remove('inVisibility');
+          this.setSliderPhoto(this.photoFiles);
           this.setMainPhoto();
-          this.setNewSlideSelect(event.target);
+          this.setStartSlideSelect();
+        }
+      } else if (event.target.dataset.get === 'docs'){
+        if (this.docsFiles.length > 0){
+          for (let elem of document.querySelectorAll('.docs_hide')){
+            elem.classList.add('inVisible');
+          }
+          document.querySelector('.reason').classList.add('inVisibility');
+          this.setSliderPhoto(this.docsFiles);
+          this.setMainPhoto();
+          this.setStartSlideSelect();
+        }
+      } else if (event.target.dataset.photo_id){
+        this.currentPhoto = this.currentItem.files.find(item => item.id === event.target.dataset.photo_id);
+        this.setMainPhoto();
+        this.setNewSlideSelect(event.target);
       } else if (event.target.dataset.open === 'photo'){
-          transformImage.rotate = 0;
-          transformImage.height = 100;
-          transformImage.width = 100;
-          this.openPhotoFullScreen(this.currentPhoto);
+        transformImage.rotate = 0;
+        transformImage.height = 100;
+        transformImage.width = 100;
+        this.openPhotoFullScreen(this.currentPhoto);
       } else if (event.target.dataset.open === 'file'){
         const find = this.currentItem.files.find(file => file.id === event.target.dataset.fileid);
         this.openFile = !this.openFile;
@@ -587,25 +587,25 @@ class App {
         transformImage.width = 100;
         this.openPhotoFullScreen(find);
       } else if(event.target.dataset.control){
-          this.switchActionSetStatus(event.target.dataset.action, event.target.dataset.control);
+        this.switchActionSetStatus(event.target.dataset.action, event.target.dataset.control);
       } else if (event.target.dataset.list === 'update'){
-          this.getNewItems();
+        this.getNewItems();
       } else if (event.target.dataset.input === 'reason'){
-          const reasonList = document.querySelector('.reason__list');
-          reasonList.setAttribute('style', `height: ${window.innerHeight - event.target.getBoundingClientRect().bottom - 50}px;`)
-          reasonList.classList.remove('inVisible');
+        const reasonList = document.querySelector('.reason__list');
+        reasonList.setAttribute('style', `height: ${window.innerHeight - event.target.getBoundingClientRect().bottom - 50}px;`)
+        reasonList.classList.remove('inVisible');
       } else if (event.target.dataset.reason === 'reason'){
-          this.setNewReason(event.target);
+        this.setNewReason(event.target);
       } else if (event.target.dataset.search){
-          document.querySelector('.search__field').classList.add('inVisible');
-          const findItem = document.querySelector(`.id${event.target.dataset.search}`)
-          findItem.scrollIntoView({block: "start", behavior: "smooth"});
-          this.toggleActive(findItem);
-          this.getItem(event.target.dataset.search);
+        document.querySelector('.search__field').classList.add('inVisible');
+        const findItem = document.querySelector(`.id${event.target.dataset.search}`)
+        findItem.scrollIntoView({block: "start", behavior: "smooth"});
+        this.toggleActive(findItem);
+        this.getItem(event.target.dataset.search);
       } else if (event.target.dataset.comment === 'toggle'){
-          this.commentToggle(event);
+        this.commentToggle(event);
       } else if (event.target.dataset.request){
-          this.getRequest(event.target.dataset.request);
+        this.getRequest(event.target.dataset.request);
       } else if (event.target.dataset.open === 'card'){
         this.openCard(event.target.dataset.req);
       } else if (event.target.dataset.open === 'edit') {
@@ -615,13 +615,13 @@ class App {
         BX.SidePanel.Instance.open(readyString, {animationDuration: 300,  width: 925, });
         return true;
       } else if (event.target.dataset.message === 'send'){
-          this.sendMessage();
+        this.sendMessage();
       } else if (event.target.dataset.message === 'delete'){
-          this.deleteMessage(event.target.dataset.id);
+        this.deleteMessage(event.target.dataset.id);
       } else if (event.target.dataset.message === 'edit'){
-          this.editMessage(event.target.dataset.id);
+        this.editMessage(event.target.dataset.id);
       } else if (event.target.dataset.message === 'done'){
-          this.sendEditMessage(event.target.dataset.id);
+        this.sendEditMessage(event.target.dataset.id);
       } else if (event.target.type === 'checkbox' && event.target.name === 'filter'){
         if (event.target.checked){
           this.showNewSliderItems();
@@ -660,9 +660,9 @@ class App {
     })
   }
   isShowTypeElem(checked, type){
-      for (let item of document.querySelectorAll(`.${type}`)){
-        item.classList[checked ? 'remove' : 'add']('inVisible');
-      }
+    for (let item of document.querySelectorAll(`.${type}`)){
+      item.classList[checked ? 'remove' : 'add']('inVisible');
+    }
   }
 
   showAllSliderItems(){
@@ -750,7 +750,7 @@ class App {
       action: action,
       reqNumber: this.currentItem.ad,
     }).then(data => {
-        this.renderAnswer(data);
+      this.renderAnswer(data);
     })
   }
   renderAnswer(answers){
@@ -837,7 +837,7 @@ class App {
     let reasons = '';
     for (let reason of this.reasons){
       if (type === reason.modType){
-          reasons += `<div class="module__reason-item">
+        reasons += `<div class="module__reason-item">
                         <input name="${reason.UID}" type="checkbox" id="${reason.UID}">
                         <label for="${reason.UID}">${reason.message}</label>
                       </div>`
@@ -1039,9 +1039,9 @@ class App {
           for (let reason of selectReason){
             this.deniedReason.push(reason.id);
           }
-          area.value.length > 0 ? this.deniedReason.push(area.value) : '';
+          // area.value.length > 0 ? this.deniedReason.push(area.value) : '';
           this.setStatusCurrentItem('denied');
-          this.sendItem('denied');
+          this.sendItem('denied', area.value);
           this.closeModule(module);
         }
       } else if(event.target.dataset.scale === 'plus'){
@@ -1084,15 +1084,15 @@ class App {
     module.addEventListener('wheel', event => {
       event.preventDefault();
       if (event.deltaY === -100){
-      //up
-            transformImage.height += 5;
-            transformImage.width += 5;
-            document.querySelector('.module__img').setAttribute('style', `transform: rotate(${transformImage.rotate}deg); height: ${transformImage.height}%; width: ${transformImage.width}%;`);
+        //up
+        transformImage.height += 5;
+        transformImage.width += 5;
+        document.querySelector('.module__img').setAttribute('style', `transform: rotate(${transformImage.rotate}deg); height: ${transformImage.height}%; width: ${transformImage.width}%;`);
       } else if (event.deltaY === 100){
-      //down
-            transformImage.height -= 5;
-            transformImage.width -= 5;
-            document.querySelector('.module__img').setAttribute('style', `transform: rotate(${transformImage.rotate}deg); height: ${transformImage.height}%; width: ${transformImage.width}%;`);
+        //down
+        transformImage.height -= 5;
+        transformImage.width -= 5;
+        document.querySelector('.module__img').setAttribute('style', `transform: rotate(${transformImage.rotate}deg); height: ${transformImage.height}%; width: ${transformImage.width}%;`);
       }
     })
   }
@@ -1196,7 +1196,7 @@ class App {
       }
     })
   }
-  sendItem(status){
+  sendItem(status, comment){
     this.currentItem.comment = document.querySelector('.card__comment-field').value;
     console.log(this.currentItem)
     api.getJson({
@@ -1204,6 +1204,7 @@ class App {
       reqStatus: status,
       data: this.currentItem,
       reason: `${this.deniedReason.length > 0 ? this.deniedReason : ''}`,
+      commentReason: comment
     }).then(() => {
       console.log('here')
       this.subtractionQuantityType();
@@ -1285,6 +1286,6 @@ api.getJson({
     app = new App(data);
     app.init();
   } else {
-      document.querySelector('.main').insertAdjacentHTML('beforebegin', `<p class="center-side__empty">Нет объектов</p>`)
+    document.querySelector('.main').insertAdjacentHTML('beforebegin', `<p class="center-side__empty">Нет объектов</p>`)
   }
 })

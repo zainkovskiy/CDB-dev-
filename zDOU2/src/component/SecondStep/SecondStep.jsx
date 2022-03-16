@@ -1,10 +1,11 @@
 import React, {Component} from 'react';
-import Button from "@mui/material/Button";
-import {Client} from '../Client';
+import moment from 'moment'
 
 import './SecondStep.css';
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
+import Button from "@mui/material/Button";
+import {Client} from '../Client';
 
 export class SecondStep extends Component{
   state = {
@@ -40,6 +41,10 @@ export class SecondStep extends Component{
     for (let input of allInputs) {
       if (input.value.length === 0){
         isFalse = false
+      } else if (input.name === 'dateBorn') {
+        if (moment(input.value) > moment()) {
+          isFalse = false;
+        }
       }
     }
     return isFalse;

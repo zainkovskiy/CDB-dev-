@@ -1,4 +1,6 @@
 import React, {Component} from "react";
+import moment from 'moment'
+
 import TextField from '@mui/material/TextField';
 import Button from "@mui/material/Button";
 
@@ -8,7 +10,8 @@ export class Client extends Component {
     firstName: this.props.client.firstName  ? this.props.client.firstName : '',
     secondName: this.props.client.secondName  ? this.props.client.secondName : '',
     dateBorn: this.props.client.dateBorn  ? this.props.client.dateBorn : '',
-    disabled: true
+    disabled: true,
+    dateBornError: false,
   }
 
   handleInput = (event) => {
@@ -23,7 +26,13 @@ export class Client extends Component {
       }
     })
   }
-
+  checkDateBornError = (event) => {
+    if (moment(event.target.value) > moment()){
+      this.setState({dateBornError: true});
+    } else {
+      this.setState({dateBornError: false});
+    }
+  }
   render() {
     const { setIsSend, isSend } = this.props;
     return (
@@ -74,13 +83,14 @@ export class Client extends Component {
         />
         <TextField
           disabled={this.state.disabled}
-          error={this.state.dateBorn.length === 0}
+          error={this.state.dateBorn.length === 0 || this.state.dateBornError}
           type='date'
           name='dateBorn'
           value={this.state.dateBorn && this.state.dateBorn.split(' ')[0]}
           size="small"
           onChange={(event) => this.handleInput(event)}
-          helperText={`${this.state.dateBorn.length === 0 ? 'Не корректно указана дата рождения' : 'Дата рождения'}`}
+          onBlur={(event) => this.checkDateBornError(event)}
+          helperText={`${this.state.dateBorn.length === 0 || this.state.dateBornError ? 'Не корректно указана дата рождения' : 'Дата рождения'}`}
           fullWidth
         />
       </>

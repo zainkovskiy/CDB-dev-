@@ -6,7 +6,7 @@ import './FourthStep.css';
 
 import {Notice} from "../Notice";
 import {File} from "../File";
-import {Dialog} from "../Dialog";
+import {DialogMain} from "../DialogMain";
 import {DialogType} from "../DialogType";
 import {DialogSMS} from "../DialogSMS";
 
@@ -62,7 +62,7 @@ export class FourthStep extends Component{
           docType === 'Рекламный' && <div className='about__wrap'>Вид: {docForm}</div>
         }
         <div className='about__wrap'>
-          <span>Срок: {moment(docType === 'Эксклюзив' && moderation.status !== 'Подтвержден' ? docProlongation : docExpired).format('DD.MM.YYYY')}</span>
+          <span>Срок: {moment(docType === 'Эксклюзив' && moderation.status !== 'Подтверждено' ? docProlongation : docExpired).format('DD.MM.YYYY')}</span>
           { (docType === 'Эксклюзив' && moderation.status === 'Подтвержден') &&
           <Button
             variant="text"
@@ -110,7 +110,7 @@ export class FourthStep extends Component{
         </div>
       </>
       }
-      <Dialog
+      <DialogMain
         open={this.state.openChangeType}
         onClose={this.setOpenChangeType}
         fullWidth={true}
@@ -121,8 +121,8 @@ export class FourthStep extends Component{
           setNewType={setNewType}
           title={this.state.titleDialog}
         />
-      </Dialog>
-      <Dialog
+      </DialogMain>
+      <DialogMain
         open={this.state.openSendSMS}
         onClose={this.setOpenSendSMS}
         fullWidth={true}
@@ -133,7 +133,7 @@ export class FourthStep extends Component{
           clientsPhones={clientsPhones}
           repeatSendSMS={repeatSendSMS}
         />
-      </Dialog>
+      </DialogMain>
     </div>)
   }
 }

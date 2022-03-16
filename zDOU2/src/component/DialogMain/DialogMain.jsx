@@ -2,7 +2,7 @@ import React from "react";
 
 import Dialog from '@mui/material/Dialog';
 
-export function Dialog(props) {
+export function DialogMain(props) {
   const { onClose, open, children, fullWidth, maxWidth } = props;
 
   return (

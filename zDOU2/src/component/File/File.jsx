@@ -1,9 +1,9 @@
 import React, {useState} from "react";
-import {Dialog} from "../Dialog";
 
 import './File.css';
 
-import {FileWindow} from "../FileWindow";
+import { FileWindow } from "../FileWindow";
+import { DialogMain } from '../DialogMain';
 
 export function File (props) {
   const [open, setOpen] = useState(false);
@@ -37,13 +37,13 @@ export function File (props) {
               alt={ document.name }
             />
             <span>{ docTypeRus[document.documentType] }</span>
-            <Dialog
+            <DialogMain
               open={open}
               onClose={ () => setOpen(!open) }
               fullWidth={false}
               maxWidth={''}
             >
               <FileWindow document={document} url={getURL()} docTypeRus={docTypeRus}/>
-            </Dialog>
+            </DialogMain>
           </div>)
 }

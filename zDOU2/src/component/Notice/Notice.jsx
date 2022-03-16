@@ -3,7 +3,7 @@ import Button from "@mui/material/Button";
 
 import './Notice.css';
 
-import { Dialog } from '../Dialog';
+import { DialogMain } from '../DialogMain';
 import { DialogCorrect } from '../DialogCorrect';
 
 export function Notice(props){
@@ -33,7 +33,7 @@ export function Notice(props){
                 <span className='notice__title'>Комментарий модератора</span>
                 <span>{ moderation.modComment }</span>
               </>}
-            <Dialog
+            <DialogMain
               open={openCorrect}
               onClose={isOpenCorrect}
               fullWidth={true}
@@ -49,6 +49,6 @@ export function Notice(props){
                 sendAlterObject={sendAlterObject}
                 onClose={isOpenCorrect}
               />
-            </Dialog>
+            </DialogMain>
             </div>)
 }

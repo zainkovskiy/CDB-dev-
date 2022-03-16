@@ -153,7 +153,7 @@ export function FirstStep(props){
               </div>
               {docType === 'Эксклюзив' &&
                 <div className='container-page__wrap'>
-                  <span className='subtitle'>Срок действия договора</span>
+                  <span className='subtitle'>Срок действия договора до</span>
                   <TextField
                     error={isErrorDate}
                     id="date"
