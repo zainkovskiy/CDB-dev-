@@ -643,7 +643,7 @@ class Handler{
       textArea: true,
     }
     library.radio = this.isValidRadio(allRadio);
-    library.input = this.isValidInput(allInput);
+    library.input = this.isValidInput(allInpu1t);
     library.select = this.isValidSelect(allSelect);
     library.textArea = this.isValidTextArea(textArea);
 
