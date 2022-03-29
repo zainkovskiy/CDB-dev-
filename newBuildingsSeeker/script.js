@@ -141,6 +141,16 @@ class newBuildingsSeeker {
       this.openModule(form);
     })
   }
+  getFile(files){
+    let filesTemplate = '';
+    if (files && files.length > 0){
+      let parseFiles = JSON.parse(files);
+      parseFiles.forEach(file => {
+        filesTemplate += `<p class="module__text">${file.name} <a download="Паспорт" href="${file.URI}">скачать</a></p>`
+      })
+    }
+    return filesTemplate;
+  }
   openModule(form){
     const htmlDom = document.querySelector('HTML');
     htmlDom.setAttribute("style", "overflow-y:hidden;");
@@ -165,10 +175,7 @@ class newBuildingsSeeker {
                     <p class="module__text">Этаж<span>${form.floor ? form.floor : ''}</span></p>
                     <p class="module__text">Номер квартиры<span>${form.numberAppartment ? form.numberAppartment : ''}</span></p>
                     <p class="module__text">Площадь квартиры<span>${form.area ? form.area : ''}</span></p>
-                    ${form.file ?
-        `<p class="module__text">Паспорт <a download="Паспорт" href="${form.file}">скачать</a></p>`
-        : ''
-      }
+                    ${this.getFile(form.file)}
                   </div>
                   <div class="module__footer"> 
                     <button data-name="close" class="module__close"><span>Закрыть</span></button>

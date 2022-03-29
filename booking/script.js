@@ -87,7 +87,7 @@ class Render{
                         </label>
                       </div>                                                
                     </div>
-                    <h3 class="title">Объект<span data-button="add" class="title__add">добавить жх</span></h3>
+                    <h3 class="title">Объект<span data-button="add" class="title__add">добавить жк</span></h3>
                     <div class="info__object">
                       <div class="field"> 
                         <input data-complex="0" class="search__input search__complex" type="search" name="complex" value="" placeholder="Выберете ЖК">  
@@ -620,16 +620,15 @@ class Handler{
         if (this.isValidForm(allInputs, event.target.id)){
           this.setLoader();
           this.setValue(allInputs, event.target.id);
-          console.log(this.booking)
-          // this.sendFormToServer(data => {
-          //   this.removeLoader();
-          //   if (data.result) {
-          //     alert('Успешно отправлено');
-          //     location.reload();
-          //   } else {
-          //     alert('Ошибка,попробуйте снова');
-          //   }
-          // }, this.booking, 'https://hs-01.centralnoe.ru/Project-Selket-Main/Servers/Object/NewbuildBooking.php')
+          this.sendFormToServer(data => {
+            this.removeLoader();
+            if (data.result) {
+              alert('Успешно отправлено');
+              location.reload();
+            } else {
+              alert('Ошибка,попробуйте снова');
+            }
+          }, this.booking, 'https://hs-01.centralnoe.ru/Project-Selket-Main/Servers/Object/NewbuildBooking.php')
         }
       })
     }
