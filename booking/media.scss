@@ -1,4 +1,13 @@
 @media (max-width: 480px){
+  body{
+    padding: 0.5rem;
+  }
+  .title{
+    font-size: 12px;
+  }
+  .tabset > ul label {
+    font-size: 12px;
+  }
   .info{
     &__client, &__object, &__passport{
       grid-template-columns: 1fr;
@@ -15,5 +24,8 @@
   }
   h4 {
     font-size: 12px;
+  }
+  .module__window{
+    width: 90%;
   }
 }

@@ -39,13 +39,16 @@ class Render{
     }
   }
   render(){
-    return `<div class="header"> 
-                <h2>Уведомление/бронь по новостройке</h2>
-                <div class="header__right"> 
-                  <span class="header__text">ЖК нет в списке</span>
-                  <span data-complain="open" class="header__button">пожаловаться</span>
-                </div>
-            </div> 
+    return `<div class="header">
+              <img src="https://crm.centralnoe.ru/dealincom/assets/logo_can.jpg" alt="logo" class="header__logo">
+            </div>
+            <div class='title'>
+              Уведомление/бронь по новостройке
+            </div>
+             <div class="complain"> 
+                <span class="complain__text">ЖК нет в списке</span>
+                <span data-complain="open" class="complain__button">пожаловаться</span>
+            </div>
             <div class="tabset">
               <input type="radio" name="tabset_1" id="tabset_1_notification" hidden="" aria-hidden="true" ${this.params.reqType === 0 ? 'checked' : `${this.params.reqType === 1 ? '' : 'checked'}`}="">
               <input type="radio" name="tabset_1" id="tabset_1_booking" hidden="" aria-hidden="true" ${this.params.reqType === 1 ? 'checked' : ''}>
@@ -56,7 +59,7 @@ class Render{
               <div>
                 <section>
                   <form name="notification" id="notification" class="form" autocomplete="off"> 
-                    <h3 class="title">общая информация о клиенте</h3>
+                    <h3 class="subtitle">Общая информация о клиенте</h3>
                     <div class="info__client"> 
                       <div class="field"> 
                         <input class="field__input" name="lastName" type="text" id="lastName" autocomplete="off" 
@@ -87,7 +90,7 @@ class Render{
                         </label>
                       </div>                                                
                     </div>
-                    <h3 class="title">Объект<span data-button="add" class="title__add">добавить жк</span></h3>
+                    <h3 class="subtitle">Объект<span data-button="add" class="subtitle__add">добавить еще</span></h3>
                     <div class="info__object">
                       <div class="field"> 
                         <input data-complex="0" class="search__input search__complex" type="search" name="complex" value="" placeholder="Выберете ЖК">  
@@ -111,7 +114,7 @@ class Render{
                 </section>
                 <section>
                   <form name="booking" id="booking" class="form" autocomplete="off"> 
-                    <h3 class="title">общая информация о клиенте</h3>
+                    <h3 class="subtitle">Общая информация о клиенте</h3>
                     <div class="info__client"> 
                       <div class="field"> 
                         <input class="field__input" name="lastName" type="text" id="lastName" autocomplete="off" 
@@ -160,7 +163,7 @@ class Render{
                         </div>
                       </div>   
                     </div>
-                    <h3 class="title">объект<span data-button="add" class="title__add">добавить жх</span></h3>
+                    <h3 class="subtitle">Объект<span data-button="add" class="subtitle__add">добавить еще</span></h3>
                     <div class="info__object">
                       <div class="field"> 
                         <input data-complex="0" class="search__input search__complex" type="search" name="complex" value="" placeholder="Выберете ЖК">  
@@ -177,7 +180,7 @@ class Render{
                         </label>
                       </div> 
                     </div>
-                    <h3 class="title">данные для бронирования</h3>
+                    <h3 class="subtitle">Данные для бронирования</h3>
                     <div class="info__passport"> 
                       <div class="info__passport-wrap">
                         <h4 class="info__passport-text">Паспорт</h4>
@@ -295,8 +298,8 @@ class Handler{
                       </div> 
                       <textarea cols="30" rows="10" placeholder="Введите комментарий"></textarea>
                       <div class="module__buttons"> 
-                        <span data-module="close" class="module__btn module__btn-cancel">Отменить</span> 
-                        <span data-module="send" class="module__btn">Отправить</span> 
+                        <span data-module="close" class="form__button module__btn-cancel">Отменить</span> 
+                        <span data-module="send" class="form__button">Отправить</span> 
                       </div>
                     </div>
                   </div>`)
@@ -307,8 +310,10 @@ class Handler{
     module.addEventListener('click', event => {
       if (event.target.classList.contains('module')){
         module.remove();
+        document.querySelector('HTML').removeAttribute("style");
       } else if (event.target.dataset.module === 'close'){
         module.remove();
+        document.querySelector('HTML').removeAttribute("style");
       } else if (event.target.dataset.module === 'send'){
         const residential = module.querySelector(`INPUT[name='newComplex']`);
         if (residential.value.length === 0) {
@@ -316,7 +321,7 @@ class Handler{
         } else {
           this.sendFormToServer(data => {
             module.remove();
-            console.log(data)
+            location.reload();
           }, {
             applicant: loginID ? loginID : this.params.currentUserId,
             residential: module.querySelector(`INPUT[name='newComplex']`).value,
