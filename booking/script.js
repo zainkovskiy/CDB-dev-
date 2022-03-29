@@ -694,14 +694,19 @@ class Handler{
     }
     for (let input of allInputs){
       if (input.name !== 'secondName' && input.name !== 'floor' && input.name !== 'numberAppartment' && input.name !== 'area'){
-        if (input.value.length === 0){
+        if (input.value.length === 0 && !input.classList.contains('manager')){
           library[input.name] = false;
           input.classList.add('inValid');
         } else if (input.classList.contains('manager')){
+          if (formName !== 'notification'){
             if (!regexp.manager.test(input.value)) {
               library[input.name] = false;
               input.classList.add('inValid');
+            } else if (input.value.length === 0){
+              library[input.name] = false;
+              input.classList.add('inValid');
             }
+          }
         } else if (!regexp[input.name].test(input.value)){
           library[input.name] = false;
           input.classList.add('inValid');
