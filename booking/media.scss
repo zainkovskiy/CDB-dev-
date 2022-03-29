@@ -1,0 +1,19 @@
+@media (max-width: 480px){
+  .info{
+    &__client, &__object, &__passport{
+      grid-template-columns: 1fr;
+    }
+    &__passport-wrap:first-child{
+      grid-template-rows: auto 1fr 1fr;
+    }
+  }
+  h2 {
+    font-size: 16px;
+  }
+  h3 {
+    font-size: 14px;
+  }
+  h4 {
+    font-size: 12px;
+  }
+}
