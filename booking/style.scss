@@ -139,7 +139,7 @@ textarea{
 }
 .complain{
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   &__text{
     font-weight: bold;

@@ -46,8 +46,7 @@ class Render{
               Уведомление/бронь по новостройке
             </div>
              <div class="complain"> 
-                <span class="complain__text">ЖК нет в списке</span>
-                <span data-complain="open" class="complain__button">пожаловаться</span>
+                <span data-complain="open" class="complain__button">ЖК нет в списке?</span>
             </div>
             <div class="tabset">
               <input type="radio" name="tabset_1" id="tabset_1_notification" hidden="" aria-hidden="true" ${this.params.reqType === 0 ? 'checked' : `${this.params.reqType === 1 ? '' : 'checked'}`}="">

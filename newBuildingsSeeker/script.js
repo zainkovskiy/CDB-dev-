@@ -47,10 +47,10 @@ class newBuildingsSeeker {
   }
   setArrayRealtors(){
     let arrayRealtors = [];
-    for (let item of this.list){
-      if (!arrayRealtors.find(Applicant => Applicant === item.applicant)){
-        arrayRealtors.push(item.applicant);
-      }
+      for (let item of this.list){
+        if (!arrayRealtors.find(Applicant => Applicant === item.applicant)){
+          arrayRealtors.push(item.applicant);
+        }
     }
     return arrayRealtors;
   }
@@ -130,6 +130,7 @@ class newBuildingsSeeker {
     server.request({
       action: `${isChecked ? 'sendet' : 'unSendet'}`,
       UID: req,
+      loginID: loginID
     })
   }
   getFormData(uid){
