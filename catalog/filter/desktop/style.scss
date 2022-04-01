@@ -131,7 +131,6 @@ ul {
   & span{
     color: #399fc2;
     font-size: 16px;
-    margin: 0 20px 0 0;
   }
 }
 .search-form{
@@ -165,7 +164,7 @@ ul {
   background-repeat: no-repeat;
   cursor: pointer;
   transition: opacity .3s,
-              transform .3s;
+  transform .3s;
   &:hover{
     opacity: .6;
   }
