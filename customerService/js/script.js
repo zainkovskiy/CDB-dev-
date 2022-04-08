@@ -46,24 +46,32 @@ class App{
     this.currentOptions = '';
   }
   init(){
-    this.checkWork.addEventListener('change', () => {
-      if (this.checkWork.checked && this.isNotItem){
-        this.startJobs();
-      } else {
-        if (this.isNotItem){
-          document.querySelector('.inJob__load').classList.remove('inJob__next_timer');
-          this.finishSession();
-        } else {
-          this.checkWork.disabled = true;
-        }
+    document.querySelector('.inJob__phone').addEventListener('keyup', event => {
+      const regExp = new RegExp(/\d{4}/, 'g');
+      if (event.target.value.length > 0 && regExp.test(+event.target.value)){
+        this.checkWork.disabled = false;
+        event.target.disabled = true;
+        this.checkWork.addEventListener('change', () => {
+          if (this.checkWork.checked && this.isNotItem){
+            this.startJobs(+event.target.value);
+          } else {
+            if (this.isNotItem){
+              document.querySelector('.inJob__load').classList.remove('inJob__next_timer');
+              this.finishSession();
+            } else {
+              this.checkWork.disabled = true;
+            }
+          }
+        });
+        this.handler();
       }
-    });
-    this.handler();
+    })
   }
-  startJobs(){
+  startJobs(phone){
     api.requestToServer('getInfo', {
       operatorId: loginID,
-      action: 'onWorking'
+      action: 'onWorking',
+      ext: phone
     }).then(startWork => {
       console.log(startWork)
       if (startWork.result){
@@ -180,7 +188,7 @@ class App{
     this.containerMain.addEventListener('click', event => {
       const e = event.target;
       const dataset = event.target.dataset;
-      if (e.tagName === 'INPUT' && e.type === 'text'){
+      if (e.tagName === 'INPUT' && e.type === 'text' && !e.classList.contains('inJob__phone')){
         if (this.currentSelect && this.currentSelect === e){
           this.checkOption();
         } else {
