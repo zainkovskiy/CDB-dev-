@@ -132,21 +132,21 @@ export function FirstStep(props){
                       </label>
                     </div>
                   }
-                  { rights !== 'owner' &&
-                    <div className='toggle-btn__item'>
-                      <input
-                        id='ring'
-                        name='docForm'
-                        type="radio"
-                        checked={docForm === 'Звонок'}
-                        value='Звонок'
-                        onChange={(event) => handleInputs(event)}
-                      />
-                      <label htmlFor='ring'>
-                        Звонок
-                      </label>
-                    </div>
-                  }
+                  {/*{ rights !== 'owner' &&*/}
+                  {/*  <div className='toggle-btn__item'>*/}
+                  {/*    <input*/}
+                  {/*      id='ring'*/}
+                  {/*      name='docForm'*/}
+                  {/*      type="radio"*/}
+                  {/*      checked={docForm === 'Звонок'}*/}
+                  {/*      value='Звонок'*/}
+                  {/*      onChange={(event) => handleInputs(event)}*/}
+                  {/*    />*/}
+                  {/*    <label htmlFor='ring'>*/}
+                  {/*      Звонок*/}
+                  {/*    </label>*/}
+                  {/*  </div>*/}
+                  {/*}*/}
                 </div>
                   <span className='error-text'>{ errorViewText }</span>
                 </div>
