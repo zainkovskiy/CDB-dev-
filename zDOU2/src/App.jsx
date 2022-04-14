@@ -164,6 +164,7 @@ export class App extends Component{
         isRepeat={this.state.obj.isRepeat}
         sendFiles={this.sendFiles}
         sendAlterObject={this.sendAlterObject}
+        isGod={this.state.obj.isGod}
       />,
     }
     const isGrid = +obj.step !== 4 ? 'container-grid' : '';
@@ -212,7 +213,7 @@ export class App extends Component{
   componentDidMount() {
     const raw = {
       method: 'POST',
-      body: JSON.stringify({action: 'get', dealId: deal})
+      body: JSON.stringify({action: 'get', dealId: deal, loginID: loginID})
     }
     fetch('https://hs-01.centralnoe.ru/Project-Selket-Main/Servers/Contract/Server.php', raw).then(res => {
       res.json().then(data => {

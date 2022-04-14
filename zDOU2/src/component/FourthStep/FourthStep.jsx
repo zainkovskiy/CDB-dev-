@@ -30,7 +30,7 @@ export class FourthStep extends Component{
 
   render() {
     const { docType, docForm, docExpired, documents, smsvalidation, repeatSendSMS, sendAlterObject,
-      moderation, handleInputs, setNewType, docProlongation, clientsPhones, isRepeat, sendFiles } = this.props;
+      moderation, handleInputs, setNewType, docProlongation, clientsPhones, isRepeat, sendFiles, isGod } = this.props;
     return (<div className='container-page'>
       <div className='about'>
         <div className='about__wrap'>
@@ -76,10 +76,10 @@ export class FourthStep extends Component{
           (docType === 'Рекламный' && docForm === 'СМС') &&
           <div className='about__wrap'>
             <span>
-              Статус смс: {smsvalidation.status} {smsvalidation.phone} {smsvalidation.date &&  moment(smsvalidation.date).format('DD.MM.YYYY')}
+              Статус смс: {smsvalidation.status} {smsvalidation.phone} {smsvalidation.date &&  moment(smsvalidation.date).format('DD.MM.YYYY, HH:mm')}
             </span>
             {
-              !isRepeat &&
+              (!isRepeat || isGod) &&
                 <Button
                   variant="text"
                   onClick={this.setOpenSendSMS}
