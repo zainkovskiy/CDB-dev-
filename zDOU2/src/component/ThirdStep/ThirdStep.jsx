@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import Button from "@mui/material/Button";
 import {File} from "../File";
 import {DragAndDrop} from "../DragAndDrop";
+import { LoadingButton } from "@mui/lab";
+
 
 
 import './ThirdStep.css';
@@ -9,6 +11,7 @@ import './ThirdStep.css';
 export class ThirdStep  extends Component{
   state = {
     haveContract: false,
+    loading: false,
   }
 
   isHaveContract = () => {
@@ -34,9 +37,15 @@ export class ThirdStep  extends Component{
       method: 'POST',
       body: JSON.stringify(req)
     }
+    this.setState({loading: true});
     fetch('https://crm.centralnoe.ru/dealincom/templates/sk.php', requestOptions)
-      .then(data => {
-        location.href = `https://crm.centralnoe.ru${data.result.document.downloadUrl}`
+      .then(res => {
+        res.text().then(url => {
+          this.setState({loading: false});
+          if (url !== 'false'){
+            location.href = url;
+          }
+        })
     })
   }
   render() {
@@ -56,29 +65,42 @@ export class ThirdStep  extends Component{
               docType === 'Рекламный' ?
               <div className='downloads__item'>
                 <span>Рекламный договор</span>
-                <Button variant="contained" >
+                {/*<Button*/}
+                {/*  variant="contained"*/}
+                {/*  onClick={() => this.getDocument({packUID: UID})}*/}
+                {/*>*/}
+                {/*  Скачать*/}
+                {/*</Button>                */}
+                <LoadingButton
+                  variant="contained"
+                  onClick={() => this.getDocument({packUID: UID})}
+                  loading={this.state.loading}
+                  loadingIndicator="Loading..."
+                >
                   Скачать
-                </Button>
+                </LoadingButton>
               </div>
                 :
               <>
                 <div className='downloads__item'>
                   <span>ДОУ (+ соглашение если СК)</span>
-                  <Button
+                  <LoadingButton
                     variant="contained"
                     onClick={() => this.getDocument({packUID: UID})}
+                    loading={this.state.loading}
                   >
                     Скачать
-                  </Button>
+                  </LoadingButton>
                 </div>
                 <div className='downloads__item'>
                 <span>Соглашение о продление ДОУ</span>
-                <Button
+                <LoadingButton
                   variant="contained"
                   onClick={() => this.getDocument({packUID: UID, Ext: 1})}
+                  loading={this.state.loading}
                 >
                 Скачать
-                </Button>
+                </LoadingButton>
                 </div>
               </>
             }

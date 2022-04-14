@@ -38,7 +38,7 @@ export function DialogCorrect (props) {
               Исправить
             </DialogTitle>
             {
-              DateErr &&
+              (DateErr && docType !== 'Рекламный') &&
               <TextField
                 error={isErrorDate}
                 id="date"

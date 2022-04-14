@@ -37,7 +37,7 @@ export class FourthStep extends Component{
           <span>Тип: {docType}</span>
           { docType === 'Рекламный' &&
             <>
-              { moderation.status !== 'Подтвержден' ?
+              { moderation.status !== 'Подтверждено' ?
                 <Button
                   variant="text"
                   name='step'
@@ -63,7 +63,7 @@ export class FourthStep extends Component{
         }
         <div className='about__wrap'>
           <span>Срок: {moment(docType === 'Эксклюзив' && moderation.status !== 'Подтверждено' ? docProlongation : docExpired).format('DD.MM.YYYY')}</span>
-          { (docType === 'Эксклюзив' && moderation.status === 'Подтвержден') &&
+          { (docType === 'Эксклюзив' && moderation.status === 'Подтверждено') &&
           <Button
             variant="text"
             onClick={() => {this.setOpenChangeType(); this.setTitleDialog('Продлить договор')}}
