@@ -71,7 +71,7 @@ export class FourthStep extends Component{
             Продлить
           </Button> }
         </div>
-        <div className='about__wrap'>Статус договора: {moderation.status} с {moderation.date && moment(moderation.data).format('DD.MM.YYYY')}</div>
+        <div className='about__wrap'>Статус договора: {moderation.status} с {moderation.date && moment(moderation.data).format('DD.MM.YYYY, HH:mm')}</div>
         {
           (docType === 'Рекламный' && docForm === 'СМС') &&
           <div className='about__wrap'>

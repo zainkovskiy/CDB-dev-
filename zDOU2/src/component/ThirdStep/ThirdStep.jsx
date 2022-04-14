@@ -11,7 +11,8 @@ import './ThirdStep.css';
 export class ThirdStep  extends Component{
   state = {
     haveContract: false,
-    loading: false,
+    doc: false,
+    ext: false,
   }
 
   isHaveContract = () => {
@@ -32,16 +33,18 @@ export class ThirdStep  extends Component{
       return 'сканы'
     }
   }
-  getDocument = (req) => {
+  getDocument = (req, name) => {
+    console.log(this.state[name])
+    console.log(name)
     const requestOptions = {
       method: 'POST',
       body: JSON.stringify(req)
     }
-    this.setState({loading: true});
+    this.setState({ [name]: true } );
     fetch('https://crm.centralnoe.ru/dealincom/templates/sk.php', requestOptions)
       .then(res => {
         res.text().then(url => {
-          this.setState({loading: false});
+          this.setState({ [name]: false } );
           if (url !== 'false'){
             location.href = url;
           }
@@ -72,9 +75,10 @@ export class ThirdStep  extends Component{
                 {/*  Скачать*/}
                 {/*</Button>                */}
                 <LoadingButton
+                  name='doc'
                   variant="contained"
-                  onClick={() => this.getDocument({packUID: UID})}
-                  loading={this.state.loading}
+                  onClick={event => this.getDocument({packUID: UID}, event.target.name)}
+                  loading={this.state.doc}
                   loadingIndicator="Loading..."
                 >
                   Скачать
@@ -85,9 +89,10 @@ export class ThirdStep  extends Component{
                 <div className='downloads__item'>
                   <span>ДОУ (+ соглашение если СК)</span>
                   <LoadingButton
+                    name="doc"
                     variant="contained"
-                    onClick={() => this.getDocument({packUID: UID})}
-                    loading={this.state.loading}
+                    onClick={event => this.getDocument({packUID: UID}, event.target.name)}
+                    loading={this.state.doc}
                   >
                     Скачать
                   </LoadingButton>
@@ -95,9 +100,10 @@ export class ThirdStep  extends Component{
                 <div className='downloads__item'>
                 <span>Соглашение о продление ДОУ</span>
                 <LoadingButton
+                  name='ext'
                   variant="contained"
-                  onClick={() => this.getDocument({packUID: UID, Ext: 1})}
-                  loading={this.state.loading}
+                  onClick={event => this.getDocument({packUID: UID, Ext: 1}, event.target.name)}
+                  loading={this.state.ext}
                 >
                 Скачать
                 </LoadingButton>

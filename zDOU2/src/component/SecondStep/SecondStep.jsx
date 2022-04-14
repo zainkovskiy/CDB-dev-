@@ -29,10 +29,11 @@ export class SecondStep extends Component{
   }
 
   handleInputPhone = (phone) => {
-    this.setState({phone: phone}, () => {
-      this.props.phoneForSms(phone);
-    });
-
+    if (phone){
+      this.setState({phone: phone}, () => {
+        this.props.phoneForSms(phone);
+      });
+    }
   }
 
   validPage = () => {
@@ -76,7 +77,7 @@ export class SecondStep extends Component{
                   id="outlined-select-currency"
                   select
                   label="Номер клиента"
-                  value={this.state.phone}
+                  value={this.state.phone ? this.state.phone : ''}
                   name='phone'
                   size="small"
                   fullWidth
