@@ -114,7 +114,7 @@ export class App extends Component{
 
   setNewType = (event, newExpired, isCb) => {
     this.setState(prevState => ({
-      obj: {...prevState.obj, docType : 'Эксклюзив', docExpired : newExpired},
+      obj: {...prevState.obj, docType : event.target.dataset.action === 'changeType' ? 'Эксклюзив' : prevState.obj.docType, docExpired : newExpired},
     }), () => {
       isCb ? this.handleInputs(event) : this.sendAlterObject(event.target.dataset.action)
     })
