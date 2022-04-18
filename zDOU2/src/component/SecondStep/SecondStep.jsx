@@ -40,7 +40,7 @@ export class SecondStep extends Component{
     let isFalse = true;
     const allInputs = document.querySelectorAll('INPUT');
     for (let input of allInputs) {
-      if (input.value.length === 0){
+      if (input.value.length === 0 && input.name !== 'secondName'){
         isFalse = false
       } else if (input.name === 'dateBorn') {
         if (moment(input.value) > moment()) {

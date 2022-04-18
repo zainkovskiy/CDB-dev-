@@ -181,7 +181,7 @@ export class App extends Component{
                   <Title/>
                   <div className={isGrid}>
                     {
-                      obj.rights ?
+                      obj.clients ?
                         <>
                           {step[obj.step]}
                           {
@@ -199,7 +199,7 @@ export class App extends Component{
                             />
                           }
                         </>
-                        : <span>Нет прав на просмотр</span>
+                        : <span>Отсутвует клиент в сделке</span>
                     }
                   </div>
                 </>

@@ -72,14 +72,12 @@ export class Client extends Component {
         <TextField
           disabled={this.state.disabled}
           autoComplete='off'
-          error={this.state.secondName.length === 0}
           label="Отчество"
           type="text"
           name='secondName'
           value={this.state.secondName}
           size="small"
           onChange={(event) => this.handleInput(event)}
-          helperText={`${this.state.secondName.length === 0 ? 'Укажите отчество клиента' : ''}`}
         />
         <TextField
           disabled={this.state.disabled}
