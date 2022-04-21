@@ -39,12 +39,26 @@ export class SecondStep extends Component{
   validPage = () => {
     let isFalse = true;
     const allInputs = document.querySelectorAll('INPUT');
-    for (let input of allInputs) {
-      if (input.value.length === 0 && input.name !== 'secondName'){
-        isFalse = false
-      } else if (input.name === 'dateBorn') {
-        if (moment(input.value) > moment()) {
-          isFalse = false;
+    if(this.props.docType === 'Рекламный'){
+      for (let input of allInputs){
+        if (input.name === 'firstName') {
+          if (input.value.length === 0) {
+            isFalse = false
+          }
+        } else if ((this.props.docForm === 'СМС' || this.props.docForm === 'Звонок') && input.name === 'phone'){
+          if (input.value.length === 0) {
+            isFalse = false
+          }
+        }
+      }
+    } else {
+      for (let input of allInputs) {
+        if (input.value.length === 0 && input.name !== 'secondName'){
+          isFalse = false
+        } else if (input.name === 'dateBorn') {
+          if (moment(input.value) > moment()) {
+            isFalse = false;
+          }
         }
       }
     }
@@ -64,6 +78,7 @@ export class SecondStep extends Component{
                 setIsSend={this.setIsSend}
                 isSend={this.state.isSend}
                 client={client}
+                docType={docType}
               />)
             : <div>нет клиента</div>
         }

@@ -27,14 +27,16 @@ export class Client extends Component {
     })
   }
   checkDateBornError = (event) => {
-    if (moment(event.target.value) > moment()){
-      this.setState({dateBornError: true});
-    } else {
-      this.setState({dateBornError: false});
+    if (this.props.docType !== 'Рекламный'){
+      if (moment(event.target.value) > moment()){
+        this.setState({dateBornError: true});
+      } else {
+        this.setState({dateBornError: false});
+      }
     }
   }
   render() {
-    const { setIsSend, isSend } = this.props;
+    const { setIsSend, isSend, docType } = this.props;
     return (
       <>
         <Button
@@ -48,7 +50,7 @@ export class Client extends Component {
         <TextField
           disabled={this.state.disabled}
           autoComplete='off'
-          error={this.state.lastName.length === 0}
+          error={this.state.lastName.length === 0 && docType !== 'Рекламный'}
           label="Фамилия"
           type="text"
           name='lastName'
@@ -81,14 +83,14 @@ export class Client extends Component {
         />
         <TextField
           disabled={this.state.disabled}
-          error={this.state.dateBorn.length === 0 || this.state.dateBornError}
+          error={docType !== 'Рекламный' && this.state.dateBorn.length === 0 || this.state.dateBornError}
           type='date'
           name='dateBorn'
           value={this.state.dateBorn && this.state.dateBorn.split(' ')[0]}
           size="small"
           onChange={(event) => this.handleInput(event)}
           onBlur={(event) => this.checkDateBornError(event)}
-          helperText={`${this.state.dateBorn.length === 0 || this.state.dateBornError ? 'Не корректно указана дата рождения' : 'Дата рождения'}`}
+          helperText={docType !== 'Рекламный' && `${this.state.dateBorn.length === 0 || this.state.dateBornError ? 'Не корректно указана дата рождения' : 'Дата рождения'}`}
           fullWidth
         />
       </>
