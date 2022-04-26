@@ -25,7 +25,14 @@ export class App extends Component{
   sendAlterObject = (action, comment) => {
     const raw = {
       method: 'POST',
-      body: JSON.stringify({action: action, data: this.state.obj, comment: comment, dealId: deal})
+      body: JSON.stringify(
+        {
+          action: action,
+          data: this.state.obj,
+          comment: comment,
+          dealId: deal,
+          editor: loginID
+        })
     }
     fetch('https://hs-01.centralnoe.ru/Project-Selket-Main/Servers/Contract/Server.php', raw).then(res => {
               res.json().then(data => {

@@ -46,6 +46,6 @@ if (isset($placementOptions['ID'])) {
 </head>
 <body>
   <?php echo('<div id="root"></div>'); ?>
-  <?php echo('<script src="index.9312e142.js?'.chr(rand(65,90)).chr(rand(65,90)).'='.rand(0,1000000).'"></script>'); ?>
+  <?php echo('<script src="index.ff857b95.js?'.chr(rand(65,90)).chr(rand(65,90)).'='.rand(0,1000000).'"></script>'); ?>
 </body>
 </html>
