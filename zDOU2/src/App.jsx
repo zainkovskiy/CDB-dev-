@@ -172,6 +172,8 @@ export class App extends Component{
         sendFiles={this.sendFiles}
         sendAlterObject={this.sendAlterObject}
         isGod={this.state.obj.isGod}
+        showProlongation={this.state.obj.showProlongation}
+        showChange={this.state.obj.showChange}
       />,
     }
     const isGrid = +obj.step !== 4 ? 'container-grid' : '';
