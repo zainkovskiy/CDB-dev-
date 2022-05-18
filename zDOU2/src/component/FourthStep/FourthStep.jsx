@@ -52,7 +52,7 @@ export class FourthStep extends Component {
                   value='1'
                   onClick={(event) => handleInputs(event)}
                 >
-                  Сменить тип
+                  Продлить
                 </Button>
               }
             </>
