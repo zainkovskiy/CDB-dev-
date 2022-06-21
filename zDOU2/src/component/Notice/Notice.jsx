@@ -7,7 +7,7 @@ import { DialogMain } from '../DialogMain';
 import { DialogCorrect } from '../DialogCorrect';
 
 export function Notice(props){
-  const { moderation, docType, sendFiles, docExpired, docProlongation, setNewType, sendAlterObject } = props;
+  const { moderation, docType, sendFiles, docExpired, docProlongation, setNewType, sendAlterObject, UID } = props;
   const [ openCorrect, setOpenCorrect ] = useState(false);
 
   const isOpenCorrect = () => {
@@ -48,6 +48,7 @@ export function Notice(props){
                 setNewType={setNewType}
                 sendAlterObject={sendAlterObject}
                 onClose={isOpenCorrect}
+                UID={UID}
               />
             </DialogMain>
             </div>)

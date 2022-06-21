@@ -174,6 +174,7 @@ export class App extends Component{
         isGod={this.state.obj.isGod}
         showProlongation={this.state.obj.showProlongation}
         showChange={this.state.obj.showChange}
+        UID={this.state.obj.UID}
       />,
     }
     const isGrid = +obj.step !== 4 ? 'container-grid' : '';

@@ -29,7 +29,7 @@ export class FourthStep extends Component {
   }
 
   render() {
-    const { docType, docForm, docExpired, documents, smsvalidation, repeatSendSMS, sendAlterObject,
+    const { docType, docForm, docExpired, documents, smsvalidation, repeatSendSMS, sendAlterObject, UID,
       moderation, handleInputs, setNewType, docProlongation, clientsPhones, isRepeat, sendFiles, isGod, showProlongation, showChange } = this.props;
     return (<div className='container-page'>
       <div className='about'>
@@ -99,6 +99,7 @@ export class FourthStep extends Component {
           docProlongation={docProlongation}
           sendAlterObject={sendAlterObject}
           setNewType={setNewType}
+          UID={UID}
         />}
       {documents.length > 0 &&
         <>
