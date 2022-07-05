@@ -148,6 +148,8 @@ class Add {
         `${add.obj.reqWaterPipes ? add.obj.reqWaterPipes : 'Выберите'}`);
       selectStyle('.reqDrainage', 'reqDrainage',
         `${add.obj.reqDrainage ? add.obj.reqDrainage : 'Выберите'}`);
+      selectStyle('.reqTypeofLayout', 'reqTypeofLayout',
+        `${add.obj.reqTypeofLayout ? add.obj.reqTypeofLayout : 'Выберите'}`);
     } else if (this.obj.reqTypeofRealty === 'Земельный участок') {
       form.insertAdjacentHTML('beforeend', new Ground().render());
       new Search().init();
@@ -1681,7 +1683,7 @@ class Float{
               </div>
             </div> 
             ${ action !== 'old' ?
-              `<div class="price">
+      `<div class="price">
                 <span class="form__title">цена<i class="i">*<p class="guid">При указании "цены в рекламу" отличной от основной, на рекламных площадках N1, CIAN, Domclick будет выгружена "цена в рекламу"</p></i></span>
                 <div class="form__item">
                   <span class="form__subtitle">Цена, тыс руб.</span>
@@ -1700,7 +1702,7 @@ class Float{
                          autoComplete="new-password">
                 </div>
               </div>` : ''
-            }            
+    }            
             <div class="infoHouse"> 
               <span class="form__title">информация о доме<i class="i">*<p class="guid">все поля обязательны для заполнения</p></i></span>
               <div class="form__item">
@@ -1936,7 +1938,7 @@ class Room{
               </div>
             </div> 
             ${ action !== 'old' ?
-              `<div class="price">
+      `<div class="price">
                 <span class="form__title">цена<i class="i">*<p class="guid">При указании "цены в рекламу" отличной от основной, на рекламных площадках N1, CIAN, Domclick будет выгружена "цена в рекламу"</p></i></span>
                 <div class="form__item">
                   <span class="form__subtitle">Цена, тыс руб.</span>
@@ -1955,7 +1957,7 @@ class Room{
                          autoComplete="new-password">
                 </div>
               </div>`  : ''
-              }               
+    }               
             <div class="infoHouse"> 
               <span class="form__title">информация о доме<i class="i">*<p class="guid">все поля обязательны для заполнения</p></i></span>
               <div class="form__item"> 
@@ -2220,7 +2222,7 @@ class House{
               </div>          
             </div> 
             ${ action !== 'old' ?
-            `<div class="price">
+      `<div class="price">
               <span class="form__title">цена<i class="i">*<p class="guid">При указании "цены в рекламу" отличной от основной, на рекламных площадках N1, CIAN, Domclick будет выгружена "цена в рекламу"</p></i></span>
               <div class="form__item">
                 <span class="form__subtitle">Цена, тыс руб.</span>
@@ -2239,7 +2241,7 @@ class House{
                        autoComplete="new-password">
               </div>
             </div>` : ''
-            }           
+    }           
             <div class="comment"> 
               <span class="form__title">Комментарии<i class="i">*<p class="guid">Обязательно к заполнению. Внимание! Комментарий должен быть "продающим". Запрещено описывать с использованием обилия восклицательных знаков и с использованием CAPS LOCK, а так же указывать что объект в задатке.</p></i></span>
               <textarea class="comment__input" name="reqComment" cols="30" rows="10">${add.obj.reqComment ? add.obj.reqComment : ''}</textarea>
@@ -2348,7 +2350,7 @@ class Ground{
               </div>         
             </div> 
             ${ action !== 'old' ?
-            `<div class="price">
+      `<div class="price">
             <span class="form__title">цена<i class="i">*<p class="guid">При указании "цены в рекламу" отличной от основной, на рекламных площадках N1, CIAN, Domclick будет выгружена "цена в рекламу"</p></i></span>
             <div class="form__item">
               <span class="form__subtitle">Цена, тыс руб.</span>
@@ -2367,7 +2369,7 @@ class Ground{
                      autoComplete="new-password">
             </div>
             </div>` : ''
-            }                             
+    }                             
             <div class="comment"> 
               <span class="form__title">Комментарии<i class="i">*<p class="guid">Обязательно к заполнению. Внимание! Комментарий должен быть "продающим". Запрещено описывать с использованием обилия восклицательных знаков и с использованием CAPS LOCK, а так же указывать что объект в задатке.</p></i></span>
               <textarea class="comment__input" name="reqComment" cols="30" rows="10">${add.obj.reqComment ? add.obj.reqComment : ''}</textarea>
@@ -2483,7 +2485,7 @@ class Garage{
               </div>            
             </div> 
             ${ action !== 'old' ?
-    `<div class="price">
+      `<div class="price">
             <span class="form__title">цена<i class="i">*<p class="guid">При указании "цены в рекламу" отличной от основной, на рекламных площадках N1, CIAN, Domclick будет выгружена "цена в рекламу"</p></i></span>
             <div class="form__item">
               <span class="form__subtitle">Цена, тыс руб.</span>
