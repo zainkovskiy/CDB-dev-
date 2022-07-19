@@ -68,7 +68,6 @@ class newBuildingsSeeker {
     }
   }
   renderRows(list){
-    console.log(list)
     if (this.showSend){
       for (let item of list){
         this.table.querySelector('tbody').insertAdjacentHTML('beforeend', new Render(item, this.getApplicant(item.applicant)).render());
@@ -143,7 +142,6 @@ class newBuildingsSeeker {
       action: 'getForm',
       UID: uid,
     }).then(form => {
-      console.log(form)
       this.openModule(form);
     })
   }
@@ -294,6 +292,12 @@ class Render{
                   <label class="table__label" for="${this.row.UID}"></label>
                   ${this.getDate(this.row.sendet)}
                 </div>
+              </td>              
+              <td class="table__row">
+                <div class="table__row_wrap">
+                  <input class="table__checkbox" type="checkbox" ${this.row.delivered ? 'checked' : ''} id='deliv${this.row.UID}'>
+                  <label class="table__label" for="deliv${this.row.UID}"></label>
+                </div>
               </td>
             </tr>`
   }
@@ -346,6 +350,5 @@ const server = new Server();
 server.request({
   action: 'get'
 }).then(data => {
-  console.log(data)
   new newBuildingsSeeker(data).init();
 });
