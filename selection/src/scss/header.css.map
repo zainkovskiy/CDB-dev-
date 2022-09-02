@@ -1,1 +1,9 @@
-{"version":3,"sourceRoot":"","sources":[],"names":[],"mappings":"","file":"header.css"}
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,OAAO,CAAA;EACL,OAAO,EAAE,IAAI;EACb,qBAAqB,EAAE,OAAO;EAC9B,KAAK,EAAE,IAAI;EACX,QAAQ,EAAE,IAAI;CAMf;;AALE,AAAD,gBAAU,CAAA;EACR,OAAO,EAAE,IAAI;EACb,eAAe,EAAE,QAAQ;EACzB,GAAG,EAAE,IAAI;CACV",
+    "sources": [
+        "header.scss"
+    ],
+    "names": [],
+    "file": "header.css"
+}

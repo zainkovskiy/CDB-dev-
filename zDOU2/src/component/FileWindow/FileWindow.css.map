@@ -1,1 +1,9 @@
-{"version":3,"sourceRoot":"","sources":["FileWindow.scss"],"names":[],"mappings":"AAAA;EACE;EACA;;AACA;EACE;EACA;EACA;EACA","file":"FileWindow.css"}
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,MAAM,CAAA;EACJ,gBAAgB,EAAE,IAAI;EACtB,aAAa,EAAE,GAAG;CAOnB;;AANE,AAAD,WAAM,CAAA;EACJ,UAAU,EAAE,IAAI;EAChB,UAAU,EAAE,IAAI;EAChB,SAAS,EAAE,IAAI;EACf,UAAU,EAAE,OAAO;CACpB",
+    "sources": [
+        "FileWindow.scss"
+    ],
+    "names": [],
+    "file": "FileWindow.css"
+}

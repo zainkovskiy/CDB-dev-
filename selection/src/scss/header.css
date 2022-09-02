@@ -1,3 +1,19 @@
+.header {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 65% 1fr;
+      grid-template-columns: 65% 1fr;
+  width: 100%;
+  grid-gap: 10px;
+}
 
-
+.header__buttons {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
+  gap: 20px;
+}
 /*# sourceMappingURL=header.css.map */

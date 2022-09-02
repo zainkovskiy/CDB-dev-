@@ -1,6 +1,7 @@
 .field-wrap {
+  display: -webkit-box;
+  display: -ms-flexbox;
   display: flex;
   gap: 1rem;
 }
-
 /*# sourceMappingURL=SecondStep.css.map */

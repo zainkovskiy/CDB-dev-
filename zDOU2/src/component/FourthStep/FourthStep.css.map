@@ -1,1 +1,9 @@
-{"version":3,"sourceRoot":"","sources":["FourthStep.scss"],"names":[],"mappings":"AAAA;EACE;EACA;EACA;;AACA;EACE;EACA;EACA","file":"FourthStep.css"}
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,MAAM,CAAA;EACJ,OAAO,EAAE,IAAI;EACb,cAAc,EAAE,MAAM;EACtB,cAAc,EAAE,GAAG;CAMpB;;AALE,AAAD,YAAO,CAAA;EACL,OAAO,EAAE,IAAI;EACb,eAAe,EAAE,aAAa;EAC9B,WAAW,EAAE,MAAM;CACpB",
+    "sources": [
+        "FourthStep.scss"
+    ],
+    "names": [],
+    "file": "FourthStep.css"
+}

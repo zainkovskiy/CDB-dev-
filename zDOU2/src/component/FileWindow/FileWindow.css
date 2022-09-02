@@ -2,11 +2,12 @@
   background-color: #fff;
   border-radius: 4px;
 }
+
 .paper__img {
   min-height: 30vh;
   max-height: 80vh;
   max-width: 90vw;
-  object-fit: contain;
+  -o-object-fit: contain;
+     object-fit: contain;
 }
-
 /*# sourceMappingURL=FileWindow.css.map */

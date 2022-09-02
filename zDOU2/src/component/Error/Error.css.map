@@ -1,1 +1,9 @@
-{"version":3,"sourceRoot":"","sources":["Error.scss"],"names":[],"mappings":"AAAA;EACE;EACA;EACA;EACA;;AACE;EACE","file":"Error.css"}
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,MAAM,CAAA;EACJ,gBAAgB,EAAE,OAAO;EACzB,OAAO,EAAE,IAAI;EACb,eAAe,EAAE,MAAM;EACvB,WAAW,EAAE,MAAM;CAIpB;;AAHI,AAAD,WAAM,CAAA;EACJ,MAAM,EAAE,IAAI;CACZ",
+    "sources": [
+        "Error.scss"
+    ],
+    "names": [],
+    "file": "Error.css"
+}

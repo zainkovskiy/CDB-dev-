@@ -1,1 +1,9 @@
-{"version":3,"sourceRoot":"","sources":["DialogCorrect.scss"],"names":[],"mappings":"AAAA;EACE;EACA;EACA;EACA","file":"DialogCorrect.css"}
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,QAAQ,CAAA;EACN,OAAO,EAAE,IAAI;EACb,cAAc,EAAE,MAAM;EACtB,GAAG,EAAE,IAAI;EACT,OAAO,EAAE,IAAI;CACd",
+    "sources": [
+        "DialogCorrect.scss"
+    ],
+    "names": [],
+    "file": "DialogCorrect.css"
+}

@@ -2,37 +2,31 @@
   body {
     padding: 0.5rem;
   }
-
   .title {
     font-size: 12px;
   }
-
   .tabset > ul label {
     font-size: 12px;
   }
-
   .info__client, .info__object, .info__passport {
-    grid-template-columns: 1fr;
+    -ms-grid-columns: 1fr;
+        grid-template-columns: 1fr;
   }
   .info__passport-wrap:first-child {
-    grid-template-rows: auto 1fr 1fr;
+    -ms-grid-rows: auto 1fr 1fr;
+        grid-template-rows: auto 1fr 1fr;
   }
-
   h2 {
     font-size: 16px;
   }
-
   h3 {
     font-size: 14px;
   }
-
   h4 {
     font-size: 12px;
   }
-
   .module__window {
     width: 90%;
   }
 }
-
 /*# sourceMappingURL=media.css.map */

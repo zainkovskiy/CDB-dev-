@@ -1,1 +1,9 @@
-{"version":3,"sourceRoot":"","sources":["SecondStep.scss"],"names":[],"mappings":"AAAA;EACE;EACA","file":"SecondStep.css"}
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,WAAW,CAAA;EACT,OAAO,EAAE,IAAI;EACb,GAAG,EAAE,IAAI;CACV",
+    "sources": [
+        "SecondStep.scss"
+    ],
+    "names": [],
+    "file": "SecondStep.css"
+}

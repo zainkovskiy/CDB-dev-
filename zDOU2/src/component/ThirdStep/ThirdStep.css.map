@@ -1,1 +1,9 @@
-{"version":3,"sourceRoot":"","sources":["ThirdStep.scss"],"names":[],"mappings":"AAAA;EACE;EACA;EACA;;AACA;EACE;EACA;EACA;EACA;;;AAGJ;EACE;EACA;EACA;;;AAEF;EACE;EACA;EACA","file":"ThirdStep.css"}
+{
+    "version": 3,
+    "mappings": "AAAA,AAAA,UAAU,CAAA;EACR,OAAO,EAAE,IAAI;EACb,SAAS,EAAE,IAAI;EACf,GAAG,EAAE,MAAM;CAOZ;;AANE,AAAD,gBAAO,CAAA;EACL,OAAO,EAAE,IAAI;EACb,eAAe,EAAE,aAAa;EAC9B,WAAW,EAAE,MAAM;EACnB,KAAK,EAAE,IAAI;CACZ;;AAEH,AAAA,OAAO,CAAA;EACL,OAAO,EAAE,IAAI;EACb,qBAAqB,EAAE,cAAc;EACrC,QAAQ,EAAE,IAAI;CACf;;AACD,AAAA,UAAU,CAAA;EACR,OAAO,EAAE,IAAI;EACb,qBAAqB,EAAE,qCAAqC;EAC5D,QAAQ,EAAE,IAAI;CACf",
+    "sources": [
+        "ThirdStep.scss"
+    ],
+    "names": [],
+    "file": "ThirdStep.css"
+}
